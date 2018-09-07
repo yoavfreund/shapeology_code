@@ -118,9 +118,12 @@ def extract_patches(_mean,Peaks):
         extracted.append((_m,_std,rot_angle1+rot_angle2,ex_rotation_normed*mask))
     return extracted,markers
     
+def check_blank(window,min_std=10):
+    # find whether window mosly blank and should be ignored.
+    return np.std(window.flatten()) < min_std
 
 def preprocess(window):
-    _mean=normalize(np.mean(window,axis=2))
+    _mean=normalize(window)
     P=convolve(_mean,mexicanhat_2D_kernel)
     thr=find_threshold(P,0.9)
     Peaks=find_peaks(P,thr,footprint=footprint)
@@ -135,17 +138,21 @@ if __name__=="__main__":
                     help="Process <filestem>.pkl into <filestem>_extracted.pkl")
 
     args = parser.parse_args()
-    infile = args.filestem+'.pkl'
+    infile = args.filestem+'.tif'
     outfile= args.filestem+'_extracted.pkl'
 
-    t0=time()
-    print('processing',infile,'into',outfile)
-    window=pickle.load(open(infile,'rb'))
-    cell_size,center,ratio,footprint=create_footprint(cell_size=41)
-    mask=1.*footprint
-    _mean,P,Peaks=preprocess(window)    
-    print('found',len(Peaks),'patches')
-    extracted,markers=extract_patches(_mean,Peaks)
+    window=cv2.imread(infile,cv2.IMREAD_GRAYSCALE | cv2.IMREAD_ANYDEPTH)
 
-    pickle.dump(extracted,open(outfile,'wb'))
-    print('finished in %5.1f seconds'%(time()-t0))
+    if check_blank(window):
+        print('image',infile,'too blank, skipping')
+    else:
+        t0=time()
+        print('processing',infile,'into',outfile)
+        cell_size,center,ratio,footprint=create_footprint(cell_size=41)
+        mask=1.*footprint
+        _mean,P,Peaks=preprocess(window)    
+        print('found',len(Peaks),'patches')
+        extracted,markers=extract_patches(_mean,Peaks)
+
+        pickle.dump(extracted,open(outfile,'wb'))
+        print('finished in %5.1f seconds'%(time()-t0))
