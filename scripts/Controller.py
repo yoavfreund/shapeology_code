@@ -117,7 +117,7 @@ def process_tiles(tile_pattern):
             load=sum(psutil.cpu_percent(percpu=True))
         print('\nload low enough',load)
 
-if __name__="__main__":
+if __name__=="__main__":
     
     parser = argparse.ArgumentParser()
     parser.add_argument("s3location", type=str,
