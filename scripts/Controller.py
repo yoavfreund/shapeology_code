@@ -168,9 +168,9 @@ if __name__=="__main__":
         clock('broke into tiles')
 
         # perform analysis
-        i=process_tiles(local_data)
+        i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
         clock('1 - processed %6d tiles'%i)
-        i=process_tiles(local_data)
+        i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
         clock('2 - processed %6d tiles'%i)
 
         #cleanup
