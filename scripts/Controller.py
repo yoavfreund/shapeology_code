@@ -95,8 +95,10 @@ def find_and_lock(stack_directory):
 
 def process_tiles(tile_pattern):
     i=0
+    print('tile_pattern=',tile_pattern)
     for infile in glob(tile_pattern):
         stem=infile[:-4]
+        print ('infile=%s, stem=%s'%(infile,stem))
         lockfile=stem+'.lock'
         if not isfile(lockfile):
             i+=1
