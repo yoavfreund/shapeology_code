@@ -154,10 +154,10 @@ if __name__=="__main__":
         run('aws s3 cp %s%s.jp2 %s/%s.jp2'%(stack_directory,stem,local_data,stem))
         clock('copied from s3:',filename)
         run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
-        clock('translated into tif'))
+        clock('translated into tif')
         run('convert %s/%s -crop 1000x1000  +repage  +adjoin  %s/tiles/tiles_%02d.tif'\
             %(local_data,stem,local_data))
-        clock('broke into tiles'))
+        clock('broke into tiles')
 
         # perform analysis
         i=run("python3 ProcessTiles.py %s/tiles/tiles_*.tif"%local_data)
