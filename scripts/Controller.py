@@ -136,9 +136,13 @@ if __name__=="__main__":
     clock('starting Controller with stack_directory=%s, local_data=%s'%(stack_directory,local_data))
     #preparations: make dirs data and data/tiles
     run('sudo chmod 0777 /dev/shm/')
-    mkdir(local_data)
-    mkdir(local_data+'/tiles')
-    clock('created data directory')
+
+    try:
+        mkdir(local_data)
+        mkdir(local_data+'/tiles')
+        clock('created data directory')
+    except:
+        pass
 
 
     while True:
