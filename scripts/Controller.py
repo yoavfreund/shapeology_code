@@ -110,14 +110,15 @@ def process_tiles(tile_pattern):
             continue
 
         # Wait if load is too high
-        all_loads=np.mean(psutil.cpu_percent(percpu=True))
-        print('\r %5d                            load: %6.2f'%(i,load))
+        load=np.mean(psutil.cpu_percent(percpu=True))
+        print(' %5d                            load: %6.2f'%(i,load))
         j=0
         while load>0.9:
-            print('\r %5d    Sleep:%3d               load: %6.2f'%(i,j,load))
+            print(' %5d    Sleep:%3d               load: %6.2f'%(i,j,load))
             j+=1
             sleep(2)
-            load=sum(psutil.cpu_percent(percpu=True))
+            load=np.mean(psutil.cpu_percent(percpu=True))
+
         print('\nload low enough',load)
     return i
 
