@@ -155,7 +155,7 @@ if __name__=="__main__":
             break
 
         #Bring in a file and break it into tiles
-        run('aws s3 cp %s%s.jp2 %s/%s.jp2'%(stack_directory,stem,local_data,stem))
+        run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(stack_directory,stem,local_data,stem))
         clock('copied from s3: %s'%filename)
         run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
         clock('translated into tif')
