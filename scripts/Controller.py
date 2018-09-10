@@ -159,8 +159,8 @@ if __name__=="__main__":
         clock('copied from s3: %s'%filename)
         run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
         clock('translated into tif')
-        run('convert %s/%s -crop 1000x1000  +repage  +adjoin  %s/tiles/tiles_%02d.tif'\
-            %(local_data,stem,local_data))
+        run('convert %s/%s -crop 1000x1000  +repage  +adjoin  %s'%
+            (local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
         clock('broke into tiles')
 
         # perform analysis
