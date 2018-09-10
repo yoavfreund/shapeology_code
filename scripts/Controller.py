@@ -22,7 +22,7 @@ def clock(message):
 def printClock():
     t=time_log[0][0]
     for i in range(1,len(time_log)):
-        print('%8.1f \t%s'%(time_log[i][0]-t,time_log[1]))
+        print('%8.1f \t%s'%(time_log[i][0]-t,time_log[i][1]))
 
 def get_file_table(stack_directory):
     """create a table of the files in a directory corresponding to a stack:
@@ -116,6 +116,7 @@ def process_tiles(tile_pattern):
             sleep(2)
             load=sum(psutil.cpu_percent(percpu=True))
         print('\nload low enough',load)
+    return i
 
 if __name__=="__main__":
     
@@ -164,9 +165,9 @@ if __name__=="__main__":
         clock('broke into tiles')
 
         # perform analysis
-        i=run("python3 ProcessTiles.py %s/tiles/tiles_*.tif"%local_data)
+        i=process_tiles(local_data)
         clock('1 - processed %6d tiles'%i)
-        i=run("python3 ProcessTiles.py %s/tiles/tiles_*.tif"%local_data)
+        i=process_tiles(local_data)
         clock('2 - processed %6d tiles'%i)
 
         #cleanup
