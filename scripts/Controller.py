@@ -9,6 +9,7 @@ from sys import argv
 import re
 import socket
 import argparse
+import numpy as np
 
 def run(command):
     print('cmd=',command)
