@@ -30,7 +30,7 @@ def get_file_table(stack_directory):
     example: s3://mousebraindata-open/MD657/
     """
                    
-    run("aws s3 ls %s > awsfiles.txt"%stack_directory)
+    run("aws s3 ls %s/ > awsfiles.txt"%stack_directory)
     pat=re.compile(r'(.*)\.([^\.]*)$')
 
     T={}
