@@ -113,7 +113,7 @@ def process_tiles(tile_pattern):
         load=np.mean(psutil.cpu_percent(percpu=True))
         print(' %5d                            load: %6.2f'%(i,load))
         j=0
-        while load>0.9:
+        while load>85:
             print(' %5d    Sleep:%3d               load: %6.2f'%(i,j,load))
             j+=1
             sleep(2)
@@ -159,6 +159,11 @@ if __name__=="__main__":
             print('all files processed')
             break
 
+        run('rm -rf %s/tiles/*'%local_data)
+        run('rm %s/*'%(local_data))
+        clock('cleaning local directory')
+
+
         #Bring in a file and break it into tiles
         run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(stack_directory,stem,local_data,stem))
         clock('copied from s3: %s'%filename)
@@ -174,15 +179,12 @@ if __name__=="__main__":
         i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
         clock('2 - processed %6d tiles'%i)
 
-        #cleanup
+        #copy results to s3
         run("tar czvf {0}/{1}_patches.tgz {0}/tiles/*.pkl {0}/tiles/*.log {0}/tiles/*.lock".format(local_data,stem))
         clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
 
         run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,stack_directory))
         clock('copy tar file to S3')
         break
-        run('rm -rf %s/tiles/*'%local_data)
-        run('rm %s/%s.*'%(local_data,stem))
-        clock('rm files')
 
     printClock()
