@@ -76,7 +76,7 @@ def find_and_lock(stack_directory):
         flagname=filename+'.lock-'+hostname
         open(flagname,'w').write(flagname+'\n')
 
-        command='aws s3 cp %s %s%s'%(flagname,stack_directory,flagname)
+        command='aws s3 cp %s %s/%s'%(flagname,stack_directory,flagname)
         system(command)
 
         # check to make sure that there is only one lock.
@@ -173,7 +173,7 @@ if __name__=="__main__":
         run("tar czvf {0}/{1}_patches.tgz {0}/tiles/*.pkl {0}/tiles/*.log {0}/tiles/*.lock".format(local_data,stem))
         clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
 
-        run('aws s3 cp {0}/{1}_patches.tgz {2}'.format(local_data,stem,stack_directory))
+        run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,stack_directory))
         clock('copy tar file to S3')
         break
         run('rm -rf %s/tiles/*'%local_data)
