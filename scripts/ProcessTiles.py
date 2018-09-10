@@ -4,7 +4,7 @@ from os.path import isfile
 from glob import glob
 from time import sleep
 from os.path import isfile
-from sys import argv
+from sys import argv,exit
 
 
 tile_pattern=argv[1]
@@ -36,3 +36,5 @@ for infile in glob(tile_pattern):
         sleep(2)
         load=sum(psutil.cpu_percent(percpu=True))
     print('\nload low enough',load)
+
+    sys.exit(i)
