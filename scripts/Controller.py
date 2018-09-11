@@ -134,15 +134,13 @@ if __name__=="__main__":
     stack_directory=args.s3location
     local_data=args.local_data
     
-    stem=find_and_lock(stack_directory)
-
     time_log=[]
 
     clock('starting Controller with stack_directory=%s, local_data=%s'%(stack_directory,local_data))
-    #preparations: make dirs data and data/tiles
-    run('sudo chmod 0777 /dev/shm/')
 
     try:
+        #preparations: make dirs data and data/tiles
+        run('sudo chmod 0777 /dev/shm/')
         mkdir(local_data)
         mkdir(local_data+'/tiles')
         clock('created data directory')
@@ -151,36 +149,36 @@ if __name__=="__main__":
 
 
     while True:
-        #find an unprocessed file on S3
-        filename=find_and_lock(stack_directory)
-        clock('found and locked %s'%filename)
+        # #find an unprocessed file on S3
+        # filename=find_and_lock(stack_directory)
+        # clock('found and locked %s'%filename)
 
-        if filename==None:
-            print('all files processed')
-            break
+        # if filename==None:
+        #     print('all files processed')
+        #     break
 
-        run('rm -rf %s/tiles/*'%local_data)
-        run('rm %s/*'%(local_data))
-        clock('cleaning local directory')
+        # run('rm -rf %s/tiles/*'%local_data)
+        # run('rm %s/*'%(local_data))
+        # clock('cleaning local directory')
 
 
-        #Bring in a file and break it into tiles
-        run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(stack_directory,stem,local_data,stem))
-        clock('copied from s3: %s'%filename)
-        run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
-        clock('translated into tif')
-        run('convert %s/%s.tif -crop 1000x1000  +repage  +adjoin  %s'%
-            (local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
-        clock('broke into tiles')
+        # #Bring in a file and break it into tiles
+        # run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(stack_directory,stem,local_data,stem))
+        # clock('copied from s3: %s'%filename)
+        # run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
+        # clock('translated into tif')
+        # run('convert %s/%s.tif -crop 1000x1000  +repage  +adjoin  %s'%
+        #     (local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
+        # clock('broke into tiles')
 
-        # perform analysis
-        i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
-        clock('1 - processed %6d tiles'%i)
-        i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
-        clock('2 - processed %6d tiles'%i)
+        # # perform analysis
+        # i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
+        # clock('1 - processed %6d tiles'%i)
+        # i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
+        # clock('2 - processed %6d tiles'%i)
 
         #copy results to s3
-        run("tar czvf {0}/{1}_patches.tgz {0}/tiles/*.pkl {0}/tiles/*.log {0}/tiles/*.lock".format(local_data,stem))
+        run("cd {0}; tar czf ../{1}_patches.tgz *.pkl *.log *.lock".format(local_data,stem))
         clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
 
         run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,stack_directory))
