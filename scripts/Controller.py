@@ -42,7 +42,7 @@ def get_file_table(stack_directory):
             if len(parts)!=4:
                 continue
             filename=parts[3]
-            if not 'lossless' in filename:
+            if not 'lossless.' in filename:
                 continue
             m=pat.match(filename)
             if m:
