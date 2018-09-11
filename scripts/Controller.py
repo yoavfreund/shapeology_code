@@ -17,7 +17,7 @@ def run(command):
     return out
 
 def clock(message):
-    print(time(),message)
+    print('%8.1f \t%s'%(time(),message))
     time_log.append((time(),message))
 
 def printClock():
