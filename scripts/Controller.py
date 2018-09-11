@@ -24,6 +24,7 @@ def printClock():
     t=time_log[0][0]
     for i in range(1,len(time_log)):
         print('%8.1f \t%s'%(time_log[i][0]-t,time_log[i][1]))
+        t=time_log[i][0]
 
 def get_file_table(stack_directory):
     """create a table of the files in a directory corresponding to a stack:
@@ -149,41 +150,39 @@ if __name__=="__main__":
 
 
     while True:
-        # #find an unprocessed file on S3
-        # filename=find_and_lock(stack_directory)
-        # clock('found and locked %s'%filename)
+        #find an unprocessed file on S3
+        filename=find_and_lock(stack_directory)
+        clock('found and locked %s'%filename)
 
-        # if filename==None:
-        #     print('all files processed')
-        #     break
+        if filename==None:
+            print('all files processed')
+            break
 
-        # run('rm -rf %s/tiles/*'%local_data)
-        # run('rm %s/*'%(local_data))
-        # clock('cleaning local directory')
+        run('rm -rf %s/tiles/*'%local_data)
+        run('rm %s/*'%(local_data))
+        clock('cleaning local directory')
 
 
-        # #Bring in a file and break it into tiles
-        # run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(stack_directory,stem,local_data,stem))
-        # clock('copied from s3: %s'%filename)
-        # run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
-        # clock('translated into tif')
-        # run('convert %s/%s.tif -crop 1000x1000  +repage  +adjoin  %s'%
-        #     (local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
-        # clock('broke into tiles')
+        #Bring in a file and break it into tiles
+        run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(stack_directory,stem,local_data,stem))
+        clock('copied from s3: %s'%filename)
+        run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
+        clock('translated into tif')
+        run('convert %s/%s.tif -crop 1000x1000  +repage  +adjoin  %s'%
+            (local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
+        clock('broke into tiles')
 
-        # # perform analysis
-        # i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
-        # clock('1 - processed %6d tiles'%i)
-        # i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
-        # clock('2 - processed %6d tiles'%i)
+        # perform analysis
+        i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
+        clock('1 - processed %6d tiles'%i)
+        i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
+        clock('2 - processed %6d tiles'%i)
 
         #copy results to s3
-        stem='MD657-N70-2017.02.22-18.31.14_MD657_1_0208_lossless'
         run("cd {0}/tiles; tar czf ../{1}_patches.tgz *.pkl *.log *.lock".format(local_data,stem))
         clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
 
         run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,stack_directory))
         clock('copy tar file to S3')
-        break
 
     printClock()
