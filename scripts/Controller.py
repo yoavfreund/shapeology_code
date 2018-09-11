@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import psutil
 import socket
 from os import getpid,system,mkdir
