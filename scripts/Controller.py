@@ -178,6 +178,7 @@ if __name__=="__main__":
         # clock('2 - processed %6d tiles'%i)
 
         #copy results to s3
+        stem='MD657-N70-2017.02.22-18.31.14_MD657_1_0208_lossless'
         run("cd {0}; tar czf ../{1}_patches.tgz *.pkl *.log *.lock".format(local_data,stem))
         clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
 
