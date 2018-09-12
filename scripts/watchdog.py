@@ -28,6 +28,6 @@ if __name__=='__main__':
             Recent=True
             break
     if(not Recent):
-        command='{0}/Controller.py {1} {2} &> {0}/Controller-{3}.log &'\
+        command='cd {0}; Controller.py {1} {2} &> Controller-{3}.log &'\
         .format(exec_dir,stack,local_data,int(time()))
         run(command)
