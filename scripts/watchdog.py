@@ -31,7 +31,7 @@ if __name__=='__main__':
             Recent=True
             break
     if(not Recent):
-        command='{0}/Controller.py {1} {2}'\
+        command='{0}/Controller.py {0} {1} {2}'\
         .format(exec_dir,stack,local_data)
         output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
         run(command,output)
