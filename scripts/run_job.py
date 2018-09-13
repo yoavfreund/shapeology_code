@@ -12,14 +12,16 @@ def getLock(lockfile):
     except FileExistsError:
         return None
 
-stem=argv[1]
+scripts=argv[1]
+stem=argv[2]
+
 lockfilename=stem+'.lock'
 logfilename=stem+'.log'
 
 lockfile=getLock(lockfilename)
 if not lockfile is None:
 
-    command='python3 ../scripts/extractPatches.py %s > %s'%(stem,logfilename)
+    command='python3 %s/extractPatches.py %s > %s'%(scripts,stem,logfilename)
     # put some info into the log/lock file
     now = datetime.datetime.now()
     print('pid=',getpid(), file=lockfile)

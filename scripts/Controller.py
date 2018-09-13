@@ -105,7 +105,7 @@ def process_tiles(tile_pattern):
         if not isfile(lockfile):
             i+=1
             print('got lock',lockfile,i)
-            run('python3 run_job.py %s &'%stem)
+            run('python3 {0}/run_job.py {0} {1} &'.format(scripts,stem))
             sleep(0.1)
         else:
             print('\r %s exists'%lockfile,end='')
@@ -127,12 +127,15 @@ def process_tiles(tile_pattern):
 if __name__=="__main__":
     
     parser = argparse.ArgumentParser()
+    parser.add_argument("scripts", type=str,
+                        help="path to the directory with the scripts")
     parser.add_argument("s3location", type=str,
                         help="path to the s3 directory with the lossless images")
     parser.add_argument("local_data",type=str,
                         help="path to the local data directory")
     args = parser.parse_args()
-    
+
+    scripts=args.scripts
     stack_directory=args.s3location
     local_data=args.local_data
     
