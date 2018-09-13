@@ -4,15 +4,16 @@ from os.path import isfile,getmtime
 from glob import glob
 from time import sleep,time
 from os import system
-##subprocess.Popen(full_command, close_fds=True)
+from subprocess import Popen
 
 stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
 exec_dir='/home/ubuntu/shapeology_code/scripts'
 
-def run(command):
-    print('cmd=',command)
-    system(command)
+def run(command,out):
+    print('cmd=',command,'out=',out)
+    out_handle=open(out,'w')
+    Popen(command.split(),stdout=out_handle,stderr=out_handle)
 
 def Last_Modified(file_name):
     try:
@@ -30,6 +31,7 @@ if __name__=='__main__':
             Recent=True
             break
     if(not Recent):
-        command='cd {0}; ./Controller.py {1} {2} &>Controller-{3}.log &'\
-        .format(exec_dir,stack,local_data,int(time()))
-        run(command)
+        command='{0}/Controller.py {1} {2}'\
+        .format(exec_dir,stack,local_data)
+        output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
+        run(command,output)
