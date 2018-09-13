@@ -32,12 +32,13 @@ def get_file_table(stack_directory):
     stack_directory: the location of the directory on s3.
     example: s3://mousebraindata-open/MD657/
     """
-                   
-    run("aws s3 ls %s/ > %s/awsfiles.txt"%(stack_directory,scripts))
+
+    awsfiles='/home/ubuntu/shapeology_code/scripts/awsfiles.txt'
+    run("aws s3 ls %s/ > %s"%(stack_directory,awsfiles))
     pat=re.compile(r'(.*)\.([^\.]*)$')
 
     T={}
-    with open('%s/awsfiles.txt'%scripts,'r') as files:
+    with open(awsfiles,'r') as files:
         for file in files.readlines():
             parts=file.strip().split()
             if len(parts)!=4:
