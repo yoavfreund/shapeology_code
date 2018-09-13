@@ -35,6 +35,7 @@ def get_file_table(stack_directory):
 
     awsfiles='/home/ubuntu/shapeology_code/scripts/awsfiles.txt'
     run("aws s3 ls %s/ > %s"%(stack_directory,awsfiles))
+    sleep(30)
     pat=re.compile(r'(.*)\.([^\.]*)$')
 
     T={}
