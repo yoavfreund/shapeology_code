@@ -33,11 +33,11 @@ def get_file_table(stack_directory):
     example: s3://mousebraindata-open/MD657/
     """
                    
-    run("aws s3 ls %s/ > awsfiles.txt"%stack_directory)
+    run("aws s3 ls %s/ > %s/awsfiles.txt"%(stack_directory,scripts))
     pat=re.compile(r'(.*)\.([^\.]*)$')
 
     T={}
-    with open('awsfiles.txt','r') as files:
+    with open('%s/awsfiles.txt'%scripts,'r') as files:
         for file in files.readlines():
             parts=file.strip().split()
             if len(parts)!=4:
@@ -77,9 +77,9 @@ def find_and_lock(stack_directory):
         #create a lock
         hostname=socket.gethostname().replace('.','+')
         flagname=filename+'.lock-'+hostname
-        open(flagname,'w').write(flagname+'\n')
+        open(scripts+'/'+flagname,'w').write(flagname+'\n')
 
-        command='aws s3 cp %s %s/%s'%(flagname,stack_directory,flagname)
+        command='aws s3 cp %s %s/%s'%(scripts+'/'+flagname,stack_directory,flagname)
         system(command)
 
         # check to make sure that there is only one lock.
