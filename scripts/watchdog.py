@@ -4,6 +4,7 @@ from os.path import isfile,getmtime
 from glob import glob
 from time import sleep,time
 from os import system
+##subprocess.Popen(full_command, close_fds=True)
 
 stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
