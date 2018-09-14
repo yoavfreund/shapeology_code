@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import psutil
 import socket
-from os import getpid,system,mkdir
+from os import getpid,mkdir
+from subprocess import Popen,PIPE
 from os.path import isfile
 from glob import glob
 from time import sleep,time
@@ -14,7 +15,10 @@ import numpy as np
 
 def run(command):
     print('cmd=',command)
-    out=system(command)
+    p=Popen(command.split(),stdout=PIPE,stderr=PIPE)
+    L=p.communicate()
+    stdout=L[0].decode("utf-8").split('\n')
+    stderr=L[1].decode("utf-8").split('\n')
     return out
 
 def clock(message):
@@ -34,29 +38,27 @@ def get_file_table(stack_directory):
     """
 
     awsfiles='/home/ubuntu/shapeology_code/scripts/awsfiles.txt'
-    run("aws s3 ls %s/ > %s"%(stack_directory,awsfiles))
-    sleep(30)
+    stdout,stderr=run("aws s3 ls %s/ "%(stack_directory))
     pat=re.compile(r'(.*)\.([^\.]*)$')
 
     T={}
-    with open(awsfiles,'r') as files:
-        for file in files.readlines():
-            parts=file.strip().split()
-            if len(parts)!=4:
-                continue
-            filename=parts[3]
-            if not 'lossless.' in filename:
-                continue
-            m=pat.match(filename)
-            if m:
-                file,ext= m.groups()
-                info=(ext,parts[0]+' '+parts[1])
-                if file in T:
-                    T[file].append(info)
-                else:
-                    T[file]=[info]
+    for file in stdout:
+        parts=file.strip().split()
+        if len(parts)!=4:
+            continue
+        filename=parts[3]
+        if not 'lossless.' in filename:
+            continue
+        m=pat.match(filename)
+        if m:
+            file,ext= m.groups()
+            info=(ext,parts[0]+' '+parts[1])
+            if file in T:
+                T[file].append(info)
             else:
-                print(filname,'no match')
+                T[file]=[info]
+        else:
+            print(filname,'no match')
     return T
 
 def find_and_lock(stack_directory):
@@ -82,7 +84,7 @@ def find_and_lock(stack_directory):
         open(scripts+'/'+flagname,'w').write(flagname+'\n')
 
         command='aws s3 cp %s %s/%s'%(scripts+'/'+flagname,stack_directory,flagname)
-        system(command)
+        run(command)
 
         # check to make sure that there is only one lock.
         T=get_file_table(stack_directory)
@@ -107,7 +109,7 @@ def process_tiles(tile_pattern):
         if not isfile(lockfile):
             i+=1
             print('got lock',lockfile,i)
-            run('python3 {0}/run_job.py {0} {1} &'.format(scripts,stem))
+            run('python3 {0}/run_job.py {0} {1}'.format(scripts,stem))
             sleep(0.1)
         else:
             print('\r %s exists'%lockfile,end='')
