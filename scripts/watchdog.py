@@ -10,7 +10,7 @@ stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
 exec_dir='/home/ubuntu/shapeology_code/scripts'
 
-def run(command,out):
+def run(command,out):`
     print('cmd=',command,'out=',out)
     outfile=open(out,'w')
     Popen(command.split(),stdout=outfile,stderr=outfile)
@@ -26,7 +26,7 @@ if __name__=='__main__':
     Recent=False
     for logfile in glob(exec_dir+'/Controller*.log'):
         gap=time() - Last_Modified(logfile)
-        if gap <600: # allow 10 minute idle
+        if gap <120: # allow 2 minute idle
             print(logfile,'gap is %6.1f'%gap)
             Recent=True
             break
