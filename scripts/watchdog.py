@@ -10,7 +10,7 @@ stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
 exec_dir='/home/ubuntu/shapeology_code/scripts'
 
-def run(command,out):`
+def run(command,out):
     print('cmd=',command,'out=',out)
     outfile=open(out,'w')
     Popen(command.split(),stdout=outfile,stderr=outfile)
