@@ -12,8 +12,7 @@ exec_dir='/home/ubuntu/shapeology_code/scripts'
 
 def run(command,out):
     print('cmd=',command,'out=',out)
-    out_handle=open(out,'w')
-    Popen(command.split(),stdout=out_handle,stderr=out_handle)
+    system('%s &> %s'%(command,out))
 
 def Last_Modified(file_name):
     try:
