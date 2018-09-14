@@ -187,7 +187,7 @@ if __name__=="__main__":
         clock('2 - processed %6d tiles'%i)
 
         #copy results to s3
-        run("cd {0}/tiles; tar czf ../{1}_patches.tgz *.pkl *.log *.lock".format(local_data,stem))
+        run("tar czf {0}/{1}_patches.tgz {0}/tiles/*.pkl {0}/tiles/*.log {0}/tiles/*.lock".format(local_data,stem))
         clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
 
         run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,stack_directory))
