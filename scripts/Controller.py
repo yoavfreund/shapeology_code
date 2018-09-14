@@ -19,7 +19,7 @@ def run(command):
     L=p.communicate()
     stdout=L[0].decode("utf-8").split('\n')
     stderr=L[1].decode("utf-8").split('\n')
-    return stdout
+    return stdout,stderr
 
 def clock(message):
     print('%8.1f \t%s'%(time(),message))
