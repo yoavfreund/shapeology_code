@@ -14,7 +14,7 @@ import argparse
 import numpy as np
 
 def run(command):
-    print('cmd=',cmd)
+    print('cmd=',command)
     system(command)
     
 def runPipe(command):
