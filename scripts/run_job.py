@@ -21,7 +21,7 @@ logfilename=stem+'.log'
 lockfile=getLock(lockfilename)
 if not lockfile is None:
 
-    command='python3 %s/extractPatches.py %s > %s'%(scripts,stem,logfilename)
+    command='python3 %s/extractPatches.py %s > %s &'%(scripts,stem,logfilename)
     # put some info into the log/lock file
     now = datetime.datetime.now()
     print('pid=',getpid(), file=lockfile)
