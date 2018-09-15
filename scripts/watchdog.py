@@ -49,9 +49,8 @@ if __name__=='__main__':
         
         if Other_controller:
             print('Other Controller.py is running')
-            break
-        
-        command='{0}/Controller.py {0} {1} {2}'\
-            .format(exec_dir,stack,local_data)
-        output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
-        run(command,output)
+        else:
+            command='{0}/Controller.py {0} {1} {2}'\
+                .format(exec_dir,stack,local_data)
+            output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
+            run(command,output)
