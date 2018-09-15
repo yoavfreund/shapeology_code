@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import psutil
 import socket
-from os import getpid,mkdir
+from os import getpid,mkdir,system
 from subprocess import Popen,PIPE
 from os.path import isfile
 from glob import glob
