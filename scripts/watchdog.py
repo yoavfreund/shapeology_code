@@ -10,6 +10,14 @@ stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
 exec_dir='/home/ubuntu/shapeology_code/scripts'
 
+def runPipe(command):
+    print('cmd=',command)
+    p=Popen(command.split(),stdout=PIPE,stderr=PIPE)
+    L=p.communicate()
+    stdout=L[0].decode("utf-8").split('\n')
+    stderr=L[1].decode("utf-8").split('\n')
+    return stdout,stderr
+
 def run(command,out):
     print('cmd=',command,'out=',out)
     outfile=open(out,'w')
@@ -31,6 +39,11 @@ if __name__=='__main__':
             Recent=True
             break
     if(not Recent):
+        # Check that another 'controller' is not running
+        stdout,stderr = runPipe('ps aux')
+        if 'Controller.py' in stdout:
+            break
+        
         command='{0}/Controller.py {0} {1} {2}'\
         .format(exec_dir,stack,local_data)
         output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
