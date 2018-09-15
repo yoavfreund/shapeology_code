@@ -104,7 +104,7 @@ def process_tiles(tile_pattern):
     print('tile_pattern=',tile_pattern)
     for infile in glob(tile_pattern):
         stem=infile[:-4]
-        print ('infile=%s, stem=%s'%(infile,stem))
+        #print ('infile=%s, stem=%s'%(infile,stem))
         lockfile=stem+'.lock'
         if not isfile(lockfile):
             i+=1
@@ -112,7 +112,7 @@ def process_tiles(tile_pattern):
             run('python3 {0}/run_job.py {0} {1}'.format(scripts,stem))
             sleep(0.1)
         else:
-            print('\r %s exists'%lockfile,end='')
+            #print('\r %s exists'%lockfile,end='')
             continue
 
         # Wait if load is too high
