@@ -14,7 +14,11 @@ import argparse
 import numpy as np
 
 def run(command):
-    print('cmd=',command)
+    print('cmd=',cmd)
+    system(command)
+    
+def runPipe(command):
+    print('runPipe cmd=',command)
     p=Popen(command.split(),stdout=PIPE,stderr=PIPE)
     L=p.communicate()
     stdout=L[0].decode("utf-8").split('\n')
@@ -38,7 +42,7 @@ def get_file_table(stack_directory):
     """
 
     awsfiles='/home/ubuntu/shapeology_code/scripts/awsfiles.txt'
-    stdout,stderr=run("aws s3 ls %s/ "%(stack_directory))
+    stdout,stderr=runPipe("aws s3 ls %s/ "%(stack_directory))
     pat=re.compile(r'(.*)\.([^\.]*)$')
 
     T={}
@@ -166,8 +170,8 @@ if __name__=="__main__":
             print('all files processed')
             break
 
-        run('rm -rf %s/tiles/*'%local_data)
-        run('rm %s/*'%(local_data))
+        system('rm -rf %s/tiles'%local_data)
+        run('rm %s/'%(local_data))
         clock('cleaning local directory')
 
 
