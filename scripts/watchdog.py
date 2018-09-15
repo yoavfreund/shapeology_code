@@ -41,10 +41,17 @@ if __name__=='__main__':
     if(not Recent):
         # Check that another 'controller' is not running
         stdout,stderr = runPipe('ps aux')
-        if 'Controller.py' in stdout:
+        Other_controller=False
+        for line in stdout:
+            if 'Controller.py' in line:
+                Other_controller=True
+                break
+        
+        if Other_controller:
+            print('Other Controller.py is running')
             break
         
         command='{0}/Controller.py {0} {1} {2}'\
-        .format(exec_dir,stack,local_data)
+            .format(exec_dir,stack,local_data)
         output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
         run(command,output)
