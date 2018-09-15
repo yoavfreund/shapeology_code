@@ -170,7 +170,7 @@ if __name__=="__main__":
             print('all files processed')
             break
 
-        run('rm -rf %s/'%(local_data))
+        run('rm -rf %s/*'%(local_data))
         run('mkdir %s/tiles'%local_data)
         clock('cleaning local directory')
 
