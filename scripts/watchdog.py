@@ -41,7 +41,7 @@ if __name__=='__main__':
     if(not Recent):
         # Check that another 'controller' is not running
         stdout,stderr = runPipe('ps aux')
-        if 'Controller.py' in stdout:
+        if 'scripts/Controller.py' in stdout:
             break
         
         command='{0}/Controller.py {0} {1} {2}'\
