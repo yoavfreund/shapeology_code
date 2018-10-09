@@ -9,7 +9,6 @@ from time import sleep,time
 from os.path import isfile
 from sys import argv
 import re
-import socket
 import argparse
 import numpy as np
 

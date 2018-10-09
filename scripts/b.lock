@@ -1,0 +1,3 @@
+pid= 72063
+start time= 2018-09-13T08:15:57.686327
+command= python3 a/extractPatches.py b > b.log
