@@ -34,15 +34,18 @@ def printClock():
         print('%8.1f \t%s'%(time_log[i][0]-t,time_log[i][1]))
         t=time_log[i][0]
 
-def get_file_table(stack_directory):
+def list_s3_files(stack_directory):
+    stdout,stderr=runPipe("aws s3 ls %s/ "%(stack_directory))
+    return stdout
+    
+def get_file_table(stack_directory,pattern=r'(.*)\.([^\.]*)$'):
     """create a table of the files in a directory corresponding to a stack:
     stack_directory: the location of the directory on s3.
     example: s3://mousebraindata-open/MD657/
     """
 
-    awsfiles='/home/ubuntu/shapeology_code/scripts/awsfiles.txt'
-    stdout,stderr=runPipe("aws s3 ls %s/ "%(stack_directory))
-    pat=re.compile(r'(.*)\.([^\.]*)$')
+    stdout = list_s3_files(stack_directory)
+    pat=re.compile(pattern)
 
     T={}
     for file in stdout:
