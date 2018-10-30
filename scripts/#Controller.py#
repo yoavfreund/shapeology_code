@@ -12,110 +12,12 @@ import re
 import argparse
 import numpy as np
 
-def run(command):
-    print('cmd=',command)
-    system(command)
-    
-def runPipe(command):
-    print('runPipe cmd=',command)
-    p=Popen(command.split(),stdout=PIPE,stderr=PIPE)
-    L=p.communicate()
-    stdout=L[0].decode("utf-8").split('\n')
-    stderr=L[1].decode("utf-8").split('\n')
-    return stdout,stderr
-
-def clock(message):
-    print('%8.1f \t%s'%(time(),message))
-    time_log.append((time(),message))
-
-def printClock():
-    t=time_log[0][0]
-    for i in range(1,len(time_log)):
-        print('%8.1f \t%s'%(time_log[i][0]-t,time_log[i][1]))
-        t=time_log[i][0]
-
-def list_s3_files(s3_directory):
-    stdout,stderr=runPipe("aws s3 ls %s/ "%(s3_directory))
-    return stdout
-    
-def get_file_table(s3_directory,pattern=r'(.*)\.([^\.]*)$'):
-    """generate a dictionary of the files in an s3 directory 
-    that fit a given regex pattern.
-
-    :param s3_directory: s3 directory, example: s3://mousebraindata-open/MD657/
-    :param pattern: a regular expression defining the files to be considered.
-    :returns: 
-    :rtype: 
-
-    """
-    
-    stdout = list_s3_files(s3_directory)
-    pat=re.compile(pattern)
-
-    T={}
-    for file in stdout:
-        parts=file.strip().split()
-        if len(parts)!=4:
-            continue
-        filename=parts[3]
-        m=pat.match(filename)
-        if m:
-            file,ext= m.groups()
-            info=(ext,parts[0]+' '+parts[1])
-            if file in T:
-                T[file].append(info)
-            else:
-                T[file]=[info]
-        else:
-            print(filname,'no match')
-    return T
-
-def find_and_lock(s3_directory,pattern=r'.*'):
-    """ find an s3 file without a lock and lock it
-
-    :param s3_directory: 
-
-    """
-    T=get_file_table(s3_directory,pattern=pattern)
-
-    while True:
-        #find a file without a lock
-        found=False
-        for item in T.items():
-            if len(item[1])==1:
-                found=True
-                break
-        if not found:
-            return None
-        
-        filename=item[0]
-        extensions=item[1]
-
-        #create a lock
-        hostname=socket.gethostname().replace('.','+')
-        flagname=filename+'.lock-'+hostname
-        open(scripts_dir+'/'+flagname,'w').write(flagname+'\n')
-
-        command='aws s3 cp %s %s/%s'%(scripts_dir+'/'+flagname,s3_directory,flagname)
-        run(command)
-
-        # check to make sure that there is only one lock.
-        T=get_file_table(s3_directory)
-        extensions=T[filename]
-        if len(extensions)==2:
-            return filename
-    
-        # translation of date for better handling of two machines putting locks 
-        # at nearly the same time
-        # comparing the time stamps of the locks can be used to resolve who was firstand should continue
-        # and who should look for another file.
-        # from datetime import datetime
-        # d1=datetime.strptime('2018-08-28 21:16:34','%Y-%m-%d %H:%M:%S')
 
 def process_tiles(tile_pattern):
     i=0
     print('tile_pattern=',tile_pattern)
     for infile in glob(tile_pattern):
+        
         stem=infile[:-4]
         #print ('infile=%s, stem=%s'%(infile,stem))
         lockfile=stem+'.lock'
@@ -146,7 +48,9 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("scripts_dir", type=str,
                         help="path to the directory with the scripts")
-    parser.add_argument("script",type=str,
+    parser.add_argument("init_script",type=str,
+                        help='the name of the script that is to run at initialization')
+    parser.add_argument("main_script",type=str,
                         help='the name of the script that is to run on each file')
     parser.add_argument("s3location", type=str,
                         help="path to the s3 directory with the lossless images")
@@ -167,6 +71,7 @@ if __name__=="__main__":
 
     clock('starting Controller with s3_directory=%s, local_data=%s'%(s3_directory,local_data))
 
+    # pre-processing
     try:
         #preparations: make dirs data and data/tiles
         run('sudo chmod 0777 /dev/shm/')
@@ -179,13 +84,15 @@ if __name__=="__main__":
 
     while True:
         #find an unprocessed file on S3
-        stem=find_and_lock(s3_directory,pattern=r'.*')
+        stem=find_and_lock(s3_directory,pattern=r'(.*)\.([^\.]*)$')
         clock('found and locked %s'%stem)
 
         if stem==None:
             print('all files processed')
             break
 
+        
+        #main_script
         run('rm -rf %s/*'%(local_data))
         run('mkdir %s/tiles'%local_data)
         clock('cleaning local directory')

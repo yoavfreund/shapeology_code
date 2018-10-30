@@ -53,11 +53,15 @@ def read_files(s3_dir,_delete=False):
 
 def data_stream(s3_dir='s3://mousebraindata-open/MD657/permuted'):
     for pics in read_files(s3_dir):
+        j=0
         for i in range(pics.shape[0]):
+            if j%1000==0:
+                print('\r examples read=%10d'%j,end='')
+            j+=1    
             yield pics[i,:,:]
 
 def calc_err(pic,gaussian = Gaussian2DKernel(1,x_size=7,y_size=7)):
-    factor=sum(gaussian.flatten())
+    factor=sum(gaussian)
     P=convolve(pic,gaussian)/factor
     error=sqrt(mean(abs(pic-P)))
     sub=P[::2,::2]
@@ -69,7 +73,7 @@ def plot_patches(data,h=40,w=15,_titles=[]):
         if i>=data.shape[0]:
             break
         subplot(h,w,i+1);
-        pic=data[i,:,:]
+        pic=np.array(data[i,:,:],dtype=np.float32)
 
         fig=imshow(pic,cmap='gray')
         if(len(_titles)>i):
@@ -97,41 +101,48 @@ def dist_hist(data):
             print('\r',i,end='')
     hist(D,bins=100);
 
-def refineKmeans(data,Reps):
-    new_Reps=[np.zeros(Reps[0].shape) for r in Reps]
+def refineKmeans(data_stream,Reps,per_rep_sample=100,refinement_iter=3):
+    _shape=Reps[0].shape
+    new_Reps=[np.zeros(_shape) for r in Reps]
+    _area=_shape[0]*_shape[1]
     Reps_count=[0.0 for r in Reps]
     error=0
-    for i in range(data.shape[0]): 
-        patch=data[i,:,:]
+    count=per_rep_sample*len(Reps)
+    i=0
+    for patch in data_stream: 
         dists=[dist2(patch,r) for r in Reps]
         _argmin=argmin(dists)
         _min=min(dists)
         new_Reps[_argmin]+=patch
         Reps_count[_argmin]+=1
         error+=_min
-    error /= data.shape[0]
+        i+=1
+        if i >= count:
+            break
+    error /= (count*_area)
     final_Reps=[]
     final_counts=[]
     for i in range(len(new_Reps)):
-        if Reps_count[i]>5:
+        if Reps_count[i]>refinement_iter:
             final_Reps.append(new_Reps[i]/Reps_count[i])
             final_counts.append(Reps_count[i])
     return final_Reps,final_counts,error
 
-def Kmeans(data,n=100,scale=550):
-    Reps,Statistics = Kmeanspp(data,n,scale)
+def Kmeans(data_stream,Reps=[],n=100,scale=550):
+    Reps,Statistics = Kmeanspp(data_stream,Reps,n,scale)
     for i in range(5):
-        Reps,error = refineKmeans(data,Reps)
-        print('refine iteration %2d, error=%7.3f'%(i,error))
+        Reps,final_counts,error = refineKmeans(data_stream,Reps)
+        print('refine iteration %2d, error=%7.3f, n_Reps=%5d'%(i,error,len(Reps)))
+    return Reps,final_counts
 
-def Kmeanspp(data,n=100,scale=550):
-    Reps=[data[0,:,:]]
+def Kmeanspp(data_stream,Reps=[],n=100,scale=550):
+    if len(Reps)==0:
+        Reps=[next(data_stream)]
 
     Statistics=[]
-    j=1
-    for i in range(1,data.shape[0]): 
+    j=len(Reps)
+    for patch in data_stream: 
         _min=100000
-        patch=data[i,:,:]
         for r in Reps:
             _min=min(_min,dist2(patch,r))
         Prob=_min/scale
@@ -158,19 +169,19 @@ def plot_statistics(Statistics,alpha=0.05,_start=10):
     ylabel('smoothed distance')
     grid(which='both')
 
-if __name__=="__main__"
-    N=300
 
-    Reps, Statistics = Kmeanspp(lcombined,n=N)
-    Reps_mat = pack_pics(Reps)
-    plot_patches(Reps_mat,h=5,w=10)
+def filtered_images(s3_dir='s3://mousebraindata-open/MD657/permuted',reduce_res=True,smooth_threshold=0.4):
+    for pic in data_stream(s3_dir):
+        err,sub=calc_err(pic)
+        if err>smooth_threshold:
+            continue
+        if reduce_res:
+            yield sub
+        else:
+            yield pic
 
-    for i in range(1,4):
-        new_Reps,Reps_count,error = refineKmeans(lcombined[i*10000:(i+1)*10000,:,:],Reps)
-        print(i,error,len(Reps_count))
-        Reps_mat = pack_pics(new_Reps)
-        plot_patches(Reps_mat,h=1,w=10,_titles=['%4d'%x for x in Reps_count])
-        Reps=new_Reps
-    plot_patches(Reps_mat,h=10,w=10,_titles=['final_%4d'%x for x in Reps_count])
 
+gen=filtered_images(smooth_threshold=0.35,reduce_res=False)
+Reps,final_count=Kmeans(gen,n=10)
+plot_patches(pack_pics(Reps),_titles=['%4d'%x for x in final_count])
 

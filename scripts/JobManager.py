@@ -70,13 +70,13 @@ def get_file_table(s3_directory,pattern=r'(.*)\.([^\.]*)$'):
             print(filname,'no match')
     return T
 
-def find_and_lock(s3_directory,pattern=r'.*'):
+def find_and_lock(s3_directory):
     """ find an s3 file without a lock and lock it
 
     :param s3_directory: 
 
     """
-    T=get_file_table(s3_directory,pattern=pattern)
+    T=get_file_table(s3_directory)
 
     while True:
         #find a file without a lock
@@ -146,21 +146,14 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("scripts_dir", type=str,
                         help="path to the directory with the scripts")
-    parser.add_argument("script",type=str,
-                        help='the name of the script that is to run on each file')
     parser.add_argument("s3location", type=str,
                         help="path to the s3 directory with the lossless images")
-    parser.add_argument("pattern",type=str,default=r'.*',
-                        help="pattern for filtering files from S3 directory")
     parser.add_argument("local_data",type=str,
                         help="path to the local data directory")
-    # pattern=r'(.*)\.([^\.]*)$'
     args = parser.parse_args()
 
     scripts_dir=args.scripts_dir
-    script=args.script
     s3_directory=args.s3location
-    pattern=args.pattern
     local_data=args.local_data
     
     time_log=[]
@@ -179,7 +172,7 @@ if __name__=="__main__":
 
     while True:
         #find an unprocessed file on S3
-        stem=find_and_lock(s3_directory,pattern=r'.*')
+        stem=find_and_lock(s3_directory)
         clock('found and locked %s'%stem)
 
         if stem==None:

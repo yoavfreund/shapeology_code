@@ -150,7 +150,7 @@ if __name__=="__main__":
                         help='the name of the script that is to run on each file')
     parser.add_argument("s3location", type=str,
                         help="path to the s3 directory with the lossless images")
-    parser.add_argument("pattern",type=str,default=r'.*',
+    parser.add_argument("pattern",type=str,
                         help="pattern for filtering files from S3 directory")
     parser.add_argument("local_data",type=str,
                         help="path to the local data directory")
@@ -158,9 +158,7 @@ if __name__=="__main__":
     args = parser.parse_args()
 
     scripts_dir=args.scripts_dir
-    script=args.script
     s3_directory=args.s3location
-    pattern=args.pattern
     local_data=args.local_data
     
     time_log=[]
