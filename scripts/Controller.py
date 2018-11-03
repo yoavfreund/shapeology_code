@@ -1,50 +1,20 @@
 #!/usr/bin/env python3
-import psutil
-import socket
-from os import getpid,mkdir,system
-from subprocess import Popen,PIPE
-from os.path import isfile
-from glob import glob
-from time import sleep,time
-from os.path import isfile
-from sys import argv
-import re
+from os import mkdir
 import argparse
-import numpy as np
+from lib.utils import *
+"""
+The controller runs a given script on a set of files on S3. The application is intended to run on a set of ec2 instances in parallel. 
+Lock files are used to insure that each file is processed exactly once.
 
-def run(command):
-    print('cmd=',command)
-    system(command)
-    
-def runPipe(command):
-    print('runPipe cmd=',command)
-    p=Popen(command.split(),stdout=PIPE,stderr=PIPE)
-    L=p.communicate()
-    stdout=L[0].decode("utf-8").split('\n')
-    stderr=L[1].decode("utf-8").split('\n')
-    return stdout,stderr
-
-def clock(message):
-    print('%8.1f \t%s'%(time(),message))
-    time_log.append((time(),message))
-
-def printClock():
-    t=time_log[0][0]
-    for i in range(1,len(time_log)):
-        print('%8.1f \t%s'%(time_log[i][0]-t,time_log[i][1]))
-        t=time_log[i][0]
-
-def list_s3_files(s3_directory):
-    stdout,stderr=runPipe("aws s3 ls %s/ "%(s3_directory))
-    return stdout
-    
-def get_file_table(s3_directory,pattern=r'(.*)\.([^\.]*)$'):
+This python file will be rewritten in a simpler way using datajoin
+"""
+def get_file_table(s3_directory,pattern=r'.*'):
     """generate a dictionary of the files in an s3 directory 
     that fit a given regex pattern.
 
     :param s3_directory: s3 directory, example: s3://mousebraindata-open/MD657/
     :param pattern: a regular expression defining the files to be considered.
-    :returns: 
+    :returns: A dictionary in which the file name stem is the key and the value is a list of descriptors of files which have that stem.
     :rtype: 
 
     """
@@ -67,14 +37,14 @@ def get_file_table(s3_directory,pattern=r'(.*)\.([^\.]*)$'):
             else:
                 T[file]=[info]
         else:
-            print(filname,'no match')
+             print(filname,'no match')
     return T
 
 def find_and_lock(s3_directory,pattern=r'.*'):
     """ find an s3 file without a lock and lock it
 
-    :param s3_directory: 
-
+    :param s3_directory: location of files and locks
+    :param pattern: regular expression that should match the file stem
     """
     T=get_file_table(s3_directory,pattern=pattern)
 
@@ -105,41 +75,7 @@ def find_and_lock(s3_directory,pattern=r'.*'):
         if len(extensions)==2:
             return filename
     
-        # translation of date for better handling of two machines putting locks 
-        # at nearly the same time
-        # comparing the time stamps of the locks can be used to resolve who was firstand should continue
-        # and who should look for another file.
-        # from datetime import datetime
-        # d1=datetime.strptime('2018-08-28 21:16:34','%Y-%m-%d %H:%M:%S')
 
-def process_tiles(tile_pattern):
-    i=0
-    print('tile_pattern=',tile_pattern)
-    for infile in glob(tile_pattern):
-        stem=infile[:-4]
-        #print ('infile=%s, stem=%s'%(infile,stem))
-        lockfile=stem+'.lock'
-        if not isfile(lockfile):
-            i+=1
-            print('got lock',lockfile,i)
-            run('python3 {0}/run_job.py {0} {1}'.format(scripts_dir,stem))
-            sleep(0.1)
-        else:
-            #print('\r %s exists'%lockfile,end='')
-            continue
-
-        # Wait if load is too high
-        load=np.mean(psutil.cpu_percent(percpu=True))
-        print(' %5d                            load: %6.2f'%(i,load))
-        j=0
-        while load>85:
-            print(' %5d    Sleep:%3d               load: %6.2f'%(i,j,load))
-            j+=1
-            sleep(2)
-            load=np.mean(psutil.cpu_percent(percpu=True))
-
-        print('\nload low enough',load)
-    return i
 
 if __name__=="__main__":
     
@@ -150,25 +86,22 @@ if __name__=="__main__":
                         help='the name of the script that is to run on each file')
     parser.add_argument("s3location", type=str,
                         help="path to the s3 directory with the lossless images")
-    parser.add_argument("pattern",type=str,default=r'.*',
+    parser.add_argument("pattern",type=str,
                         help="pattern for filtering files from S3 directory")
     parser.add_argument("local_data",type=str,
                         help="path to the local data directory")
     # pattern=r'(.*)\.([^\.]*)$'
     args = parser.parse_args()
-
     scripts_dir=args.scripts_dir
-    script=args.script
     s3_directory=args.s3location
-    pattern=args.pattern
     local_data=args.local_data
     
     time_log=[]
-
     clock('starting Controller with s3_directory=%s, local_data=%s'%(s3_directory,local_data))
 
+
+    #preparations: make dirs data and data/tiles
     try:
-        #preparations: make dirs data and data/tiles
         run('sudo chmod 0777 /dev/shm/')
         mkdir(local_data)
         mkdir(local_data+'/tiles')
@@ -176,41 +109,20 @@ if __name__=="__main__":
     except:
         pass
 
-
+    #main loop
     while True:
         #find an unprocessed file on S3
-        stem=find_and_lock(s3_directory,pattern=r'.*')
+        stem=find_and_lock(s3_directory,pattern=r'(.*)\.([^\.]*)$')
         clock('found and locked %s'%stem)
 
         if stem==None:
             print('all files processed')
             break
 
-        run('rm -rf %s/*'%(local_data))
-        run('mkdir %s/tiles'%local_data)
-        clock('cleaning local directory')
-
-
-        #Bring in a file and break it into tiles
-        run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(s3_directory,stem,local_data,stem))
-        clock('copied from s3: %s'%stem)
-        run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
-        clock('translated into tif')
-        run('convert %s/%s.tif -crop 1000x1000  +repage  +adjoin  %s'%
-            (local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
-        clock('broke into tiles')
-
-        # perform analysis
-        i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
-        clock('1 - processed %6d tiles'%i)
-        i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
-        clock('2 - processed %6d tiles'%i)
-
-        #copy results to s3
-        run("tar czf {0}/{1}_patches.tgz {0}/tiles/*.pkl {0}/tiles/*.log {0}/tiles/*.lock".format(local_data,stem))
-        clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
-
-        run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,s3_directory))
-        clock('copy tar file to S3')
-
+        cmd='python3 %s/%s --local_data  %s --s3location %s --stem %s'\
+            %(scripts_dir,script,local_data,s3_directory,stem)
+        run(cmd)
+        
     printClock()
+
+

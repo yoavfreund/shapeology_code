@@ -1,6 +1,5 @@
 from sys import argv
 from os import getpid,system
-from os.path import isfile
 from time import sleep
 import datetime
 
@@ -12,8 +11,7 @@ def getLock(lockfile):
     except FileExistsError:
         return None
 
-scripts=argv[1]
-stem=argv[2]
+stem=argv[1]
 
 lockfilename=stem+'.lock'
 logfilename=stem+'.log'
@@ -21,7 +19,7 @@ logfilename=stem+'.log'
 lockfile=getLock(lockfilename)
 if not lockfile is None:
 
-    command='python3 %s/extractPatches.py %s > %s &'%(scripts,stem,logfilename)
+    command='python3 extractPatches.py %s > %s &'%(stem,logfilename)
     # put some info into the log/lock file
     now = datetime.datetime.now()
     print('pid=',getpid(), file=lockfile)

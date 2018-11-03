@@ -105,20 +105,22 @@ def extract_patches(_mean,Peaks):
            corner_x+cell_size>markers.shape[1] or corner_y+cell_size>markers.shape[0]):
             continue
 
+        # extract patch
+        ex=np.array(_mean[corner_y:corner_y+cell_size,corner_x:corner_x+cell_size])
+        ex *= mask
         #normalize patch interms of grey values and in terms of rotation
         _m,_std,ex_grey_normed=normalize_greyvals(ex)
         rot_angle1,ex_rotation_normed=normalize_angle(ex_grey_normed)
         rot_angle2,ex_rotation_normed=normalize_angle(ex_rotation_normed)
         total_rotation = rot_angle1+rot_angle2
         normalized_patch =  ex_rotation_normed*mask
-        
+
+        description=DM.label_patch(normalized_patch)
         extracted.append((normalize_patch,_std,total_rotation))
 
+        # compute 
         # mark location of extracted patches
         markers[corner_y:corner_y+cell_size,corner_x:corner_x+cell_size]=stamp
-        # extract patch
-        ex=np.array(_mean[corner_y:corner_y+cell_size,corner_x:corner_x+cell_size])
-        ex *= mask
 
     return extracted,markers
     
