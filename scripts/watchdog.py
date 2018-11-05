@@ -1,34 +1,14 @@
 #!/usr/bin/env python3
 
-from os.path import isfile,getmtime
 from glob import glob
 from time import sleep,time
 from os import system
 from subprocess import Popen,PIPE
+from lib.shape_utils import run,runPipe
 
 stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
 exec_dir='/home/ubuntu/shapeology_code/scripts'
-
-def runPipe(command):
-    print('cmd=',command)
-    p=Popen(command.split(),stdout=PIPE,stderr=PIPE)
-    L=p.communicate()
-    stdout=L[0].decode("utf-8").split('\n')
-    stderr=L[1].decode("utf-8").split('\n')
-    return stdout,stderr
-
-def run(command,out):
-    print('cmd=',command,'out=',out)
-    outfile=open(out,'w')
-    Popen(command.split(),stdout=outfile,stderr=outfile)
-
-def Last_Modified(file_name):
-    try:
-        mtime = getmtime(file_name)
-    except OSError:
-        mtime = 0
-    return(mtime)
 
 if __name__=='__main__':
     Recent=False

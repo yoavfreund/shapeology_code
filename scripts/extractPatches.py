@@ -3,137 +3,92 @@ from cv2 import moments,HuMoments
 import pickle
 import numpy as np
 
-def create_footprint(cell_size=41):
-    center=(cell_size-1)/2.
-    footprint=np.ones([cell_size,cell_size])>1
-
-    for i in range(cell_size):
-        for j in range(cell_size):
-            footprint[i,j]=((i-center)**2+(j-center)**2)<=center**2
-            
-    ratio=sum(footprint.flatten())/(cell_size**2) # ratio of footprint area to square patch area
-    return cell_size,center,ratio,footprint
-
-def normalize_greyvals(ex):
-    ex=ex*mask
-    _flat=ex.flatten()
-    _m=np.mean(_flat)/ratio
-    _m2=np.mean(_flat**2)/ratio
-    #print(_m.shape,_m2.shape,_flat.shape)
-    if _m2>_m**2:
-        _std=np.sqrt(_m2-_m**2)
-    else:
-        _std=1
-        print('error in calc of _std',_m,_m2)
-    #print('normalize_greyvals: mean=',_m,'std=',_std)
-    ex_new=(ex-_m)/_std
-    return _m,_std,ex_new * mask
-
-def angle(ex):
-    rows,cols = ex.shape
-    M=moments(ex+mask)
-    #print(M['m00'],M['m10'],M['m01'])
-    x=M['m10']/M['m00']
-    y=M['m01']/M['m00']
-    nu20=(M['m20']/M['m00'])-x**2
-    nu02=(M['m02']/M['m00'])-y**2
-    nu11=(M['m11']/M['m00'])-y*x
-    ang_est=-np.arctan(2*nu11/(nu20-nu02))/np.pi+0.5
-
-    if ang_est>0.5:
-        ang_est-=1
-    ang180=(ang_est+(np.sign(nu11))/2)*90
-
-    if ang180>=180:
-        ang180-=360
-    if ang180<-180:
-        ang180+=360
-    return ang180
-
-def flipOrNot(ex):
-    rows,cols = ex.shape
-    M=moments(ex)
-    x=M['m10']/M['m00'] - cols/2.
-    y=M['m01']/M['m00'] - rows/2.
-    if abs(x)>abs(y):
-        return x<0
-    else:
-        return y<0
-
-
-def normalize_angle(ex):
-    rows,cols = ex.shape
-    ang=angle(ex)
-    M = cv2.getRotationMatrix2D((cols/2,rows/2),-ang,1)
-    dst= cv2.warpAffine(ex,M,(cols,rows))*footprint*1
-    if flipOrNot(dst):
-        M180 = cv2.getRotationMatrix2D((cols/2,rows/2),180,1)
-        dst = cv2.warpAffine(dst,M180,(cols,rows))
-
-    return ang,dst*footprint*1.
-
 from astropy.convolution import MexicanHat2DKernel,convolve
-mexicanhat_2D_kernel = 10000*MexicanHat2DKernel(10)
-
-def find_threshold(image,percentile=0.9):
-    V=sorted(image.flatten())
-    l=len(V)
-    thr=V[int(l*percentile)] #consider only peaks in the top 5%
-    return thr
-
-def normalize(window,range=[0,1],dtype=np.float32):
-    _max=max(window.flatten())
-    _min=min(window.flatten())
-    return np.array((window-_min)/(_max-_min),dtype=dtype)
-
 from photutils.detection import find_peaks
 
-def extract_patches(_mean,Peaks):
-    markers=_mean*np.float32(0)
-    stamp=footprint*np.float32(0.2)
+from label_patch import diffusionMap
+from patch_normalizer import normalizer
 
-    X=list(Peaks["x_peak"])
-    Y=list(Peaks["y_peak"])
+mexicanhat_2D_kernel = 10000*MexicanHat2DKernel(10)
 
-    extracted=[]
-    for i in range(len(X)):
-        corner_x=np.uint16(X[i]-center)
-        corner_y=np.uint16(Y[i]-center)
+class patch_extractor:
+    def __init__(self,min_std=10,kernel=mexicanhat_2D_kernel,percentile=0.9):
+        """Initialize a patch extractor. The extractor works by first checking if the grey value std is too small, in which case it aborts.
+        otherwise it uses a mexican-hat kernel followed by photutils.detection.find_peaks to define the center of cells.
 
-        # ignore patches that extend outside of window
-        if(corner_x<0 or corner_y<0 or \
-           corner_x+cell_size>markers.shape[1] or corner_y+cell_size>markers.shape[0]):
-            continue
+        :param min_std: defines what is considered an image that is "too flat" or "too empty"
+        :param kernel: the kernel used for preprocessing
+        :param percentile: the percentile of the values after convolution that are to be considered for find_peaks.
+        :returns: 
+        :rtype: 
 
-        # extract patch
-        ex=np.array(_mean[corner_y:corner_y+cell_size,corner_x:corner_x+cell_size])
-        ex *= mask
-        #normalize patch interms of grey values and in terms of rotation
-        _m,_std,ex_grey_normed=normalize_greyvals(ex)
-        rot_angle1,ex_rotation_normed=normalize_angle(ex_grey_normed)
-        rot_angle2,ex_rotation_normed=normalize_angle(ex_rotation_normed)
-        total_rotation = rot_angle1+rot_angle2
-        normalized_patch =  ex_rotation_normed*mask
+        """
+        self.min_std=min_std
+        self.kernel=kernel
+        self.percentile=percentile
+        self.Norm=normalizer()
+        self.DM = diffusionMap('../notebooks/diffusionMap.pkl')
+        self.cell_size=self.Norm.cell_size
+        self.center=self.Norm.center
 
-        description=DM.label_patch(normalized_patch)
-        extracted.append((normalize_patch,_std,total_rotation))
+    def find_threshold(self,image):
+        V=sorted(image.flatten())
+        l=len(V)
+        thr=V[int(l*self.percentile)] #consider only peaks in the top 5%
+        return thr
 
-        # compute 
-        # mark location of extracted patches
-        markers[corner_y:corner_y+cell_size,corner_x:corner_x+cell_size]=stamp
+    def normalize_window(self,window,dtype=np.float32):
+        _max=max(window.flatten())
+        _min=min(window.flatten())
+        return np.array((window-_min)/(_max-_min),dtype=dtype)
 
-    return extracted,markers
+    def check_blank(self,window,min_std=10):
+        # find whether window mosly blank and should be ignored.
+        return np.std(window.flatten()) < self.min_std
+
+    def preprocess(self,window):
+        _mean=self.normalize_window(window)
+        P=convolve(_mean,mexicanhat_2D_kernel)
+        # Take abs value to find peaks of both polarities.
+        # keep P to decide which peaks are positive and which are negative
+        thr=self.find_threshold(P)
+        Peaks=find_peaks(P,thr,footprint=self.Norm.footprint)
+        return _mean,P,Peaks
+
+    def extract_patches(self,_mean,Peaks):
+        markers=_mean*np.float32(0)
+
+        X=list(Peaks["x_peak"])
+        Y=list(Peaks["y_peak"])
+
+        extracted=[]
+        for i in range(len(X)):
+            corner_x=np.uint16(X[i]-self.center)
+            corner_y=np.uint16(Y[i]-self.center)
+
+            # ignore patches that extend outside of window
+            if(corner_x<0 or corner_y<0 or \
+               corner_x+self.cell_size>markers.shape[1] or corner_y+self.cell_size>markers.shape[0]):
+                continue
+
+            # extract patch
+            ex=np.array(_mean[corner_y:corner_y+self.cell_size,corner_x:corner_x+self.cell_size])
+            normalized_patch,rotation,confidence=self.Norm.normalize_patch(ex)
+            description=self.DM.label_patch([normalized_patch])
+            extracted.append({'i':i,
+                              'X':X[i],
+                              'Y':Y[i],
+                              'normalized_patch':normalized_patch,
+                              'rotation':rotation,
+                              'confidence':confidence,
+                              'description': description})
+
+            # compute 
+            # mark location of extracted patches
+            #markers[corner_y:corner_y+cell_size,corner_x:corner_x+cell_size]=stamp
+
+        return extracted
     
-def check_blank(window,min_std=10):
-    # find whether window mosly blank and should be ignored.
-    return np.std(window.flatten()) < min_std
-
-def preprocess(window):
-    _mean=normalize(window)
-    P=convolve(_mean,mexicanhat_2D_kernel)
-    thr=find_threshold(P,0.9)
-    Peaks=find_peaks(P,thr,footprint=footprint)
-    return _mean,P,Peaks
 
 if __name__=="__main__":
 
@@ -147,18 +102,18 @@ if __name__=="__main__":
     infile = args.filestem+'.tif'
     outfile= args.filestem+'_extracted.pkl'
 
+    extractor=patch_extractor()
+    
     window=cv2.imread(infile,cv2.IMREAD_GRAYSCALE | cv2.IMREAD_ANYDEPTH)
 
-    if check_blank(window):
+    if extractor.check_blank(window):
         print('image',infile,'too blank, skipping')
     else:
         t0=time()
         print('processing',infile,'into',outfile)
-        cell_size,center,ratio,footprint=create_footprint(cell_size=41)
-        mask=1.*footprint
-        _mean,P,Peaks=preprocess(window)    
+        _mean,P,Peaks=extractor.preprocess(window)    
         print('found',len(Peaks),'patches')
-        extracted,markers=extract_patches(_mean,Peaks)
+        extracted=extractor.extract_patches(_mean,Peaks)
 
         pickle.dump(extracted,open(outfile,'wb'))
         print('finished in %5.1f seconds'%(time()-t0))

@@ -70,13 +70,14 @@ def process_file(local_data,s3_directory,stem):
     return
 
 if __name__=="__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="A script that takes in an S3 directory breaks it into tiles and extracts normalized patches from these tiles.")
     parser.add_argument("s3location", type=str,
                         help="path to the s3 directory with the lossless images")
     parser.add_argument('stem',type=str,
                         help='the file name stem')
     parser.add_argument("local_data",type=str,
                         help="path to the local data directory")
+    parser.
     # pattern=r'(.*)\.([^\.]*)$'
     args = parser.parse_args()
 

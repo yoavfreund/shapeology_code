@@ -1,13 +1,15 @@
-#!/usr/bin/env python3
+
 import psutil
 from os import system
 from subprocess import Popen,PIPE
 from time import time
 
 import numpy as np
+from numpy import sqrt, mean
 from subprocess import Popen,PIPE
 from os import system
-from os.path import isfile
+from os.path import isfile,getmtime
+
 import matplotlib.pyplot as plt
 from astropy.convolution import Gaussian2DKernel,convolve
 
@@ -63,8 +65,18 @@ def data_stream(s3_dir='s3://mousebraindata-open/MD657/permuted'):
             j+=1    
             yield pics[i,:,:]
 
-def calc_err(pic,gaussian = Gaussian2DKernel(1,x_size=7,y_size=7)):
-    factor=sum(gaussian)
+
+def Last_Modified(file_name):
+    try:
+        mtime = getmtime(file_name)
+    except OSError:
+        mtime = 0
+    return(mtime)
+            
+def calc_err(pic,gaussian = None):
+    if gaussian is None:
+        gaussian=Gaussian2DKernel(1,x_size=7,y_size=7)
+    factor=np.sum(gaussian)
     P=convolve(pic,gaussian)/factor
     #except:
     #    print('err in calc_err/convolve',pic.shape,gaussian.shape,factor)
@@ -96,7 +108,7 @@ def pack_pics(Reps):
 
 def dist2(a,b):
     diff=(a-b)**2
-    return sum(diff.flatten())
+    return np.sum(diff.flatten())
 
 def dist_hist(data):
     D=[]
