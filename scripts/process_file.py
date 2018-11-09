@@ -77,7 +77,7 @@ if __name__=="__main__":
                         help='the file name stem')
     parser.add_argument("local_data",type=str,
                         help="path to the local data directory")
-    parser.
+    #parser.
     # pattern=r'(.*)\.([^\.]*)$'
     args = parser.parse_args()
 

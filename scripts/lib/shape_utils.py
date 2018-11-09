@@ -25,6 +25,7 @@ def runPipe(command):
     stderr=L[1].decode("utf-8").split('\n')
     return stdout,stderr
 
+time_log=[]
 def clock(message):
     print('%8.1f \t%s'%(time(),message))
     time_log.append((time(),message))
@@ -117,3 +118,18 @@ def dist_hist(data):
         if i%1000==0:
             print('\r',i,end='')
     hist(D,bins=100);
+
+def find_threshold(image,percentile=0.9):
+    """find the threshold at the given percentile
+
+    :param image: grey-level image
+    :param percentile: percentile of threshold
+    :returns: threshold
+    :rtype: float
+
+    """
+    V=sorted(image.flatten())
+    l=len(V)
+    thr=V[int(l*percentile)] 
+    return thr
+

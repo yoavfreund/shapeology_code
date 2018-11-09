@@ -8,8 +8,10 @@ from photutils.detection import find_peaks
 
 from label_patch import diffusionMap
 from patch_normalizer import normalizer
+from lib.shape_utils import find_threshold
 
 mexicanhat_2D_kernel = 10000*MexicanHat2DKernel(10)
+
 
 class patch_extractor:
     def __init__(self,min_std=10,kernel=mexicanhat_2D_kernel,percentile=0.9):
@@ -26,36 +28,39 @@ class patch_extractor:
         self.min_std=min_std
         self.kernel=kernel
         self.percentile=percentile
-        self.Norm=normalizer()
-        self.DM = diffusionMap('../notebooks/diffusionMap.pkl')
+        self.threshold=0.6
+        self.Norm=normalizer(cell_size=41)
+        #self.DM = diffusionMap('../notebooks/diffusionMap.pkl')
         self.cell_size=self.Norm.cell_size
         self.center=self.Norm.center
 
-    def find_threshold(self,image):
-        V=sorted(image.flatten())
-        l=len(V)
-        thr=V[int(l*self.percentile)] #consider only peaks in the top 5%
-        return thr
 
-    def normalize_window(self,window,dtype=np.float32):
-        _max=max(window.flatten())
-        _min=min(window.flatten())
-        return np.array((window-_min)/(_max-_min),dtype=dtype)
+    def check_and_normalize(self,window,min_std=10):
+        """ Compute the mean and td of the window, if std<min_std, return None
+        otherwise, return a normalized window with mean 0 and std 1
 
-    def check_blank(self,window,min_std=10):
+        :param window: 2d np.array with the grey-val image of a tile
+        :param min_std: thereshold for rejecting tile
+        :returns: None or normalized 2D image
+        :rtype: 2d np.array
+
+        """
         # find whether window mosly blank and should be ignored.
-        return np.std(window.flatten()) < self.min_std
+        F=window.flatten()
+        _mean=np.mean(F)
+        _std=np.std(F)
+        if _std < self.min_std:
+            return None # window too uniform - background
+        n_window=(window-_mean)/_std
+        return n_window
 
     def preprocess(self,window):
-        _mean=self.normalize_window(window)
-        P=convolve(_mean,mexicanhat_2D_kernel)
-        # Take abs value to find peaks of both polarities.
-        # keep P to decide which peaks are positive and which are negative
-        thr=self.find_threshold(P)
+        P=convolve(window,mexicanhat_2D_kernel)
+        thr=find_threshold(P,self.percentile)
         Peaks=find_peaks(P,thr,footprint=self.Norm.footprint)
-        return _mean,P,Peaks
+        return window,P,Peaks
 
-    def extract_patches(self,_mean,Peaks):
+    def extract_patches(self,_mean,Peaks,P):
         markers=_mean*np.float32(0)
 
         X=list(Peaks["x_peak"])
@@ -74,14 +79,16 @@ class patch_extractor:
             # extract patch
             ex=np.array(_mean[corner_y:corner_y+self.cell_size,corner_x:corner_x+self.cell_size])
             normalized_patch,rotation,confidence=self.Norm.normalize_patch(ex)
-            description=self.DM.label_patch([normalized_patch])
+            #description=self.DM.label_patch([normalized_patch])
             extracted.append({'i':i,
                               'X':X[i],
                               'Y':Y[i],
+                              'original_patch':ex,
                               'normalized_patch':normalized_patch,
                               'rotation':rotation,
                               'confidence':confidence,
-                              'description': description})
+                              #'description': description
+            })
 
             # compute 
             # mark location of extracted patches
@@ -96,24 +103,33 @@ if __name__=="__main__":
     from time import time
     parser = argparse.ArgumentParser()
     parser.add_argument("filestem", type=str,
-                    help="Process <filestem>.pkl into <filestem>_extracted.pkl")
+                    help="Process <filestem>.tif into <filestem>_extracted.pkl")
 
+    parser.add_argument("-n", "--noinvert", action="store_true",
+                        help="choose not to invert polarity of image, default is to invert (cells are dark)")
     args = parser.parse_args()
     infile = args.filestem+'.tif'
     outfile= args.filestem+'_extracted.pkl'
+    polarity=-1
+    if args.noinvert:
+        polarity=1
 
     extractor=patch_extractor()
     
     window=cv2.imread(infile,cv2.IMREAD_GRAYSCALE | cv2.IMREAD_ANYDEPTH)
 
-    if extractor.check_blank(window):
+    window=polarity*window  # cells should be bright, background dark
+
+    n_window=extractor.check_and_normalize(window)
+
+    if n_window is None:
         print('image',infile,'too blank, skipping')
     else:
         t0=time()
         print('processing',infile,'into',outfile)
-        _mean,P,Peaks=extractor.preprocess(window)    
+        _mean,P,Peaks=extractor.preprocess(n_window)    
         print('found',len(Peaks),'patches')
-        extracted=extractor.extract_patches(_mean,Peaks)
+        extracted=extractor.extract_patches(_mean,Peaks,P)
 
         pickle.dump(extracted,open(outfile,'wb'))
         print('finished in %5.1f seconds'%(time()-t0))
