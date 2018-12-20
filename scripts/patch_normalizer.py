@@ -3,61 +3,62 @@ from cv2 import moments,HuMoments
 from skimage.measure import label
 import pickle
 import numpy as np
-from lib.shape_utils import find_threshold
+#from lib.shape_utils import find_threshold
+
+def calc_width(im):
+    im=im/np.sum(im)
+    _sum=im.sum(axis=0)
+    x=np.arange(0,len(_sum))
+    return np.sqrt(np.dot(x**2,_sum)-np.dot(x,_sum)**2)
 
 class normalizer:
     """ a class for normalizing patches """
-    def __init__(self,cell_size=41,threshold=1):
-        """
-        Initialize a Normalizer
+    def __init__(self,params):
+        """        Initialize a Normalizer
         create a circular mask of a given size, size must be an odd number.
 
-        :param cell_size: the size of the mask.
+        :param params
         """
-        cell_size=int(cell_size)
-        if cell_size < 1 or cell_size % 2 !=1:
-            raise Exception("normalizer.init, cell_size=",cell_size,"should be an odd positive integer")
-        self.cell_size=cell_size
-        self.threshold=threshold
-        self.center=(cell_size-1)/2.
-        self.icent=int(self.center)
-        self.footprint=np.ones([cell_size,cell_size])>1
+        self.params=params
         
-        for i in range(cell_size):
-            for j in range(cell_size):
-                self.footprint[i,j]=((i-self.center)**2+(j-self.center)**2)<=self.center**2
-                
-        self.mask = 1.* self.footprint
-        self.ratio=sum(self.footprint.flatten())/(self.cell_size**2) # ratio of footprint area to square patch area
-        #return self.cell_size,self.center,self.ratio,self.footprint
+    def circle_patch(self,radius):
+        size=2*radius+1
+        x=np.arange(-radius,radius+1)
+        xx=np.array([x for i in x])
+        yy=xx.T
+        d=np.sqrt(xx**2+yy**2)
+        return np.array((d<radius+0.1)*1,dtype=np.uint8)
 
+    def set_mask(self,radius):
+        #print('set mask, radius=',radius)
+        self.mask = self.circle_patch(radius)
+        self.center=int(radius)
+        self.size=2*radius+1
+        
     def normalize_greyvals(self,ex):
         """normalize the grey-values of a patch so the the mean is zero and the std is 1.
         :param ex:  patch
         :returns: 
-        * _m: the mean grey val before normalization
-        * _m2: std of the grey val before normalization
         * patch: normalized pattch: numpy 2D array
+        * dict: a dictionary of values associated with normalizing the patch
         """
-        ex=ex*self.mask
         _flat=ex.flatten()
-        _m=np.mean(_flat)/self.ratio
-        _m2=np.mean(_flat**2)/self.ratio
+        _m=np.mean(_flat)
+        _m2=np.mean(_flat**2)
         if _m2>_m**2:
             _std=np.sqrt(_m2-_m**2)
         else:
             _std=1
             print('error in calc of _std',_m,_m2)
-        ex_new=(ex-_m)/_std
-        return _m,_std,ex_new * self.mask
 
-    def segment_patch(self,patch):
-        threshold=find_threshold(patch,percentile=0.8)
-        binary=(patch<threshold)*1
-        labels=label(binary,connectivity=2,background=int(binary[0,0]))
-        mask=(labels==labels[self.icent,self.icent])
-        masked_patch=patch*mask
-        return masked_patch
+        Dict={
+            'mean':_m,
+            'std':_std
+        }
+
+        ex_new=ex/_std
+        return ex_new,Dict
+
     
     def angle(self,ex):
         """compute the rotation angle of a patch
@@ -67,10 +68,7 @@ class normalizer:
         :rtype: 
 
         """
-        rows,self.size = ex.shape
-        nex=np.array(ex)
-        #nex[nex>0]=0  # remove background
-        M=moments(-nex+self.mask)
+        M=moments(ex)
         #print(M['m00'],M['m10'],M['m01'])
         x=M['m10']/M['m00']
         y=M['m01']/M['m00']
@@ -108,7 +106,6 @@ class normalizer:
         :rtype: 
 
         """
-        self.size,self.size = ex.shape
         M=moments(ex)
         x=M['m10']/M['m00'] - self.center
         y=M['m01']/M['m00'] - self.center
@@ -135,14 +132,51 @@ class normalizer:
         return ang,conf,dst*self.mask
 
     # normalized_patch,rotation,confidence=Norm.
-    def normalize_patch(self,ex):
-        ex *= self.mask
+    def put_in_circle(self,ex,prop):
+        M=moments(ex)
+        #print(M['m00'],M['m10'],M['m01'])
+        x=M['m10']/M['m00']
+        y=M['m01']/M['m00']
+
+        x=round(x)
+        y=round(y)
+        w=prop['width']
+        h=prop['height']
+        x,y,h,w
+        xc=w-x
+        yc=h-y
+        radius=int(np.ceil(np.sqrt(np.max([(x*x+y*y),(xc*xc+y*y),(x*x+yc*yc),(xc*xc+yc*yc)]))))
+        self.set_mask(radius)
+        size=2*radius+1
+        circ_patch=np.zeros([size,size])
+        x1=int(radius-x)
+        x2=x1+w
+        y1=int(radius-y)
+        y2=y1+h
+        circ_patch[y1:y2,x1:x2]=ex
+        return circ_patch
+
+    def normalize_patch(self,ex,props):
+        ex_in_circle = self.put_in_circle(np.copy(ex),props)
         #normalize patch interms of grey values and in terms of rotation
-        _m,_std,ex_grey_normed=self.normalize_greyvals(ex)
-        segmented=self.segment_patch(ex_grey_normed)
-        rot_angle1,conf1,ex_rotation_normed=self.normalize_angle(segmented)
-        rot_angle2,conf2,ex_rotation_normed=self.normalize_angle(ex_rotation_normed)
+        ex_grey_normed,grey_level_stats=self.normalize_greyvals(np.copy(ex_in_circle))
+
+        #normalize angle
+        rot_angle1,conf1,ex_rotation_normed=self.normalize_angle(np.copy(ex_grey_normed))
+        rot_angle2,conf2,ex_rotation_normed=self.normalize_angle(np.copy(ex_rotation_normed))
         total_rotation = rot_angle1+rot_angle2
         confidence=conf2
         normalized_patch =  ex_rotation_normed*self.mask
-        return normalized_patch,total_rotation,confidence
+        Dict={
+            #'original_patch':ex,
+            #'patch_in_circle':ex_in_circle,
+            #'ex_grey_normed':ex_grey_normed,
+            'normalized_patch':normalized_patch,
+            'rotation':total_rotation,
+            'rotation_confidence':confidence,
+            'horiz_std':calc_width(normalized_patch),
+            'vert_std':calc_width(normalized_patch.T)
+        }
+        Dict.update(grey_level_stats)
+
+        return Dict

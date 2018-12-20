@@ -51,8 +51,8 @@ def process_file(local_data,s3_directory,stem):
     clock('copied from s3: %s'%stem)
     run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
     clock('translated into tif')
-    run('convert %s/%s.tif -crop 1000x1000  +repage  +adjoin  %s'%
-        (local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
+    # convert MD657-N48-2017.02.22-16.41.55_MD657_2_0143_lossless.tif -crop 20x10@+100+100@  new_tiles/tiles_%02d.tif
+    run('convert %s/%s.tif -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
     clock('broke into tiles')
     
     # perform analysis

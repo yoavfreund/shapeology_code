@@ -1,0 +1,10 @@
+---
+name: "thr"
+preprocessing:
+  polarity: -1  # invert polarity of image (cells are dark)
+  min_std:  10  # if tile has std smaller than min_std then it is
+                # ignored as "too smooth"
+  offset:   -20 # offset used in cv2.adaptiveThreshold
+  min_area: 10  # Patches with area smaller than min_area are ignored
+  margin: 2     # The number of pixels to add above/below unnormalized patch 
+

@@ -19,7 +19,7 @@ logfilename=stem+'.log'
 lockfile=getLock(lockfilename)
 if not lockfile is None:
 
-    command='python3 extractPatches.py %s > %s &'%(stem,logfilename)
+    command='python3 extractPatches.py %s shape_params.yaml > %s &'%(stem,logfilename)
     # put some info into the log/lock file
     now = datetime.datetime.now()
     print('pid=',getpid(), file=lockfile)

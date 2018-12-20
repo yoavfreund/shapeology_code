@@ -10,8 +10,19 @@ from subprocess import Popen,PIPE
 from os import system
 from os.path import isfile,getmtime
 
+import cv2
+
 import matplotlib.pyplot as plt
 from astropy.convolution import Gaussian2DKernel,convolve
+
+import yaml
+
+class configuration():
+    def __init__(self,yamlFile):
+        self.D=yaml.load(open(yamlFile,'r'))
+
+    def getParams(self):
+        return self.D
 
 def run(command):
     print('cmd=',command)
@@ -119,11 +130,12 @@ def dist_hist(data):
             print('\r',i,end='')
     hist(D,bins=100);
 
-def find_threshold(image,percentile=0.9):
+def find_threshold(image,percentile):
     """find the threshold at the given percentile
 
     :param image: grey-level image
-    :param percentile: percentile of threshold
+    :param percentile: threshold is chosen so that 
+                       percentile of the pixels are lower than it
     :returns: threshold
     :rtype: float
 
@@ -133,3 +145,35 @@ def find_threshold(image,percentile=0.9):
     thr=V[int(l*percentile)] 
     return thr
 
+def mark_contours(D,tile):
+
+    image = np.array(tile,dtype=np.uint8)
+    kernel = np.ones((3,3),np.uint8)
+    boundary=np.zeros(image.shape,np.uint8)
+    repress=boundary.copy()
+    #print('shape of boundary=',boundary.shape)
+    _shape=D[0]['mask'].shape
+    left=int(_shape[0]/2)
+    right=_shape[0]-left
+    left,right
+
+    for R in D:
+        #compute contour
+        color=np.array([0,0,0],dtype=np.uint8)
+        color[R['j'] % 2]=255
+        mask=np.array(R['mask']*1,dtype=np.uint8)
+        dilated = cv2.dilate(mask,kernel,iterations = 1)
+        contour = dilated-mask
+        #mark contour in ln image coordinates
+        coor=[R['Y'],R['X']]
+
+        boundary[coor[0]-left:coor[0]+right,coor[1]-left:coor[1]+right]\
+        +=np.multiply.outer(contour,color)
+        repress[coor[0]-left:coor[0]+right,coor[1]-left:coor[1]+right]\
+        +=np.multiply.outer(contour,np.array([1,1,1],dtype=np.uint8))
+
+    combined=image.copy()
+    combined[repress==1]=255
+    # combined +=boundary
+
+    return combined

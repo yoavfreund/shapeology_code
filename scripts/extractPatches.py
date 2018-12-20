@@ -3,100 +3,102 @@ from cv2 import moments,HuMoments
 import pickle
 import numpy as np
 
-from astropy.convolution import MexicanHat2DKernel,convolve
-from photutils.detection import find_peaks
-
 from label_patch import diffusionMap
 from patch_normalizer import normalizer
-from lib.shape_utils import find_threshold
-
-mexicanhat_2D_kernel = 10000*MexicanHat2DKernel(10)
-
+from lib.shape_utils import find_threshold, mark_contours, configuration
 
 class patch_extractor:
-    def __init__(self,min_std=10,kernel=mexicanhat_2D_kernel,percentile=0.9):
-        """Initialize a patch extractor. The extractor works by first checking if the grey value std is too small, in which case it aborts.
-        otherwise it uses a mexican-hat kernel followed by photutils.detection.find_peaks to define the center of cells.
+    def __init__(self,infile,params):
+        """Initialize a patch extractor. 
+        The extractor works by first checking if the gray 
+        value std is too small, in which case it aborts.
 
-        :param min_std: defines what is considered an image that is "too flat" or "too empty"
-        :param kernel: the kernel used for preprocessing
-        :param percentile: the percentile of the values after convolution that are to be considered for find_peaks.
+        :param infile: filename of tile 
+        :param params: parameters
         :returns: 
         :rtype: 
 
         """
-        self.min_std=min_std
-        self.kernel=kernel
-        self.percentile=percentile
-        self.threshold=0.6
-        self.Norm=normalizer(cell_size=41)
+        self.params=params
+        self.min_area=params['preprocessing']['min_area']
+        self.Norm=normalizer(params)
+        self.preprocess_kernel=self.Norm.circle_patch(radius=1)
+        
+        self.tile_stats={'tile name':infile}
         #self.DM = diffusionMap('../notebooks/diffusionMap.pkl')
-        self.cell_size=self.Norm.cell_size
-        self.center=self.Norm.center
 
+    def segment_cells(self,gray):
+        offset = self.params['preprocessing']['offset']
 
-    def check_and_normalize(self,window,min_std=10):
-        """ Compute the mean and td of the window, if std<min_std, return None
-        otherwise, return a normalized window with mean 0 and std 1
+        thresh = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+                                       cv2.THRESH_BINARY,101,offset)
 
-        :param window: 2d np.array with the grey-val image of a tile
-        :param min_std: thereshold for rejecting tile
-        :returns: None or normalized 2D image
-        :rtype: 2d np.array
+        # erosion to seperate weakly linked blobs
+        clean=cv2.erode(thresh,self.preprocess_kernel,iterations = 8)
+        Stats=cv2.connectedComponentsWithStats(thresh)
+        return Stats
+
+    def extract_blobs(self,Stats,tile,gray):
+        """given a set of connected components extract convexified components from gray image and annotate on color image(tile)
+
+        :param Stats: Output from cv2.connectedComponentsWithStats
+        :param tile: original image
+        :param gray: tile transfrmed to gray-scale
+        :returns: 
+        :rtype: 
 
         """
-        # find whether window mosly blank and should be ignored.
-        F=window.flatten()
-        _mean=np.mean(F)
-        _std=np.std(F)
-        if _std < self.min_std:
-            return None # window too uniform - background
-        n_window=(window-_mean)/_std
-        return n_window
+         # parse Stats
+        no_blobs,seg,props,location = Stats
 
-    def preprocess(self,window):
-        P=convolve(window,mexicanhat_2D_kernel)
-        thr=find_threshold(P,self.percentile)
-        Peaks=find_peaks(P,thr,footprint=self.Norm.footprint)
-        return window,P,Peaks
+        left= props[:,0]
+        top = props[:,1]
+        width = props[:,2]
+        height = props[:,3]
+        area = props[:,4]
 
-    def extract_patches(self,_mean,Peaks,P):
-        markers=_mean*np.float32(0)
-
-        X=list(Peaks["x_peak"])
-        Y=list(Peaks["y_peak"])
-
+        marked_tile=np.copy(tile)
+        size_step=20
         extracted=[]
-        for i in range(len(X)):
-            corner_x=np.uint16(X[i]-self.center)
-            corner_y=np.uint16(Y[i]-self.center)
-
-            # ignore patches that extend outside of window
-            if(corner_x<0 or corner_y<0 or \
-               corner_x+self.cell_size>markers.shape[1] or corner_y+self.cell_size>markers.shape[0]):
+        H,W=seg.shape
+        for i in range(1,no_blobs):
+            if area[i]<self.min_area:
+                continue
+            #extract patch
+            t,b,l,r = top[i],top[i]+height[i],left[i],left[i]+width[i]
+            if t==0 or b==H or l==0 or r==W: #ignore patches that touch the boundary (likely to be partial)
                 continue
 
-            # extract patch
-            ex=np.array(_mean[corner_y:corner_y+self.cell_size,corner_x:corner_x+self.cell_size])
-            normalized_patch,rotation,confidence=self.Norm.normalize_patch(ex)
-            #description=self.DM.label_patch([normalized_patch])
-            extracted.append({'i':i,
-                              'X':X[i],
-                              'Y':Y[i],
-                              'original_patch':ex,
-                              'normalized_patch':normalized_patch,
-                              'rotation':rotation,
-                              'confidence':confidence,
-                              #'description': description
-            })
+            # Extract connected component
+            sub_mask = np.array((seg[t:b,l:r]==i)*1,dtype=np.uint8)
+            # recover threshold that was used
+            masked_image=np.copy(gray[t:b,l:r])
+            masked_image[sub_mask==0]=255
+            _thr=np.min(masked_image.flatten())
 
-            # compute 
-            # mark location of extracted patches
-            #markers[corner_y:corner_y+cell_size,corner_x:corner_x+cell_size]=stamp
+            # compute convex hull of sub_mask
+            im2, contours, hierarchy = cv2.findContours(sub_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            convex_contour=cv2.convexHull(contours[0][:,0,:],returnPoints=True)
+            slate=np.zeros([b-t,r-l,3],dtype=np.uint8)
+            convex_mask = cv2.drawContours(slate, [convex_contour],0,(0,255,0),-1)[:,:,1]
+            #compute Threshold used 
+            masked_image=np.array(gray[t:b,l:r],dtype=np.int16)-_thr
+            masked_image[convex_mask==0]=0
+            masked_image[masked_image<0]=0
 
-        return extracted
+            properties={'left':left[i],
+                        'top':top[i],
+                        'width':width[i],
+                        'height':height[i],
+                        'area':area[i]}
+            more_properties = self.Norm.normalize_patch(masked_image, properties)
+            properties.update(more_properties)
+            extracted.append(properties)
+            #print(properties.keys())
+            #break
+            cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
+        return extracted,marked_tile
     
-
 if __name__=="__main__":
 
     import argparse
@@ -104,32 +106,51 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("filestem", type=str,
                     help="Process <filestem>.tif into <filestem>_extracted.pkl")
-
-    parser.add_argument("-n", "--noinvert", action="store_true",
-                        help="choose not to invert polarity of image, default is to invert (cells are dark)")
-    args = parser.parse_args()
-    infile = args.filestem+'.tif'
-    outfile= args.filestem+'_extracted.pkl'
-    polarity=-1
-    if args.noinvert:
-        polarity=1
-
-    extractor=patch_extractor()
+    parser.add_argument("yaml", type=str,
+                    help="Path to Yaml file with parameters")
     
-    window=cv2.imread(infile,cv2.IMREAD_GRAYSCALE | cv2.IMREAD_ANYDEPTH)
+    # Add parameters for size of mexican hat and size of cell, threshold, percentile
+    # Define file name based on size. Use this name for log file and for countours image.
+    # save parameters in a log file ,
+    
+    args = parser.parse_args()
+    config = configuration(args.yaml)
+    params=config.getParams()
 
-    window=polarity*window  # cells should be bright, background dark
+    stem=args.filestem
+    infile = stem+'.tif'
+    out_stem= stem+'.'+params['name']
+    outfile= out_stem+'_extracted.pkl'
+    annotated_infile=out_stem+'_contours.jpg'
 
-    n_window=extractor.check_and_normalize(window)
+    extractor=patch_extractor(infile,params)
 
-    if n_window is None:
-        print('image',infile,'too blank, skipping')
+    tile=cv2.imread(infile)
+    #print('tile is of type',type(tile[0,0,0]))
+    gray = cv2.cvtColor(tile,cv2.COLOR_BGR2GRAY)
+    print('gray is of type',type(gray[0,0]))
+
+    if params['preprocessing']['polarity']==-1:
+        gray = 255-gray
+
+    #n_window=extractor.check_and_normalize(gray)
+
+    min_std=params['preprocessing']['min_std']
+    _std = np.std(gray.flatten())
+    
+    if _std < min_std:
+        print('image',infile,'std=',_std, 'too blank, skipping')
     else:
         t0=time()
         print('processing',infile,'into',outfile)
-        _mean,P,Peaks=extractor.preprocess(n_window)    
-        print('found',len(Peaks),'patches')
-        extracted=extractor.extract_patches(_mean,Peaks,P)
+        Stats=extractor.segment_cells(gray)
+        extracted,marked_tile = extractor.extract_blobs(Stats,tile,gray)
 
+        print('extracted',len(extracted),'patches')
+        
         pickle.dump(extracted,open(outfile,'wb'))
+        print('patches written to',outfile)
+
+        cv2.imwrite(annotated_infile,marked_tile)
+        print('annotated image written to',annotated_infile)
         print('finished in %5.1f seconds'%(time()-t0))
