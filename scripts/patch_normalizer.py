@@ -3,7 +3,6 @@ from cv2 import moments,HuMoments
 from skimage.measure import label
 import pickle
 import numpy as np
-#from lib.shape_utils import find_threshold
 
 def calc_width(im):
     im=im/np.sum(im)

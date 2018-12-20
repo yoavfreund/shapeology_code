@@ -5,7 +5,7 @@ import pickle as pk
 import pydiffmap
 import sys
 import numpy as np
-from lib.shape_utils import calc_err
+from lib.utils import calc_err
 
 # Pre-process patch to reduce resolution and filter if too
 # noisy. (have flag in the label for that)

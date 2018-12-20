@@ -9,7 +9,7 @@ from time import sleep
 from os.path import isfile
 import numpy as np
 import argparse
-from lib.shape_utils import *
+from lib.utils import *
 
 
 def process_tiles(tile_pattern):
