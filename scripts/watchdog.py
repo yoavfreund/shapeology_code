@@ -4,7 +4,7 @@ from glob import glob
 from time import sleep,time
 from os import system
 from subprocess import Popen,PIPE
-from lib.shape_utils import run,runPipe
+from lib.utils import run,runPipe, Last_Modified
 
 stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
@@ -32,5 +32,9 @@ if __name__=='__main__':
         else:
             command='{0}/Controller.py {0} {1} {2}'\
                 .format(exec_dir,stack,local_data)
-            output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
-            run(command,output)
+            outfile=open('{0}/Controller-{1}.log'.format(exec_dir,int(time())),'w')
+            errfile=open('{0}/Controller-{1}.err'.format(exec_dir,int(time())),'w')
+            out,err=runPipe(command)
+            outfile.write('\n'.join(out))
+            errfile.write('\n'.join(out))            
+            

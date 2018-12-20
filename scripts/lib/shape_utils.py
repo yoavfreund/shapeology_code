@@ -1,4 +1,3 @@
-
 import psutil
 from os import system
 from subprocess import Popen,PIPE
@@ -6,14 +5,15 @@ from time import time
 
 import numpy as np
 from numpy import sqrt, mean
+#utils that do not require plotting
 from subprocess import Popen,PIPE
 from os import system
 from os.path import isfile,getmtime
 
 import cv2
 
-import matplotlib.pyplot as plt
-from astropy.convolution import Gaussian2DKernel,convolve
+#import matplotlib.pyplot as plt
+#from astropy.convolution import Gaussian2DKernel,convolve
 
 import yaml
 
@@ -85,30 +85,30 @@ def Last_Modified(file_name):
         mtime = 0
     return(mtime)
             
-def calc_err(pic,gaussian = None):
-    if gaussian is None:
-        gaussian=Gaussian2DKernel(1,x_size=7,y_size=7)
-    factor=np.sum(gaussian)
-    P=convolve(pic,gaussian)/factor
-    #except:
-    #    print('err in calc_err/convolve',pic.shape,gaussian.shape,factor)
-    #    P=pic
-    error=sqrt(mean(abs(pic-P)))
-    sub=P[::2,::2]
-    return error,sub
+# def calc_err(pic,gaussian = None):
+#     if gaussian is None:
+#         gaussian=Gaussian2DKernel(1,x_size=7,y_size=7)
+#     factor=np.sum(gaussian)
+#     P=convolve(pic,gaussian)/factor
+#     #except:
+#     #    print('err in calc_err/convolve',pic.shape,gaussian.shape,factor)
+#     #    P=pic
+#     error=sqrt(mean(abs(pic-P)))
+#     sub=P[::2,::2]
+#     return error,sub
 
-def plot_patches(fig,data,h=15,w=15,_titles=[]):
-    for i in range(h*w):
-        if i>=data.shape[0]:
-            break
-        ax=fig.add_subplot(h,w,i+1);
-        pic=np.array(data[i,:,:],dtype=np.float32)
+# def plot_patches(fig,data,h=15,w=15,_titles=[]):
+#     for i in range(h*w):
+#         if i>=data.shape[0]:
+#             break
+#         ax=fig.add_subplot(h,w,i+1);
+#         pic=np.array(data[i,:,:],dtype=np.float32)
 
-        subfig=ax.imshow(pic,cmap='gray')
-        if(len(_titles)>i):
-            plt.title(_titles[i])
-        subfig.axes.get_xaxis().set_visible(False)
-        subfig.axes.get_yaxis().set_visible(False)
+#         subfig=ax.imshow(pic,cmap='gray')
+#         if(len(_titles)>i):
+#             plt.title(_titles[i])
+#         subfig.axes.get_xaxis().set_visible(False)
+#         subfig.axes.get_yaxis().set_visible(False)
 
 def pack_pics(Reps):
     size=Reps[0].shape[0]
@@ -122,28 +122,28 @@ def dist2(a,b):
     diff=(a-b)**2
     return np.sum(diff.flatten())
 
-def dist_hist(data):
-    D=[]
-    for i in range(1,data.shape[0]):
-        D.append(dist2(data[i,:,:],data[i-1,:,:]))
-        if i%1000==0:
-            print('\r',i,end='')
-    hist(D,bins=100);
+# def dist_hist(data):
+#     D=[]
+#     for i in range(1,data.shape[0]):
+#         D.append(dist2(data[i,:,:],data[i-1,:,:]))
+#         if i%1000==0:
+#             print('\r',i,end='')
+#     hist(D,bins=100);
 
-def find_threshold(image,percentile):
-    """find the threshold at the given percentile
+# def find_threshold(image,percentile):
+#     """find the threshold at the given percentile
 
-    :param image: grey-level image
-    :param percentile: threshold is chosen so that 
-                       percentile of the pixels are lower than it
-    :returns: threshold
-    :rtype: float
+#     :param image: grey-level image
+#     :param percentile: threshold is chosen so that 
+#                        percentile of the pixels are lower than it
+#     :returns: threshold
+#     :rtype: float
 
-    """
-    V=sorted(image.flatten())
-    l=len(V)
-    thr=V[int(l*percentile)] 
-    return thr
+#     """
+#     V=sorted(image.flatten())
+#     l=len(V)
+#     thr=V[int(l*percentile)] 
+#     return thr
 
 def mark_contours(D,tile):
 
