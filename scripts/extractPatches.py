@@ -3,9 +3,9 @@ from cv2 import moments,HuMoments
 import pickle
 import numpy as np
 
-from label_patch import diffusionMap
+#from label_patch import diffusionMap
 from patch_normalizer import normalizer
-from lib.shape_utils import find_threshold, mark_contours, configuration
+from lib.utils import mark_contours, configuration
 
 class patch_extractor:
     def __init__(self,infile,params):

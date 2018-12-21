@@ -2,6 +2,7 @@
 from os import mkdir
 import argparse
 from lib.utils import *
+import re
 """
 The controller runs a given script on a set of files on S3. The application is intended to run on a set of ec2 instances in parallel. 
 Lock files are used to insure that each file is processed exactly once.
