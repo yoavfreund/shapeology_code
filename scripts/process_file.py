@@ -22,7 +22,7 @@ def process_tiles(tile_pattern):
         if not isfile(lockfile):
             i+=1
             print('got lock',lockfile,i)
-            run('python3 run_job.py {0}'.format(stem))
+            run('python3 run_job.py {0} &'.format(stem))
             sleep(0.1)
         else:
             #print('\r %s exists'%lockfile,end='')
@@ -62,7 +62,7 @@ def process_file(local_data,s3_directory,stem):
     clock('2 - processed %6d tiles'%i)
 
     #copy results to s3
-    run("tar czf {0}/{1}_patches.tgz {0}/tiles/*.pkl {0}/tiles/*.log {0}/tiles/*.lock".format(local_data,stem))
+    run("tar czf {0}/{1}_patches.tgz {0}/tiles/*.pkl {0}/tiles/*.log {0}/tiles/*.lock {0}/tiles/*thr_contours.jpg".format(local_data,stem))
     clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
     
     run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,s3_directory))
