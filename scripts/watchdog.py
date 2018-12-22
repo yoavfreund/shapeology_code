@@ -1,14 +1,34 @@
 #!/usr/bin/env python3
 
+from os.path import isfile,getmtime
 from glob import glob
 from time import sleep,time
 from os import system
 from subprocess import Popen,PIPE
-from lib.utils import run,runPipe, Last_Modified
 
 stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
 exec_dir='/home/ubuntu/shapeology_code/scripts'
+
+def runPipe(command):
+    print('cmd=',command)
+    p=Popen(command.split(),stdout=PIPE,stderr=PIPE)
+    L=p.communicate()
+    stdout=L[0].decode("utf-8").split('\n')
+    stderr=L[1].decode("utf-8").split('\n')
+    return stdout,stderr
+
+def run(command,out):
+    print('cmd=',command,'out=',out)
+    outfile=open(out,'w')
+    Popen(command.split(),stdout=outfile,stderr=outfile)
+
+def Last_Modified(file_name):
+    try:
+        mtime = getmtime(file_name)
+    except OSError:
+        mtime = 0
+    return(mtime)
 
 if __name__=='__main__':
     Recent=False
@@ -32,9 +52,5 @@ if __name__=='__main__':
         else:
             command='{0}/Controller.py {0} {1} {2}'\
                 .format(exec_dir,stack,local_data)
-            outfile=open('{0}/Controller-{1}.log'.format(exec_dir,int(time())),'w')
-            errfile=open('{0}/Controller-{1}.err'.format(exec_dir,int(time())),'w')
-            out,err=runPipe(command)
-            outfile.write('\n'.join(out))
-            errfile.write('\n'.join(out))            
-            
+            output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
+            run(command,output)
