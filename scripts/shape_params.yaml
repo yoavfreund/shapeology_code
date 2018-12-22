@@ -6,5 +6,4 @@ preprocessing:
                 # ignored as "too smooth"
   offset:   -20 # offset used in cv2.adaptiveThreshold
   min_area: 10  # Patches with area smaller than min_area are ignored
-  margin: 2     # The number of pixels to add above/below unnormalized patch 
 
