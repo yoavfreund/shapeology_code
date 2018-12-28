@@ -110,8 +110,7 @@ if __name__=="__main__":
             print('all files processed')
             break
 
-        cmd='python3 %s/%s %s %s %s'\
-            %(scripts_dir,script,s3_directory,stem+'_lossless',local_data)
+        cmd='python3 {0}/{1} {0} {2} {3} {4}'.format(scripts_dir,script,s3_directory,stem+'_lossless',local_data)
         run(cmd)
         
     printClock()

@@ -6,6 +6,7 @@ from time import sleep,time
 from os import system
 from subprocess import Popen,PIPE
 
+script='process_file.py'
 stack='s3://mousebraindata-open/MD657'
 local_data='/dev/shm/data'
 exec_dir='/home/ubuntu/shapeology_code/scripts'
@@ -50,7 +51,9 @@ if __name__=='__main__':
         if Other_controller:
             print('Other Controller.py is running')
         else:
-            command='{0}/Controller.py {0} {1} {2}'\
-                .format(exec_dir,stack,local_data)
+            command='{0}/Controller.py {0} {1} {2} {3}'\
+                .format(exec_dir,script,stack,local_data)
             output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
             run(command,output)
+
+            # Controller.py [-h] scripts_dir script s3location local_data
