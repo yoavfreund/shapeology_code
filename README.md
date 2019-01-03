@@ -1,4 +1,4 @@
-# Generating patches
+## Generating patches
 #### process_file.py
 A script for processing a single section.
 #### run_job.py
@@ -7,6 +7,7 @@ Wrapper around extract Patches
 Extract patches from a single tile
 #### patch_normalizer.py
 Normalize the patches - called by extractPatches.py
+
 ## Managing multiple ec2 instances
 #### Controller.py
 The controller runs a given script on a set of files on S3. The application is intended to run on a set of ec2 instances in parallel.
@@ -20,7 +21,21 @@ Command put in cron job to run watchdog.py
 #### watchdog.py
 script to check whether controller is running and, if not, restart it.
 
-# Analysis of patches
+## Analysis of patches
 #### CreateVQs.py
+
+a script currently implemented as a notebook: CreateSequenceVQ.ipynb 
+
 #### diffusion_maps.py
 #### label_patch.py
+
+## Notebooks
+
+#### Process_Extracted _Patches.ipynb
+Partition the patches by size, permute, and store in binary files.
+
+#### CreateSequenceVQ.ipynb
+Perform Kmeans++, Kmeans and diffusion-based analysis
+
+label_patch.py
+runAll.py
