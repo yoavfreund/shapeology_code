@@ -15,11 +15,9 @@ class diffusionMap:
 
         :param dmapFilename: name of pickle file containing the pydiffmap.dmap object 
         """
-        self.Dict=pk.load(open(dmapFilename,'rb'))
-        # Dict={'diffusion_map'  : pydiffmap.diffusion_map.DiffusionMap
-        #       'Reps'           : VQ Reps
-        #       'Counts'         : Count associated with each rep
-        #       'coordinates'    : Coordinates of the Reps according to diffusion_map
+        self.DM=pk.load(open(dmapFilename,'rb'))
+        print(type(self.DM))
+    
 
     def transform(self,data1D):
         """compute the dmap transformation for a list of square patches.
@@ -28,7 +26,7 @@ class diffusionMap:
         :returns: an array of projected values (shape =  length of list * number of eigenvectors)
         :rtype: numpy array
         """
-        lowD=self.Dict['diffusion_map'].transform(data1D)
+        lowD=self.DM.transform(data1D)
         return lowD
 
     def label_patch(self,Patches,smooth_threshold=0.4):
@@ -45,23 +43,11 @@ class diffusionMap:
         :rtype: list
 
         """
-        err,sub=calc_err(Patches[0])
-        _sub_size=sub.shape[0]
         data1D=np.zeros((len(Patches),_sub_size*_sub_size))
         for i in range(len(Patches)):
-            patch=Patches[i]
-            err,sub=calc_err(patch)
-            if err<smooth_threshold:
-                data1D[i,:] = sub.flatten();
+            data1D[i,:] = Patches[i].flatten();
         dmap=self.transform(data1D)
+        return(dmap)
 
-        labels=[]
-        for i in range(dmap.shape[0]):
-            proj=dmap[i,:]
-            if np.sum(np.abs(data1D[i,:]))==0:
-                labels.append(None)
-            else:
-                labels.append(data1D[i,:])
-        return labels
 
 

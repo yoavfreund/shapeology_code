@@ -85,17 +85,17 @@ def Last_Modified(file_name):
         mtime = 0
     return(mtime)
             
-# def calc_err(pic,gaussian = None):
-#     if gaussian is None:
-#         gaussian=Gaussian2DKernel(1,x_size=7,y_size=7)
-#     factor=np.sum(gaussian)
-#     P=convolve(pic,gaussian)/factor
-#     #except:
-#     #    print('err in calc_err/convolve',pic.shape,gaussian.shape,factor)
-#     #    P=pic
-#     error=sqrt(mean(abs(pic-P)))
-#     sub=P[::2,::2]
-#     return error,sub
+def calc_err(pic,gaussian = None):
+    if gaussian is None:
+        gaussian=Gaussian2DKernel(1,x_size=7,y_size=7)
+    factor=np.sum(gaussian)
+    P=convolve(pic,gaussian)/factor
+    #except:
+    #    print('err in calc_err/convolve',pic.shape,gaussian.shape,factor)
+    #    P=pic
+    error=sqrt(mean(abs(pic-P)))
+    sub=P[::2,::2]
+    return error,sub
 
 # def plot_patches(fig,data,h=15,w=15,_titles=[]):
 #     for i in range(h*w):
