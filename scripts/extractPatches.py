@@ -3,7 +3,7 @@ from cv2 import moments,HuMoments
 import pickle
 import numpy as np
 
-#from label_patch import diffusionMap
+from label_patch import diffusionMap
 from patch_normalizer import normalizer
 from lib.utils import mark_contours, configuration
 
@@ -25,7 +25,10 @@ class patch_extractor:
         self.preprocess_kernel=self.Norm.circle_patch(radius=1)
         
         self.tile_stats={'tile name':infile}
-        #self.DM = diffusionMap('../notebooks/diffusionMap.pkl')
+        self.DM = diffusionMap(params['paths']['DiffusionMap'])
+
+        self.size_thresholds = params['normalization']['size_thresholds']
+        self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
 
     def segment_cells(self,gray):
         offset = self.params['preprocessing']['offset']
@@ -94,6 +97,12 @@ class patch_extractor:
             more_properties = self.Norm.normalize_patch(masked_image, properties)
             properties.update(more_properties)
             extracted.append(properties)
+
+            padded_patch=properties['padded_patch']
+            padded_size=properties['padded_size']
+            if not padded_patch is None:
+                self.V[padded_size].append(padded_patch)
+            
             #print(properties.keys())
             #break
             cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
@@ -117,18 +126,18 @@ if __name__=="__main__":
     config = configuration(args.yaml)
     params=config.getParams()
 
+    _dir=params['paths']['data_dir']+'/tiles/'
     stem=args.filestem
-    infile = stem+'.tif'
+    infile = _dir+stem+'.tif'
     out_stem= stem+'.'+params['name']
-    outfile= out_stem+'_extracted.pkl'
-    annotated_infile=out_stem+'_contours.jpg'
+    pkl_dir=params['paths']['pickle_subdir']
+    pkl_out_file= _dir+pkl_dir+out_stem+'.pkl'
+    annotated_infile=_dir+out_stem+'_contours.jpg'
 
     extractor=patch_extractor(infile,params)
 
     tile=cv2.imread(infile)
-    #print('tile is of type',type(tile[0,0,0]))
     gray = cv2.cvtColor(tile,cv2.COLOR_BGR2GRAY)
-    print('gray is of type',type(gray[0,0]))
 
     if params['preprocessing']['polarity']==-1:
         gray = 255-gray
@@ -142,14 +151,14 @@ if __name__=="__main__":
         print('image',infile,'std=',_std, 'too blank, skipping')
     else:
         t0=time()
-        print('processing',infile,'into',outfile)
+        print('processing',infile,'into',pkl_out_file)
         Stats=extractor.segment_cells(gray)
         extracted,marked_tile = extractor.extract_blobs(Stats,tile,gray)
 
         print('extracted',len(extracted),'patches')
         
-        pickle.dump(extracted,open(outfile,'wb'))
-        print('patches written to',outfile)
+        pickle.dump(extracted,open(pkl_out_file,'wb'))
+        print('properties written to',pkl_out_file)
 
         cv2.imwrite(annotated_infile,marked_tile)
         print('annotated image written to',annotated_infile)

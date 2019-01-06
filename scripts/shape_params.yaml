@@ -1,5 +1,11 @@
 ---
 name: "thr"
+paths:
+  scripts_dir: '/Users/yoavfreund/projects/shapeology/shapeology_code/scripts'
+  data_dir: '/Users/yoavfreund/projects/shapeology/data'
+  DiffusionMap: "/Users/yoavfreund/projects/shapeology/Diffusion_Maps/diffusionMap.pkl"
+  pickle_subdir: 'pickles/'
+  
 preprocessing:
   polarity: -1  # invert polarity of image (cells are dark)
   min_std:  10  # if tile has std smaller than min_std then it is
@@ -7,3 +13,7 @@ preprocessing:
   offset:   -20 # offset used in cv2.adaptiveThreshold
   min_area: 10  # Patches with area smaller than min_area are ignored
 
+normalization:
+  size_thresholds: [15,27,51,81,151,201]  # patches are padded to one
+                              # of these sizes so that a set of
+                            # patches is represented as a 3D numpy array

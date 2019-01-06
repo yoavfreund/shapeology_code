@@ -14,12 +14,11 @@ class normalizer:
     """ a class for normalizing patches """
     def __init__(self,params):
         """        Initialize a Normalizer
-        create a circular mask of a given size, size must be an odd number.
-
         :param params
         """
         self.params=params
-        
+        self.size_thresholds = params['normalization']['size_thresholds']
+
     def circle_patch(self,radius):
         size=2*radius+1
         x=np.arange(-radius,radius+1)
@@ -155,6 +154,23 @@ class normalizer:
         circ_patch[y1:y2,x1:x2]=ex
         return circ_patch
 
+    def pad_patch(self,patch):
+        too_big=True
+        size=patch.shape[0]
+        for sz_block in self.size_thresholds:
+            if size<sz_block:
+                too_big=False
+                break
+        if too_big:
+            return None,size
+
+        pad=np.zeros([sz_block,sz_block],dtype=np.float16)
+        _from=int((sz_block-size)/2)
+        _to = int(sz_block-_from)
+        # print(size,sz_block,_from,_to)
+        pad[_from:_to,_from:_to]=patch
+        return pad,sz_block
+
     def normalize_patch(self,ex,props):
         ex_in_circle = self.put_in_circle(np.copy(ex),props)
         #normalize patch interms of grey values and in terms of rotation
@@ -166,11 +182,16 @@ class normalizer:
         total_rotation = rot_angle1+rot_angle2
         confidence=conf2
         normalized_patch =  ex_rotation_normed*self.mask
+
+        padded_patch,padded_size = self.pad_patch(normalized_patch)
+
         Dict={
             #'original_patch':ex,
             #'patch_in_circle':ex_in_circle,
             #'ex_grey_normed':ex_grey_normed,
             'normalized_patch':normalized_patch,
+            'padded_size':padded_size,
+            'padded_patch':padded_patch,
             'rotation':total_rotation,
             'rotation_confidence':confidence,
             'horiz_std':calc_width(normalized_patch),
