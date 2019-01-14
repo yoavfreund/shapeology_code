@@ -44,10 +44,8 @@ def Kmeans(data_stream,Reps=[],n=100):
         print('refine iteration %2d, error=%7.3f, n_Reps=%5d'%(i,error,len(Reps)))
     return Reps,final_counts
 
-global scale
-scale=550
 def Kmeanspp(data_stream,Reps=[],n=100):
-    global scale
+    global scale=100
     if len(Reps)==0:
         Reps=[next(data_stream)]
 
@@ -88,7 +86,7 @@ def plot_statistics(Statistics,alpha=0.05,_start=10):
     ylabel('smoothed distance')
     grid(which='both')
 
-def filtered_images(s3_dir='s3://mousebraindata-open/MD657/permuted',reduce_res=True,smooth_threshold=0.4):
+def filtered_images(s3_dir,reduce_res=True,smooth_threshold=0.4):
     for pic in data_stream(s3_dir):
         err,sub=calc_err(pic)
         if err>smooth_threshold:
@@ -100,10 +98,27 @@ def filtered_images(s3_dir='s3://mousebraindata-open/MD657/permuted',reduce_res=
 
 if __name__=='__main__':
 
-    _size=41
-    gen=filtered_images(smooth_threshold=0.35,reduce_res=True)
+    import argparse
+    from time import time
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filestem", type=str,
+                    help="Process <filestem>.tif into <filestem>_extracted.pkl")
+    parser.add_argument("yaml", type=str,
+                    help="Path to Yaml file with parameters")
+    
+    # Add parameters for size of mexican hat and size of cell, threshold, percentile
+    # Define file name based on size. Use this name for log file and for countours image.
+    # save parameters in a log file ,
+    
+    args = parser.parse_args()
+    config = configuration(args.yaml)
+    params=config.getParams()
+
+    self.size_thresholds = params['normalization']['size_thresholds']
+    s3dir=params['paths']['patches']
+    gen=filtered_images(s3dir,smooth_threshold=0.35,reduce_res=True)
     VQ={}
-    for n in [10,100,500]:
+    for n in self.size_thresholds:
         for c in range(10):
             print('========   n=%5d, c=%1d ==========='%(n,c))
             Reps,final_count=Kmeans(gen,n=n)

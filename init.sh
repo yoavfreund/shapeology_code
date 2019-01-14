@@ -1,0 +1,1 @@
+export shaperoot=`pwd`

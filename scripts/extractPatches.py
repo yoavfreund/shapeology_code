@@ -100,14 +100,51 @@ class patch_extractor:
 
             padded_patch=properties['padded_patch']
             padded_size=properties['padded_size']
+
             if not padded_patch is None:
                 self.V[padded_size].append(padded_patch)
-            
+
             #print(properties.keys())
             #break
             cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
+
+        ## compute diffusion vectors
+        self.computeDMs(extracted)
+            
         return extracted,marked_tile
-    
+
+    def computeDMs(self,extracted):
+        patchesBySize={size:[] for size in self.size_thresholds} # storage for normalized patches
+        patchIndex={size:[] for size in self.size_thresholds}
+
+        #collect patches by size
+        for i in range(len(extracted)):
+            properties=extracted[i]
+            padded_size=properties['padded_size']
+            patch = properties['padded_patch']
+            if patch is None:
+                continue
+            patchesBySize[padded_size].append(patch.flatten())
+            patchIndex[padded_size].append(i)
+
+        # compute DM for each size
+        _size=51    #temporary: until we have maps for all sizes
+
+        asList=patchesBySize[_size]
+        indexList=patchIndex[_size]
+        _len=len(asList)
+        asMat=np.zeros([_len,_size*_size])
+        for i in range(_len):
+            asMat[i,:]=asList[i]
+        print('size os asMat:',asMat.shape)
+        DMMat=self.DM.transform(asMat)
+        print(asMat.shape,DMMat.shape)
+
+        # insert DM vectors back into properties
+        for i in range(len(asList)):
+            index=indexList[i]
+            extracted[index]['DMVec']=DMMat[i,:]
+
 if __name__=="__main__":
 
     import argparse

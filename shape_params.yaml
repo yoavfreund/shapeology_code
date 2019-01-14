@@ -1,6 +1,11 @@
 ---
 name: "thr"
 paths:
+  s3stem:  's3://mousebraindata-open/MD657'
+  patches: 'permuted'
+  DiffusionMap: 'DiffusionMaps'
+
+  #local paths
   scripts_dir: '/Users/yoavfreund/projects/shapeology/shapeology_code/scripts'
   data_dir: '/Users/yoavfreund/projects/shapeology/data'
   DiffusionMap: "/Users/yoavfreund/projects/shapeology/Diffusion_Maps/diffusionMap.pkl"
@@ -14,6 +19,9 @@ preprocessing:
   min_area: 10  # Patches with area smaller than min_area are ignored
 
 normalization:
-  size_thresholds: [15,27,51,81,151,201]  # patches are padded to one
+  size_thresholds: [15,81,251]  # patches are padded to one
                               # of these sizes so that a set of
                             # patches is represented as a 3D numpy array
+
+
+                            
