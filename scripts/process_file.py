@@ -47,21 +47,22 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
     pickle_dir=params['paths']['pickle_subdir']
 
     if isfile('%s/%s.tif'%(local_data,stem)):
-        print('found %s/%s.tif skipping download and preprocess'%(local_data,stem))
+        print('found %s/%s.tif skipping download and kdu'%(local_data,stem))
     else:
-        run('rm -rf %s/*'%(local_data))
-        run('mkdir %s/tiles'%local_data)
-        run('mkdir %s/tiles/%s'%(local_data,pickle_dir))
-        clock('cleaning local directory')
-
         #Bring in a file and break it into tiles
         run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(s3_directory,stem,local_data,stem))
         clock('copied from s3: %s'%stem)
         run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
         clock('translated into tif')
-        # convert MD657-N48-2017.02.22-16.41.55_MD657_2_0143_lossless.tif -crop 20x10@+100+100@  new_tiles/tiles_%02d.tif
-        run('convert %s/%s.tif -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
-        clock('broke into tiles')
+
+    # Break image into tiles
+    run('convert %s/%s.tif -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
+    clock('broke into tiles')
+
+    # run('rm -rf %s/*'%(local_data))
+    run('mkdir %s/tiles/*.lock'%local_data)
+    run('mkdir %s/tiles/%s'%(local_data,pickle_dir))
+    clock('cleaning local directory')
 
     chdir(scripts_dir)
     
