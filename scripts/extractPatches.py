@@ -109,7 +109,7 @@ class patch_extractor:
             cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
-        self.computeDMs(extracted)
+        # self.computeDMs(extracted)
             
         return extracted,marked_tile
 
@@ -128,7 +128,7 @@ class patch_extractor:
             patchIndex[padded_size].append(i)
 
         # compute DM for each size
-        _size=51    #temporary: until we have maps for all sizes
+        # _size=51    #temporary: until we have maps for all sizes
 
         asList=patchesBySize[_size]
         indexList=patchIndex[_size]
