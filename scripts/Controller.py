@@ -111,7 +111,7 @@ if __name__=="__main__":
             print('all files processed')
             break
 # python process_file.py s3://mousebraindata-open/MD657 MD657-N48-2017.02.22-16.41.55_MD657_2_0143_lossless ../shape_params.yaml
-        cmd='python3 {0}/{1} {0} {2} {3} {4}'.format(scripts_dir,'process_file.py',s3_directory,stem+'_lossless',args.yaml)
+        cmd='python3 {0}/{1} {2} {3} {4}'.format(scripts_dir,'process_file.py',s3_directory,stem+'_lossless',args.yaml)
         run(cmd)
         
     printClock()
