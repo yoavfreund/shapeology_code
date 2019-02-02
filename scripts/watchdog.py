@@ -5,11 +5,19 @@ from glob import glob
 from time import sleep,time
 from os import system
 from subprocess import Popen,PIPE
+from lib.utils import configuration
 
+config = configuration('shape_params.yaml')
+params=config.getParams()
+
+scripts_dir=params['paths']['scripts_dir']
+
+local_data=params['paths']['data_dir']
 script='process_file.py'
+yaml_file = 'shape_params.yaml'
 stack='s3://mousebraindata-open/MD657'
-local_data='/dev/shm/data'
-exec_dir='/home/ubuntu/shapeology_code/scripts'
+exec_dir=params['paths']['scripts_dir']
+
 
 def runPipe(command):
     print('cmd=',command)
@@ -51,8 +59,8 @@ if __name__=='__main__':
         if Other_controller:
             print('Other Controller.py is running')
         else:
-            command='{0}/Controller.py {0} {1} {2} {3}'\
-                .format(exec_dir,script,stack,local_data)
+            command='{0}/Controller.py {1} {2}'\
+                .format(exec_dir,stack,yaml_file)
             output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
             run(command,output)
 

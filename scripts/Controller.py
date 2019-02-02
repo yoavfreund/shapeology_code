@@ -70,22 +70,23 @@ def find_and_lock(s3_directory):
     return filename
 
 if __name__=="__main__":
-    
-    parser = argparse.ArgumentParser()
-    parser.add_argument("scripts_dir", type=str,
-                        help="path to the directory with the scripts")
-    parser.add_argument("script",type=str,
-                        help='the name of the script that is to run on each file')
+    parser = argparse.ArgumentParser(description="A master script that locks a section and runs process_file.py on it")
     parser.add_argument("s3location", type=str,
                         help="path to the s3 directory with the lossless images")
-    parser.add_argument("local_data",type=str,
-                        help="path to the local data directory")
-    # pattern=r'(.*)\.([^\.]*)$'
+    parser.add_argument("yaml", type=str,
+                    help="Path to Yaml file with parameters")
+
     args = parser.parse_args()
-    scripts_dir=args.scripts_dir
-    script=args.script
     s3_directory=args.s3location
-    local_data=args.local_data
+
+    config = configuration(args.yaml)
+    params=config.getParams()
+    
+    scripts_dir=params['paths']['scripts_dir']
+    local_data=params['paths']['data_dir']
+
+    
+    args = parser.parse_args()
 
     time_log=[]
     clock('starting Controller with s3_directory=%s, local_data=%s'%(s3_directory,local_data))
@@ -109,8 +110,8 @@ if __name__=="__main__":
         if stem==None:
             print('all files processed')
             break
-
-        cmd='python3 {0}/{1} {0} {2} {3} {4}'.format(scripts_dir,script,s3_directory,stem+'_lossless',local_data)
+# python process_file.py s3://mousebraindata-open/MD657 MD657-N48-2017.02.22-16.41.55_MD657_2_0143_lossless ../shape_params.yaml
+        cmd='python3 {0}/{1} {0} {2} {3} {4}'.format(scripts_dir,'process_file.py',s3_directory,stem+'_lossless',args.yaml)
         run(cmd)
         
     printClock()
