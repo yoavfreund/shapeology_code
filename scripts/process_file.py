@@ -58,7 +58,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
     # cleanup work dir
     run('rm -rf %s/tiles'%(local_data))
     run('mkdir %s/tiles/'%local_data)
-    run('mkdir %s/tiles/%s'%(local_data,pickle_dir))
+    run('mkdir %s/tiles/pickles'%(local_data))
     clock('cleaning local directory')
 
     # Break image into tiles
@@ -78,7 +78,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
     run("tar czf {0}/{1}_patches.tgz {0}/tiles/*.log {0}/tiles/*.lock {0}/tiles/*thr_contours.jpg".format(local_data,stem))
     clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
 
-    run("tar czf {0}/{1}_extracted.tgz {0}/tiles/{2}/*.pkl".format(local_data,stem,pickle_dir))
+    run("tar czf {0}/{1}_extracted.tgz {0}/tiles/pickles/*.pkl".format(local_data,stem))
     clock('created tar file {0}/{1}_extracted.tgz'.format(local_data,stem))
 
     run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,s3_directory))
