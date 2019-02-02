@@ -168,7 +168,7 @@ if __name__=="__main__":
     infile = _dir+stem+'.tif'
     out_stem= stem+'.'+params['name']
     pkl_dir=params['paths']['pickle_subdir']
-    pkl_out_file= _dir+pkl_dir+out_stem+'.pkl'
+    pkl_out_file= _dir+'pickles/'+out_stem+'.pkl'
     annotated_infile=_dir+out_stem+'_contours.jpg'
 
     extractor=patch_extractor(infile,params)
