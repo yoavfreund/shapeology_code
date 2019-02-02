@@ -83,7 +83,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
 
     run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,s3_directory))
     run('aws s3 cp {0}/{1}_extracted.tgz {2}/'.format(local_data,stem,s3_directory))
-    run('rm  {0}/*'.format(local_data)
+    run('rm  {0}/*'.format(local_data))
     clock('copy tar file to S3')
     return
 
