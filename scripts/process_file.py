@@ -55,14 +55,16 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
         run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
         clock('translated into tif')
 
+    # cleanup work dir
+    run('rm -rf %s/*'%(local_data))
+    run('mkdir %s/tiles/'%local_data)
+    run('mkdir %s/tiles/%s'%(local_data,pickle_dir))
+    clock('cleaning local directory')
+
     # Break image into tiles
     run('convert %s/%s.tif -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
     clock('broke into tiles')
 
-    # run('rm -rf %s/*'%(local_data))
-    run('mkdir %s/tiles/*.lock'%local_data)
-    run('mkdir %s/tiles/%s'%(local_data,pickle_dir))
-    clock('cleaning local directory')
 
     chdir(scripts_dir)
     
