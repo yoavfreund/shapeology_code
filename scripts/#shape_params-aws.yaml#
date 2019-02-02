@@ -4,7 +4,6 @@ paths:
   scripts_dir: '/home/ubuntu/shapeology_code/scripts'
   data_dir: '/dev/shm/data'
   DiffusionMap: "/home/ubuntu/Diffusion_Maps/diffusionMap.pkl"
-  pickle_subdir: 'pickles'
   
 preprocessing:
   polarity: -1  # invert polarity of image (cells are dark)

@@ -1,5 +1,5 @@
 ---
-name: "thr"
+name: "local"
 paths:
   s3stem:  's3://mousebraindata-open/MD657'
   patches: 'permuted'
@@ -9,7 +9,6 @@ paths:
   scripts_dir: '/Users/yoavfreund/projects/shapeology/shapeology_code/scripts'
   data_dir: '/Users/yoavfreund/projects/shapeology/data'
   DiffusionMap: "/Users/yoavfreund/projects/shapeology/Diffusion_Maps/diffusionMap.pkl"
-  pickle_subdir: 'pickles/'
   
 preprocessing:
   polarity: -1  # invert polarity of image (cells are dark)

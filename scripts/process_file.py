@@ -75,7 +75,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
     clock('2 - processed %6d tiles'%i)
 
     #copy results to s3
-    run("tar czf {0}/{1}_patches.tgz {0}/tiles/*.log {0}/tiles/*.lock {0}/tiles/*thr_contours.jpg".format(local_data,stem))
+    run("tar czf {0}/{1}_patches.tgz {0}/tiles/*.log {0}/tiles/*.lock {0}/tiles/*_contours.jpg".format(local_data,stem))
     clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
 
     run("tar czf {0}/{1}_extracted.tgz {0}/tiles/pickles/*.pkl".format(local_data,stem))
@@ -83,8 +83,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
 
     run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,s3_directory))
     run('aws s3 cp {0}/{1}_extracted.tgz {2}/'.format(local_data,stem,s3_directory))
-    run('rm  {0}/{1}*.tif')
-    run('rm  {0}/{1}*.jp2')
+    run('rm  {0}/*'.format(local_data)
     clock('copy tar file to S3')
     return
 
