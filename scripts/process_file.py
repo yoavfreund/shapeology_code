@@ -56,7 +56,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
         clock('translated into tif')
 
     # cleanup work dir
-    run('rm -rf %s/*'%(local_data))
+    run('rm -rf %s/tiles'%(local_data))
     run('mkdir %s/tiles/'%local_data)
     run('mkdir %s/tiles/%s'%(local_data,pickle_dir))
     clock('cleaning local directory')
