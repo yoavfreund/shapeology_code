@@ -54,7 +54,7 @@ def list_s3_files(stack_directory):
         parts=line.strip().split()
         if len(parts)!=4:
             continue
-        filenames.append(parts[-1])
+        filenames.append(parts)
     return filenames
 
 def read_files(s3_dir,_delete=False,data_dir='/dev/shm/data/'):
