@@ -2,17 +2,11 @@
 them for analysis by Kmeans and diffusion-maps"""
 from lib.utils import *
 from glob import glob
-import pickle as pk
-from os import system
 import numpy as np
+import pickle as pk
+from os import system, mkdir
 from os.path import isdir
 from minio import Minio
-
-import pickle as pk
-import numpy as np
-from glob import glob
-
-from os import mkdir
 
 from lib.permute import permutator
 
@@ -44,4 +38,4 @@ class Sorter:
             Permutator.combine('%s-%d'%(stem,size))
 
 if __name__=='__main__':
-    
+    filename = '

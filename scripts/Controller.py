@@ -10,33 +10,6 @@ Lock files are used to insure that each file is processed exactly once.
 
 This python file will be rewritten in a simpler way using datajoin
 """
-def get_file_table(s3_directory,pattern=r'(.*_\d_\d{4})(.*)'):
-    """generate a dictionary of the files in an s3 directory 
-    that fit a given regex pattern.
-
-    :param s3_directory: s3 directory, example: s3://mousebraindata-open/MD657/
-    :param pattern: a regular expression defining the files to be considered.
-    :returns: A dictionary in which the file name stem is the key and the value is a list of descriptors of files which have that stem.
-    :rtype: 
-
-    """
-    
-    stdout = list_s3_files(s3_directory)
-    pat=re.compile(pattern)
-
-    T={}
-    for filename in stdout:
-        m=pat.match(filename)
-        if m:
-            #print('matched, groups=',m.groups())
-            file,ext= m.groups()
-            if file in T:
-                T[file].append(ext)
-            else:
-                T[file]=[ext]
-        else:
-             print(filename,'no match')
-    return T
 
 def find_and_lock(s3_directory):
     """ find an s3 file without a lock and lock it

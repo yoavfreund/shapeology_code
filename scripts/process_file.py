@@ -5,13 +5,13 @@ A script for processing a single section.
 import psutil
 from glob import glob
 from time import sleep
-from os.path import isfile,isdir
+from os.path import isfile,isdir, getsize
 from os import chdir
 import numpy as np
 import argparse
 from lib.utils import *
 
-def process_tiles(tile_pattern):
+def process_tiles(tile_pattern,scripts_dir,yaml_file):
     i=0
     print('tile_pattern=',tile_pattern)
     for infile in glob(tile_pattern):
@@ -22,7 +22,7 @@ def process_tiles(tile_pattern):
         if not isfile(lockfile):
             i+=1
             print('got lock',lockfile,i)
-            run('python3 {0}/run_job.py {1} {2} &'.format(scripts_dir,stem,args.yaml))
+            run('python3 {0}/run_job.py {1} {2} &'.format(scripts_dir,stem,yaml_file))
             sleep(0.1)
         else:
             #print('\r %s exists'%lockfile,end='')
@@ -41,10 +41,10 @@ def process_tiles(tile_pattern):
         print('\nload low enough',load)
     return i
 
-def process_file(local_data,s3_directory,stem,scripts_dir,params):
+def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
     print('processing %s, local_data=%s, s3_directory=%s, scripts_dir=%s'%(stem,local_data,s3_directory,scripts_dir))
 
-    pickle_dir=params['paths']['pickle_subdir']
+    # pickle_dir=params['paths']['pickle_subdir']
 
     if isfile('%s/%s.tif'%(local_data,stem)):
         print('found %s/%s.tif skipping download and kdu'%(local_data,stem))
@@ -65,27 +65,37 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params):
     run('convert %s/%s.tif -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
     clock('broke into tiles')
 
-
     chdir(scripts_dir)
     
     # perform analysis
-    i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
+    i=process_tiles('%s/tiles/tiles_*.tif'%local_data, scripts_dir, yaml_file)
     clock('1 - processed %6d tiles'%i)
-    i=process_tiles('%s/tiles/tiles_*.tif'%local_data)
+    i=process_tiles('%s/tiles/tiles_*.tif'%local_data,scripts_dir, yaml_file)
     clock('2 - processed %6d tiles'%i)
 
     #copy results to s3
-    run("tar czf {0}/{1}_patches.tgz {0}/tiles/*.log {0}/tiles/*.lock {0}/tiles/*_contours.jpg".format(local_data,stem))
-    clock('created tar file {0}/{1}_patches.tgz'.format(local_data,stem))
+    chdir(local_data)
 
-    run("tar czf {0}/{1}_extracted.tgz {0}/tiles/pickles/*.pkl".format(local_data,stem))
-    clock('created tar file {0}/{1}_extracted.tgz'.format(local_data,stem))
+    patches_fn=  '{0}_patches.tgz'.format(stem)
+    extracted_fn = "{0}_extracted.tgz .".format(stem)
+    
+    run("tar czf {0}/{1} tiles/*.log  tiles/*.lock  tiles/*.tif".format(local_data,patches_fn))
+    clock('created tar file {0}/{1}'.format(local_data,patches_fn))
 
-    run('aws s3 cp {0}/{1}_patches.tgz {2}/'.format(local_data,stem,s3_directory))
-    run('aws s3 cp {0}/{1}_extracted.tgz {2}/'.format(local_data,stem,s3_directory))
+    chdir("{0}/tiles/pickles".format(local_data))  #chdir to pickles directory
+
+    run("tar czf {0}/{1} *.pkl".format(local_data,extracted_fn))
+    extracted_size=getsize('{0}{1}'.format(local_data,extracted_fn))
+    clock('created tar file  {0}/{1}'.format(local_data,extracted_fn,'of size',extracted_size))
+    
+    chdir(scripts_dir)
+
+    run('aws s3 cp {0}/{1} {2}/'.format(local_data,extracted_fn,s3_directory))
+    run('aws s3 cp {0}/{1} {2}/'.format(local_data,patches_fn,s3_directory))
     run('rm  {0}/*'.format(local_data))
     clock('copy tar file to S3')
-    return
+ 
+    return patches_fn, extracted_fn, extracted_size
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description="A script that takes in an S3 directory breaks it into tiles and extracts normalized patches from these tiles.")

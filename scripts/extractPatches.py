@@ -167,7 +167,7 @@ if __name__=="__main__":
     stem=args.filestem
     infile = _dir+stem+'.tif'
     out_stem= stem+'.'+params['name']
-    pkl_dir=params['paths']['pickle_subdir']
+    #pkl_dir=params['paths']['pickle_subdir']
     pkl_out_file= _dir+'pickles/'+out_stem+'.pkl'
     annotated_infile=_dir+out_stem+'_contours.jpg'
 
