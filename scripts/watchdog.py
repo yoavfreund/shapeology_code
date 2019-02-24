@@ -14,9 +14,9 @@ scripts_dir=params['paths']['scripts_dir']
 
 local_data=params['paths']['data_dir']
 script='process_file.py'
-yaml_file = 'shape_params.yaml'
-stack='s3://mousebraindata-open/MD657'
-exec_dir=params['paths']['scripts_dir']
+#yaml_file = 'shape_params.yaml'
+#stack='s3://mousebraindata-open/MD657'
+exec_dir=params['paths']['exec_dir']
 
 
 def runPipe(command):
@@ -52,14 +52,14 @@ if __name__=='__main__':
         stdout,stderr = runPipe('ps aux')
         Other_controller=False
         for line in stdout:
-            if 'Controller.py' in line:
+            if 'PopulateExtractedCells.py' in line:
                 Other_controller=True
                 break
         
         if Other_controller:
-            print('Other Controller.py is running')
+            print('Other PopulateExtractedCells.py is running')
         else:
-            command='{0}/Controller.py {1} {2}'\
+            command='{0}/PopulateExtractedCells.py {1} {2}'\
                 .format(exec_dir,stack,yaml_file)
             output='{0}/Controller-{1}.log'.format(exec_dir,int(time()))
             run(command,output)
