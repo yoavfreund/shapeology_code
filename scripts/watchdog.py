@@ -7,7 +7,7 @@ from os import system
 from subprocess import Popen,PIPE
 from lib.utils import configuration
 
-config = configuration('shape_params.yaml')
+config = configuration('shape_params-aws.yaml')
 params=config.getParams()
 
 scripts_dir=params['paths']['scripts_dir']
