@@ -79,13 +79,13 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
     patches_fn=  '{0}_patches.tgz'.format(stem)
     extracted_fn = "{0}_extracted.tgz .".format(stem)
     
-    run("tar czf {0}/{1} tiles/*.log  tiles/*.lock  tiles/*.tif".format(local_data,patches_fn))
+    run("tar czf {0}/{1} tiles/*.log  tiles/*.lock  tiles/*.jpg".format(local_data,patches_fn))
     clock('created tar file {0}/{1}'.format(local_data,patches_fn))
 
     chdir("{0}/tiles/pickles".format(local_data))  #chdir to pickles directory
 
     run("tar czf {0}/{1} *.pkl".format(local_data,extracted_fn))
-    extracted_size=getsize('{0}{1}'.format(local_data,extracted_fn))
+    extracted_size=getsize('{0}/{1}'.format(local_data,extracted_fn))
     clock('created tar file  {0}/{1}'.format(local_data,extracted_fn,'of size',extracted_size))
     
     chdir(scripts_dir)
