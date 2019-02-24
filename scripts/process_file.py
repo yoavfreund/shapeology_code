@@ -77,7 +77,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
     chdir(local_data)
 
     patches_fn=  '{0}_patches.tgz'.format(stem)
-    extracted_fn = "{0}_extracted.tgz .".format(stem)
+    extracted_fn = "{0}_extracted.tgz".format(stem)
     
     run("tar czf {0}/{1} tiles/*.log  tiles/*.lock  tiles/*.jpg".format(local_data,patches_fn))
     clock('created tar file {0}/{1}'.format(local_data,patches_fn))
