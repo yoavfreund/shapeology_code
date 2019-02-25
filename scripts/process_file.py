@@ -10,6 +10,8 @@ from os import chdir
 import numpy as np
 import argparse
 from lib.utils import *
+sys.path.append('/home/ubuntu/Datajoint_Interface/project_schemas/atlas_schema_python_v3/setup')
+from utilities import *
 
 def process_tiles(tile_pattern,scripts_dir,yaml_file):
     i=0
@@ -46,54 +48,61 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
 
     # pickle_dir=params['paths']['pickle_subdir']
 
-    if isfile('%s/%s.tif'%(local_data,stem)):
-        print('found %s/%s.tif skipping download and kdu'%(local_data,stem))
-    else:
-        #Bring in a file and break it into tiles
-        run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(s3_directory,stem,local_data,stem))
-        clock('copied from s3: %s'%stem)
-        run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
-        clock('translated into tif')
-
-    # cleanup work dir
-    run('rm -rf %s/tiles'%(local_data))
-    run('mkdir %s/tiles/'%local_data)
-    run('mkdir %s/tiles/pickles'%(local_data))
-    clock('cleaning local directory')
-
-    # Break image into tiles
-    run('convert %s/%s.tif -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
-    clock('broke into tiles')
-
-    chdir(scripts_dir)
-    
-    # perform analysis
-    i=process_tiles('%s/tiles/tiles_*.tif'%local_data, scripts_dir, yaml_file)
-    clock('1 - processed %6d tiles'%i)
-    i=process_tiles('%s/tiles/tiles_*.tif'%local_data,scripts_dir, yaml_file)
-    clock('2 - processed %6d tiles'%i)
-
-    #copy results to s3
-    chdir(local_data)
-
+    # check if files already exist
     patches_fn=  '{0}_patches.tgz'.format(stem)
     extracted_fn = "{0}_extracted.tgz".format(stem)
-    
-    run("tar czf {0}/{1} tiles/*.log  tiles/*.lock  tiles/*.jpg".format(local_data,patches_fn))
-    clock('created tar file {0}/{1}'.format(local_data,patches_fn))
+    filename='{1}/{0}'.format(extracted_fn,s3_directory))
+    print('checking for',filename)
+    run('aws s3 cp {1} {0}/'.format(local_data,filename))
+    if isfile('{0}/{1}'.format(local_data,extracted_fn)):
+        print ("file already computed")
+    else:
+        if isfile('%s/%s.tif'%(local_data,stem)):
+            print('found %s/%s.tif skipping download and kdu'%(local_data,stem))
+        else:
+            #Bring in a file and break it into tiles
+            run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(s3_directory,stem,local_data,stem))
+            clock('copied from s3: %s'%stem)
+            run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
+            clock('translated into tif')
 
-    chdir("{0}/tiles/pickles".format(local_data))  #chdir to pickles directory
+        # cleanup work dir
+        run('rm -rf %s/tiles'%(local_data))
+        run('mkdir %s/tiles/'%local_data)
+        run('mkdir %s/tiles/pickles'%(local_data))
+        clock('cleaning local directory')
 
-    run("tar czf {0}/{1} *.pkl".format(local_data,extracted_fn))
-    extracted_size=getsize('{0}/{1}'.format(local_data,extracted_fn))
-    clock('created tar file  {0}/{1}'.format(local_data,extracted_fn,'of size',extracted_size))
-    
-    chdir(scripts_dir)
+        # Break image into tiles
+        run('convert %s/%s.tif -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
+        clock('broke into tiles')
 
-    run('aws s3 cp {0}/{1} {2}/'.format(local_data,extracted_fn,s3_directory))
-    run('aws s3 cp {0}/{1} {2}/'.format(local_data,patches_fn,s3_directory))
-    run('rm  {0}/*'.format(local_data))
-    clock('copy tar file to S3')
+        chdir(scripts_dir)
+
+        # perform analysis
+        i=process_tiles('%s/tiles/tiles_*.tif'%local_data, scripts_dir, yaml_file)
+        clock('1 - processed %6d tiles'%i)
+        i=process_tiles('%s/tiles/tiles_*.tif'%local_data,scripts_dir, yaml_file)
+        clock('2 - processed %6d tiles'%i)
+
+        #copy results to s3
+        chdir(local_data)
+
+
+        run("tar czf {0}/{1} tiles/*.log  tiles/*.lock  tiles/*.jpg".format(local_data,patches_fn))
+        clock('created tar file {0}/{1}'.format(local_data,patches_fn))
+
+        chdir("{0}/tiles/pickles".format(local_data))  #chdir to pickles directory
+
+        run("tar czf {0}/{1} *.pkl".format(local_data,extracted_fn))
+        extracted_size=getsize('{0}/{1}'.format(local_data,extracted_fn))
+        clock('created tar file  {0}/{1}'.format(local_data,extracted_fn,'of size',extracted_size))
+
+        chdir(scripts_dir)
+
+        run('aws s3 cp {0}/{1} {2}/'.format(local_data,extracted_fn,s3_directory))
+        run('aws s3 cp {0}/{1} {2}/'.format(local_data,patches_fn,s3_directory))
+        run('rm  {0}/*'.format(local_data))
+        clock('copy tar file to S3')
  
     return patches_fn, extracted_fn, extracted_size
 
