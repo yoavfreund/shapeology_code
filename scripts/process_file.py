@@ -10,6 +10,7 @@ from os import chdir
 import numpy as np
 import argparse
 from lib.utils import *
+import sys
 sys.path.append('/home/ubuntu/Datajoint_Interface/project_schemas/atlas_schema_python_v3/setup')
 from utilities import *
 
@@ -51,7 +52,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
     # check if files already exist
     patches_fn=  '{0}_patches.tgz'.format(stem)
     extracted_fn = "{0}_extracted.tgz".format(stem)
-    filename='{1}/{0}'.format(extracted_fn,s3_directory))
+    filename='{1}/{0}'.format(extracted_fn,s3_directory)
     print('checking for',filename)
     run('aws s3 cp {1} {0}/'.format(local_data,filename))
     if isfile('{0}/{1}'.format(local_data,extracted_fn)):
