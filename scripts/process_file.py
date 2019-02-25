@@ -57,6 +57,10 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
     if isfile('{0}/{1}'.format(local_data,extracted_fn)):
         print ("file already computed")
     else:
+        if not isdir(local_data):
+            run('sudo mkdir %s'%local_data)
+            run('sudo chmod a+rwx %s'%local_data)
+            
         if isfile('%s/%s.tif'%(local_data,stem)):
             print('found %s/%s.tif skipping download and kdu'%(local_data,stem))
         else:
