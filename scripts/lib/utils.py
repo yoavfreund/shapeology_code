@@ -36,6 +36,14 @@ def runPipe(command):
     stderr=L[1].decode("utf-8").split('\n')
     return stdout,stderr
 
+def Last_Modified(file_name):
+    try:
+        mtime = getmtime(file_name)
+    except OSError:
+        mtime = 0
+    return(mtime)
+
+
 time_log=[]
 def clock(message):
     print('%8.1f \t%s'%(time(),message))
