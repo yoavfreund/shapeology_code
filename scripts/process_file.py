@@ -58,7 +58,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
     # check if tgz file already exist
     print('checking for',filename)
     try:
-        run('aws s3 cp {1} {0}/'.format(local_data,filename))
+        run("aws s3 cp '{1}' '{0}/'".format(local_data,filename))
     except:
         pass
     if isfile('{0}/{1}'.format(local_data,extracted_fn)):
@@ -75,9 +75,9 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
         else:
             print('about to download file from s3')
             #Bring in a file and break it into tiles
-            run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(s3_directory,stem,local_data,stem))
+            run('aws s3 cp "%s/%s.jp2" "%s/%s.jp2"'%(s3_directory,stem,local_data,stem))
             clock('copied from s3: %s'%stem)
-            run('kdu_expand -i %s/%s.jp2 -o %s/%s.tif'%(local_data,stem,local_data,stem))
+            run('kdu_expand -i "%s/%s.jp2" -o "%s/%s.tif"'%(local_data,stem,local_data,stem))
             clock('translated into tif')
 
         # cleanup work dir
@@ -87,7 +87,7 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
         clock('cleaning local directory')
 
         # Break image into tiles
-        run('convert %s/%s.tif -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
+        run('convert "%s/%s.tif" -crop 20x10@+100+100@  %s'%(local_data,stem,local_data)+'/tiles/tiles_%02d.tif')
         clock('broke into tiles')
 
         chdir(scripts_dir)
@@ -102,19 +102,19 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
         chdir(local_data)
 
 
-        run("tar czf {0}/{1} tiles/*.log  tiles/*.lock  tiles/*.jpg".format(local_data,patches_fn))
+        run("tar czf '{0}/{1}' tiles/*.log  tiles/*.lock  tiles/*.jpg".format(local_data,patches_fn))
         clock('created tar file {0}/{1}'.format(local_data,patches_fn))
 
         chdir("{0}/tiles/pickles".format(local_data))  #chdir to pickles directory
 
-        run("tar czf {0}/{1} *.pkl".format(local_data,extracted_fn))
+        run("tar czf '{0}/{1}' *.pkl".format(local_data,extracted_fn))
         extracted_size=getsize('{0}/{1}'.format(local_data,extracted_fn))
         clock('created tar file  {0}/{1}'.format(local_data,extracted_fn,'of size',extracted_size))
 
         chdir(scripts_dir)
 
-        run('aws s3 cp {0}/{1} {2}/'.format(local_data,extracted_fn,s3_directory))
-        run('aws s3 cp {0}/{1} {2}/'.format(local_data,patches_fn,s3_directory))
+        run('aws s3 cp "{0}/{1}" {2}/'.format(local_data,extracted_fn,s3_directory))
+        run('aws s3 cp "{0}/{1}" {2}/'.format(local_data,patches_fn,s3_directory))
         run('rm  {0}/*'.format(local_data))
         clock('copy tar file to S3')
  
