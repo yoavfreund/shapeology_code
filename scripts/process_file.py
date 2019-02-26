@@ -48,17 +48,19 @@ def process_tiles(tile_pattern,scripts_dir,yaml_file):
     return i
 
 def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
-    print('processing %s, local_data=%s, s3_directory=%s, scripts_dir=%s, yaml_file=%s'%(stem,local_data,s3_directory,scripts_dir,yaml_file))
+    print('process_file %s, local_data=%s, s3_directory=%s, scripts_dir=%s, yaml_file=%s'%(stem,local_data,s3_directory,scripts_dir,yaml_file))
     print('params=',params)
 
-    # pickle_dir=params['paths']['pickle_subdir']
-
-    # check if files already exist
     patches_fn=  '{0}_patches.tgz'.format(stem)
     extracted_fn = "{0}_extracted.tgz".format(stem)
     filename='{1}/{0}'.format(extracted_fn,s3_directory)
+
+    # check if tgz file already exist
     print('checking for',filename)
-    run('aws s3 cp {1} {0}/'.format(local_data,filename))
+    try:
+        run('aws s3 cp {1} {0}/'.format(local_data,filename))
+    except:
+        pass
     if isfile('{0}/{1}'.format(local_data,extracted_fn)):
         print ("file already computed")
     else:

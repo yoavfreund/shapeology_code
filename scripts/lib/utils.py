@@ -25,7 +25,7 @@ class configuration():
         return self.D
 
 def run(command):
-    print('cmd=',command)
+    print('run cmd=',command)
     system(command)
     
 def runPipe(command):
