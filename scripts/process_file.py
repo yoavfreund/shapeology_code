@@ -2,6 +2,11 @@
 """
 A script for processing a single section.
 """
+
+import sys
+sys.path.append('/home/ubuntu/Datajoint_Interface/project_schemas/atlas_schema_python_v3/lib/')
+sys.path.append('/home/ubuntu/shapeology_code/scripts/')
+
 import psutil
 from glob import glob
 from time import sleep
@@ -9,10 +14,8 @@ from os.path import isfile,isdir, getsize
 from os import chdir
 import numpy as np
 import argparse
-from lib.utils import *
-import sys
-sys.path.append('/home/ubuntu/Datajoint_Interface/project_schemas/atlas_schema_python_v3/setup')
 from utilities import *
+from lib.utils import *
 
 def process_tiles(tile_pattern,scripts_dir,yaml_file):
     i=0
@@ -45,7 +48,8 @@ def process_tiles(tile_pattern,scripts_dir,yaml_file):
     return i
 
 def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
-    print('processing %s, local_data=%s, s3_directory=%s, scripts_dir=%s'%(stem,local_data,s3_directory,scripts_dir))
+    print('processing %s, local_data=%s, s3_directory=%s, scripts_dir=%s, yaml_file=%s'%(stem,local_data,s3_directory,scripts_dir,yaml_file))
+    print('params=',params)
 
     # pickle_dir=params['paths']['pickle_subdir']
 
@@ -58,13 +62,16 @@ def process_file(local_data,s3_directory,stem,scripts_dir,params,yaml_file):
     if isfile('{0}/{1}'.format(local_data,extracted_fn)):
         print ("file already computed")
     else:
+        print('entering file not already computed')
         if not isdir(local_data):
+            print('mkdir')
             run('sudo mkdir %s'%local_data)
             run('sudo chmod a+rwx %s'%local_data)
             
         if isfile('%s/%s.tif'%(local_data,stem)):
             print('found %s/%s.tif skipping download and kdu'%(local_data,stem))
         else:
+            print('about to download file from s3')
             #Bring in a file and break it into tiles
             run('aws s3 cp %s/%s.jp2 %s/%s.jp2'%(s3_directory,stem,local_data,stem))
             clock('copied from s3: %s'%stem)
