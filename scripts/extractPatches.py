@@ -6,6 +6,7 @@ import numpy as np
 from label_patch import diffusionMap
 from patch_normalizer import normalizer
 from lib.utils import mark_contours, configuration
+from time import time
 
 class patch_extractor:
     def __init__(self,infile,params):
@@ -29,6 +30,7 @@ class patch_extractor:
 
         self.size_thresholds = params['normalization']['size_thresholds']
         self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
+        self.timestamps=[]
 
     def segment_cells(self,gray):
         offset = self.params['preprocessing']['offset']
@@ -109,14 +111,17 @@ class patch_extractor:
             #cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
+        self.timestamps.append(('before DM',time()))
         self.computeDMs(extracted)
+        self.timestamps.append(('after DM',time()))
             
         return extracted #,marked_tile
 
     def computeDMs(self,extracted):
+        self.timestamps.append(('start compute DM', time()))
         patchesBySize={size:[] for size in self.size_thresholds} # storage for normalized patches
         patchIndex={size:[] for size in self.size_thresholds}
-
+      
         #collect patches by size
         for i in range(len(extracted)):
             properties=extracted[i]
@@ -138,7 +143,11 @@ class patch_extractor:
         for i in range(_len):
             asMat[i,:]=asList[i]
         #print('size os asMat:',asMat.shape)
+        self.timestamps.append(('befor transform DM', time()))
+
         DMMat=self.DM.transform(asMat)
+        self.timestamps.append(('after transform DM', time()))
+
         #print(asMat.shape,DMMat.shape)
 
         # insert DM vectors back into properties

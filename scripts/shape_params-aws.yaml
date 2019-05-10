@@ -1,10 +1,10 @@
 ---
 name: "aws"
 paths:
-  scripts_dir: '/home/ubuntu/data/Github/shapeology_code/scripts'
+  scripts_dir: '/data/Github/shapeology_code/scripts'
   exec_dir: '/home/ubuntu/Datajoint_Interface/project_schemas/atlas_schema_python_v3/Cell_Extractor/'
-  data_dir: '/home/ubuntu/data/BstemAtlasDataBackup/ucsd_brain/'
-  DiffusionMap: "/home/ubuntu/data/Github/shapeology/notebooks/diffusionMap.pkl"
+  data_dir: '/data/BstemAtlasDataBackup/ucsd_brain/'
+  DiffusionMap: "/data/Github/shapeology_code/notebooks/diffusionMap.pkl"
   
 preprocessing:
   polarity: -1  # invert polarity of image (cells are dark)
