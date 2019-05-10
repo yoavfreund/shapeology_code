@@ -1,4 +1,4 @@
-PROJECT_DIR=~/MouseBrainAtlas_dev
+PROJECT_DIR=/data/Github/shapeology_code
 virtualenv="shapeology_venv"
 ##################################################
 
@@ -8,27 +8,31 @@ green='\e[1;32m'
 cyan='\e[1;36m'
 NC='\033[0m' # No Color
 
-export REPO_DIR=$PROJECT_DIR/shapeology/
+export REPO_DIR=$PROJECT_DIR/scripts/
 
 # FOR UCSD BRAIN
-export ROOT_DIR=~/BstemAtlasDataBackup/ucsd_brain/
+export ROOT_DIR=/data/BstemAtlasDataBackup/ucsd_brain/
 
+venv_dir=/data/venv/$virtualenv
 
-if [ ! -d $virtualenv ]; then
+if [ ! -d $venv_dir ]; then
         echo ""
         echo -e "${green}Creating a virtualenv environment${NC}"
-        virtualenv -p python3 $REPO_DIR/$virtualenv
+        virtualenv -p python3 $venv_dir
         echo ""
+	echo -e "${green}Activating the virtualenv environment${NC}"
+	source $venv_dir/bin/activate
+	echo ""
         echo -e "${green}[virtualenv] Installing Python packages${NC}"
-        sudo pip3 install --user opencv-contrib-python
-        sudo pip3 install astropy
-        sudo pip3 install scipy
-        sudo pip3 install scikit-image
-        sudo pip3 install photutils
-        sudo pip3 install glymur
+        pip3 install opencv-python
+        pip3 install astropy
+        pip3 install scipy
+        pip3 install scikit-image
+        pip3 install photutils
+        pip3 install glymur
 fi
 
 echo ""
 echo -e "${green}Activating the virtualenv environment${NC}"
-source $REPO_DIR/$virtualenv/bin/activate
+source $venv_dir/bin/activate
  

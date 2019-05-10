@@ -44,20 +44,21 @@ for structure in all_structures:
     for state in ['positive','negative']:
 
         savepath = cell_dir + structure + '/'
-        if os.path.exists(savepath):
-            print(structure + ' ALREADY EXIST')
+        pkl_out_file = savepath+stack+'_'+structure+'_'+state+'.pkl'
+
+        if os.path.exists(pkl_out_file):
+            print(structure +'_'+state+ ' ALREADY EXIST')
             continue
         else:
-            os.mkdir(savepath)
+            if not os.path.exists(savepath):
+                os.mkdir(savepath)
 
         if state=='positive':
             patches = [dir for dir in glob(patch_dir+structure+'/*')]
         else:
             patches = [dir for dir in glob(patch_dir+structure+'_surround_200um_noclass/*')]
 
-        #count=0
         cells=[]
-        pkl_out_file = savepath+stack+'_'+state+'.pkl'
         for i in range(len(patches)):
             extractor=patch_extractor(patches[i],params)
             tile=cv2.imread(patches[i],0)
@@ -82,8 +83,12 @@ for structure in all_structures:
                 #         cv2.imwrite(filename, img)
                 #     except:
                 #         continue
-            #if count>100000:
-                #break
+            count = len(cells)
+            if 0<=count%1000 and count%1000<=30:
+                print(count)
+            if count>100000:
+                print(i,len(patches))
+                break
         pickle.dump(cells, open(pkl_out_file, 'wb'))
     print(structure+'finished in %5.1f seconds'%(time()-t1))
 print('Finished in %5.1f seconds'%(time()-t0))
