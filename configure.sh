@@ -1,30 +1,34 @@
-sudo apt-get install python3-setuptools
-sudo /home/ubuntu/.local/bin/easy_install pip
-#sudo easy_install3 pip
-sudo mv /usr/local/bin/pip /usr/local/bin/pip3
+PROJECT_DIR=~/MouseBrainAtlas_dev
+virtualenv="shapeology_venv"
+##################################################
+
+red='\e[1;31m'
+purple='\e[1;35m'
+green='\e[1;32m'
+cyan='\e[1;36m'
+NC='\033[0m' # No Color
+
+export REPO_DIR=$PROJECT_DIR/shapeology/
+
+# FOR UCSD BRAIN
+export ROOT_DIR=~/BstemAtlasDataBackup/ucsd_brain/
+
+
+if [ ! -d $virtualenv ]; then
+        echo ""
+        echo -e "${green}Creating a virtualenv environment${NC}"
+        virtualenv -p python3 $REPO_DIR/$virtualenv
+        echo ""
+        echo -e "${green}[virtualenv] Installing Python packages${NC}"
+        sudo pip3 install --user opencv-contrib-python
+        sudo pip3 install astropy
+        sudo pip3 install scipy
+        sudo pip3 install scikit-image
+        sudo pip3 install photutils
+        sudo pip3 install glymur
+fi
+
+echo ""
+echo -e "${green}Activating the virtualenv environment${NC}"
+source $REPO_DIR/$virtualenv/bin/activate
  
-sudo pip3.5 install --user opencv-contrib-python
-sudo pip3.5 install astropy
-sudo pip3.5 install scipy
-sudo pip3.5 install scikit-image
-sudo pip3.5 install photutils
-sudo pip3.5 install glymur
-
-sudo pip3.5 install awscli
-
-aws configure (or find a better way)
-
-sudo chmod 0777 /dev/shm/
-cd /dev/shm/
-mkdir data
-cd data
-aws s3 cp  s3://mousebraindata-open/MD657/MD657-F23-2017.02.17-23.13.17_MD657_2_0068_lossless.jp2 .
-
-kdu_expand -i MD657-F23-2017.02.17-23.13.17_MD657_2_0068_lossless.jp2 -o MD657-F23-2017.02.17-23.13.17_MD657_2_0068_lossless.tiff
-
-mkdir tiles
-convert MD657-F23-2017.02.17-23.13.17_MD657_2_0068_lossless.tiff -crop 1000x1000  +repage  +adjoin  tiles/tiles_%02d.tif
-
-
-export LD_LIBRARY_PATH="/home/ubuntu/KDU7A2_Demo_Apps_for_Ubuntu-x86-64_170827":$LD_LIBRARY_PATH;
-kdu_expand -i MD657-F23-2017.02.17-23.13.17_MD657_2_0068_lossless.jp2 -o MD657-F23-2017.02.17-23.13.17_MD657_2_0068_lossless.tiff

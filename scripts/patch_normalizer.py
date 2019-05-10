@@ -164,7 +164,7 @@ class normalizer:
         if too_big:
             return None,size
 
-        pad=np.zeros([sz_block,sz_block],dtype=np.float16)
+        pad=np.zeros([sz_block,sz_block],dtype=np.float64)
         _from=int((sz_block-size)/2)
         _to = int(sz_block-_from)
         # print(size,sz_block,_from,_to)
@@ -189,7 +189,7 @@ class normalizer:
             #'original_patch':ex,
             #'patch_in_circle':ex_in_circle,
             #'ex_grey_normed':ex_grey_normed,
-            'normalized_patch':normalized_patch,
+            #'normalized_patch':normalized_patch,
             'padded_size':padded_size,
             'padded_patch':padded_patch,
             'rotation':total_rotation,

@@ -6,9 +6,9 @@ paths:
   DiffusionMap: 'DiffusionMaps'
 
   #local paths
-  scripts_dir: '/Users/yoavfreund/projects/shapeology/shapeology_code/scripts'
-  data_dir: '/Users/yoavfreund/projects/shapeology/data'
-  DiffusionMap: "/Users/yoavfreund/projects/shapeology/Diffusion_Maps/diffusionMap.pkl"
+  scripts_dir: '/Users/kuiqian/Github/MouseBrainAtlas_dev/shapeology/scripts'
+  data_dir: '/Users/kuiqian/BstemAtlasDataBackup/ucsd_brain/'
+  DiffusionMap: "/Users/kuiqian/Github/MouseBrainAtlas_dev/shapeology/notebooks/diffusionMap.pkl"
   pickle_subdir: 'pickles/'
   
 preprocessing:
@@ -19,7 +19,7 @@ preprocessing:
   min_area: 10  # Patches with area smaller than min_area are ignored
 
 normalization:
-  size_thresholds: [15,81,251]  # patches are padded to one
+  size_thresholds: [15,51,251]  # patches are padded to one
                               # of these sizes so that a set of
                             # patches is represented as a 3D numpy array
 

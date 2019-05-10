@@ -25,7 +25,7 @@ class patch_extractor:
         self.preprocess_kernel=self.Norm.circle_patch(radius=1)
         
         self.tile_stats={'tile name':infile}
-        #self.DM = diffusionMap(params['paths']['DiffusionMap'])
+        self.DM = diffusionMap(params['paths']['DiffusionMap'])
 
         self.size_thresholds = params['normalization']['size_thresholds']
         self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
@@ -41,7 +41,7 @@ class patch_extractor:
         Stats=cv2.connectedComponentsWithStats(thresh)
         return Stats
 
-    def extract_blobs(self,Stats,tile,gray):
+    def extract_blobs(self,Stats,gray):
         """given a set of connected components extract convexified components from gray image and annotate on color image(tile)
 
         :param Stats: Output from cv2.connectedComponentsWithStats
@@ -60,7 +60,7 @@ class patch_extractor:
         height = props[:,3]
         area = props[:,4]
 
-        marked_tile=np.copy(tile)
+        #marked_tile=np.copy(tile)
         size_step=20
         extracted=[]
         H,W=seg.shape
@@ -80,7 +80,7 @@ class patch_extractor:
             _thr=np.min(masked_image.flatten())
 
             # compute convex hull of sub_mask
-            im2, contours, hierarchy = cv2.findContours(sub_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            contours, hierarchy = cv2.findContours(sub_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             convex_contour=cv2.convexHull(contours[0][:,0,:],returnPoints=True)
             slate=np.zeros([b-t,r-l,3],dtype=np.uint8)
             convex_mask = cv2.drawContours(slate, [convex_contour],0,(0,255,0),-1)[:,:,1]
@@ -106,12 +106,12 @@ class patch_extractor:
 
             #print(properties.keys())
             #break
-            cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
+            #cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
-        # self.computeDMs(extracted)
+        self.computeDMs(extracted)
             
-        return extracted,marked_tile
+        return extracted #,marked_tile
 
     def computeDMs(self,extracted):
         patchesBySize={size:[] for size in self.size_thresholds} # storage for normalized patches
@@ -128,7 +128,8 @@ class patch_extractor:
             patchIndex[padded_size].append(i)
 
         # compute DM for each size
-        # _size=51    #temporary: until we have maps for all sizes
+        #for size in self.size_thresholds:
+        _size=51    #temporary: until we have maps for all sizes
 
         asList=patchesBySize[_size]
         indexList=patchIndex[_size]
@@ -136,9 +137,9 @@ class patch_extractor:
         asMat=np.zeros([_len,_size*_size])
         for i in range(_len):
             asMat[i,:]=asList[i]
-        print('size os asMat:',asMat.shape)
+        #print('size os asMat:',asMat.shape)
         DMMat=self.DM.transform(asMat)
-        print(asMat.shape,DMMat.shape)
+        #print(asMat.shape,DMMat.shape)
 
         # insert DM vectors back into properties
         for i in range(len(asList)):
@@ -190,7 +191,7 @@ if __name__=="__main__":
         t0=time()
         print('processing',infile,'into',pkl_out_file)
         Stats=extractor.segment_cells(gray)
-        extracted,marked_tile = extractor.extract_blobs(Stats,tile,gray)
+        extracted,marked_tile = extractor.extract_blobs(Stats,gray)
 
         print('extracted',len(extracted),'patches')
         
