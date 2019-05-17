@@ -16,10 +16,10 @@ class diffusionMap:
         :param dmapFilename: name of pickle file containing the pydiffmap.dmap object 
         """
         self.DM=pk.load(open(dmapFilename,'rb'))
-        data=self.DM.data
-        self.DM = self.DM.from_sklearn(alpha=self.DM.alpha, k=self.DM.k, kernel_type=self.DM.kernel_type, epsilon=self.DM.epsilon, \
-                                   n_evecs=self.DM.n_evecs, neighbor_params=self.DM.neighbor_params)
-        self.DM.fit(data)
+        # data=self.DM.data
+        # self.DM = self.DM.from_sklearn(alpha=self.DM.alpha, k=self.DM.k, kernel_type=self.DM.kernel_type, epsilon=self.DM.epsilon, \
+        #                            n_evecs=self.DM.n_evecs, neighbor_params=self.DM.neighbor_params)
+        # self.DM.fit(data)
         #print(type(self.DM))
     
 

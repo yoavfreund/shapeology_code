@@ -2,9 +2,11 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("stack", type=str, help="The name of the stack")
+parser.add_argument("structure", type=str, help="The name of the structure")
 parser.add_argument("yaml", type=str, help="Path to Yaml file with parameters")
 args = parser.parse_args()
 stack = args.stack
+structure = args.structure
 
 import cv2
 #from cv2 import moments,HuMoments
@@ -39,7 +41,8 @@ if not os.path.exists(cell_dir):
 
 t0=time()
 
-for structure in all_structures:
+#assert structure
+for structure in [structure]:
     t1=time()
     for state in ['positive','negative']:
 

@@ -134,26 +134,27 @@ class patch_extractor:
 
         # compute DM for each size
         #for size in self.size_thresholds:
-        _size=51    #temporary: until we have maps for all sizes
+        _size=15    #temporary: until we have maps for all sizes
 
         asList=patchesBySize[_size]
         indexList=patchIndex[_size]
         _len=len(asList)
-        asMat=np.zeros([_len,_size*_size])
-        for i in range(_len):
-            asMat[i,:]=asList[i]
-        #print('size os asMat:',asMat.shape)
-        self.timestamps.append(('befor transform DM', time()))
+        if _len:
+            asMat=np.zeros([_len,_size*_size])
+            for i in range(_len):
+                asMat[i,:]=asList[i]
+            #print('size os asMat:',asMat.shape)
+            #self.timestamps.append(('befor transform DM', time()))
 
-        DMMat=self.DM.transform(asMat)
-        self.timestamps.append(('after transform DM', time()))
+            DMMat=self.DM.transform(asMat)
+            #self.timestamps.append(('after transform DM', time()))
 
-        #print(asMat.shape,DMMat.shape)
+            #print(asMat.shape,DMMat.shape)
 
-        # insert DM vectors back into properties
-        for i in range(len(asList)):
-            index=indexList[i]
-            extracted[index]['DMVec']=DMMat[i,:]
+            # insert DM vectors back into properties
+            for i in range(len(asList)):
+                index=indexList[i]
+                extracted[index]['DMVec']=DMMat[i,:]
 
 if __name__=="__main__":
 

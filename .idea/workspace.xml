@@ -2,8 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/configure.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shapeology_code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shapeology_code.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/Cell_generator.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Cell_generator.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/CreateSequenceVQ-to-python.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/CreateSequenceVQ-to-python.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/CreateSequenceVQ.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/Reps01.tiff" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Reps01.tiff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/Untitled1.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Entropy Based Analysis 0.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Entropy Based Analysis 0.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Entropy Based Analysis 1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Entropy Based Analysis 1.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Heat Kernel Based Analysis - 2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Heat Kernel Based Analysis - 2.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/diffusionMap.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Cell_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Untitled.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Untitled.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/extractPatches.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/extractPatches.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/label_patch.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/label_patch.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/shape_params.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/shape_params.yaml" afterDir="false" />
     </list>
@@ -14,12 +27,21 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="44" selection-start-line="44" selection-end-line="44" />
+            <state relative-caret-position="645">
+              <caret line="43" column="1" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/shape_params.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
             </state>
           </provider>
         </entry>
@@ -27,8 +49,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="136" column="42" lean-forward="true" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
+            <state relative-caret-position="358">
+              <caret line="141" column="16" selection-start-line="141" selection-start-column="16" selection-end-line="141" selection-end-column="16" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -39,8 +61,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/label_patch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+            <state relative-caret-position="675">
+              <caret line="49" column="20" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -53,7 +75,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/scripts/Cell_generator.py" />
         <option value="$PROJECT_DIR$/scripts/label_patch.py" />
+        <option value="$PROJECT_DIR$/scripts/shape_params.yaml" />
+        <option value="$PROJECT_DIR$/scripts/extractPatches.py" />
       </list>
     </option>
   </component>
@@ -78,6 +103,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -88,22 +114,28 @@
             <path>
               <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
               <item name="shapeology_code" type="462c0819:PsiDirectoryNode" />
+              <item name="notebooks" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="shapeology_code" type="462c0819:PsiDirectoryNode" />
               <item name="scripts" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -127,26 +159,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1557480446542</updated>
-      <workItem from="1557480447814" duration="4746000" />
+      <workItem from="1557480447814" duration="7622000" />
+      <workItem from="1557942783308" duration="898000" />
+      <workItem from="1557995571437" duration="4202000" />
+      <workItem from="1558069103954" duration="261000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4746000" />
+    <option name="totallyTimeSpent" value="12983000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="16" y="45" width="1400" height="774" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2496318" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26067746" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -154,11 +183,17 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="SciView" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32991204" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -172,24 +207,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/shape_params-aws.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="14" lean-forward="true" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="44" selection-start-line="44" selection-end-line="44" />
+        <state relative-caret-position="645">
+          <caret line="43" column="1" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/shape_params.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/label_patch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+        <state relative-caret-position="675">
+          <caret line="49" column="20" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="136" column="42" lean-forward="true" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
+        <state relative-caret-position="358">
+          <caret line="141" column="16" selection-start-line="141" selection-start-column="16" selection-end-line="141" selection-end-column="16" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
