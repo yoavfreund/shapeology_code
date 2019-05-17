@@ -8,7 +8,7 @@ paths:
   #local paths
   scripts_dir: '/Users/kuiqian/Github//shapeology_code/scripts'
   data_dir: '/Users/kuiqian/BstemAtlasDataBackup/ucsd_brain/'
-  DiffusionMap: "/Users/kuiqian/Github/shapeology_code/notebooks/diffusionMap-15.pkl"
+  DiffusionMap: "/Users/kuiqian/Github/shapeology_code/notebooks/diffusionMap"
   
 preprocessing:
   polarity: -1  # invert polarity of image (cells are dark)
@@ -18,7 +18,7 @@ preprocessing:
   min_area: 10  # Patches with area smaller than min_area are ignored
 
 normalization:
-  size_thresholds: [15,81,251]  # patches are padded to one
+  size_thresholds: [15,51,201]  # patches are padded to one
                               # of these sizes so that a set of
                             # patches is represented as a 3D numpy array
 

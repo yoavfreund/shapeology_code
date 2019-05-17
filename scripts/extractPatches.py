@@ -24,13 +24,13 @@ class patch_extractor:
         self.min_area=params['preprocessing']['min_area']
         self.Norm=normalizer(params)
         self.preprocess_kernel=self.Norm.circle_patch(radius=1)
-        
+        self.dm_dir=params['paths']['DiffusionMap']
         self.tile_stats={'tile name':infile}
-        self.DM = diffusionMap(params['paths']['DiffusionMap'])
 
         self.size_thresholds = params['normalization']['size_thresholds']
+
         self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
-        self.timestamps=[]
+        #self.timestamps=[]
 
     def segment_cells(self,gray):
         offset = self.params['preprocessing']['offset']
@@ -111,14 +111,14 @@ class patch_extractor:
             #cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
-        self.timestamps.append(('before DM',time()))
+        #self.timestamps.append(('before DM',time()))
         self.computeDMs(extracted)
-        self.timestamps.append(('after DM',time()))
+        #self.timestamps.append(('after DM',time()))
             
         return extracted #,marked_tile
 
     def computeDMs(self,extracted):
-        self.timestamps.append(('start compute DM', time()))
+        #self.timestamps.append(('start compute DM', time()))
         patchesBySize={size:[] for size in self.size_thresholds} # storage for normalized patches
         patchIndex={size:[] for size in self.size_thresholds}
       
@@ -133,28 +133,30 @@ class patch_extractor:
             patchIndex[padded_size].append(i)
 
         # compute DM for each size
-        #for size in self.size_thresholds:
-        _size=15    #temporary: until we have maps for all sizes
+        for size in self.size_thresholds:
+            _size=size    #temporary: until we have maps for all sizes
 
-        asList=patchesBySize[_size]
-        indexList=patchIndex[_size]
-        _len=len(asList)
-        if _len:
-            asMat=np.zeros([_len,_size*_size])
-            for i in range(_len):
-                asMat[i,:]=asList[i]
-            #print('size os asMat:',asMat.shape)
-            #self.timestamps.append(('befor transform DM', time()))
+            asList=patchesBySize[_size]
+            indexList=patchIndex[_size]
+            _len=len(asList)
+            if _len:
+                dm_file =  self.dm_dir + '-%d.pkl'%_size
+                self.DM = diffusionMap(dm_file)
+                asMat=np.zeros([_len,_size*_size])
+                for i in range(_len):
+                    asMat[i,:]=asList[i]
+                #print('size os asMat:',asMat.shape)
+                #self.timestamps.append(('befor transform DM', time()))
 
-            DMMat=self.DM.transform(asMat)
-            #self.timestamps.append(('after transform DM', time()))
+                DMMat=self.DM.transform(asMat)
+                #self.timestamps.append(('after transform DM', time()))
 
-            #print(asMat.shape,DMMat.shape)
+                #print(asMat.shape,DMMat.shape)
 
-            # insert DM vectors back into properties
-            for i in range(len(asList)):
-                index=indexList[i]
-                extracted[index]['DMVec']=DMMat[i,:]
+                # insert DM vectors back into properties
+                for i in range(len(asList)):
+                    index=indexList[i]
+                    extracted[index]['DMVec']=DMMat[i,:]
 
 if __name__=="__main__":
 

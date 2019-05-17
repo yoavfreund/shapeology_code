@@ -4,7 +4,7 @@ paths:
   scripts_dir: '/data/Github/shapeology_code/scripts'
   exec_dir: '/home/ubuntu/Datajoint_Interface/project_schemas/atlas_schema_python_v3/Cell_Extractor/'
   data_dir: '/data/BstemAtlasDataBackup/ucsd_brain/'
-  DiffusionMap: "/data/Github/shapeology_code/notebooks/diffusionMap.pkl"
+  DiffusionMap: "/data/Github/shapeology_code/notebooks/diffusionMap"
   
 preprocessing:
   polarity: -1  # invert polarity of image (cells are dark)
@@ -14,6 +14,6 @@ preprocessing:
   min_area: 10  # Patches with area smaller than min_area are ignored
 
 normalization:
-  size_thresholds: [15,51,251]  # patches are padded to one
+  size_thresholds: [15,51,201]  # patches are padded to one
                               # of these sizes so that a set of
                             # patches is represented as a 3D numpy array

@@ -2,22 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shapeology_code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shapeology_code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/Cell_generator.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Cell_generator.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/CreateSequenceVQ-to-python.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/CreateSequenceVQ-to-python.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/CreateSequenceVQ.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/Reps01.tiff" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Reps01.tiff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/Untitled1.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Entropy Based Analysis 0.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Entropy Based Analysis 0.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Entropy Based Analysis 1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Entropy Based Analysis 1.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Heat Kernel Based Analysis - 2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/diffusionAnalysis/Heat Kernel Based Analysis - 2.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/diffusionMap.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/DiffusionmapShow.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/DiffusionmapShow.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Cell_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Untitled.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Untitled.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Untitled.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/extractPatches.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/extractPatches.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/label_patch.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/label_patch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/shape_params-aws.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/shape_params-aws.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/shape_params.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/shape_params.yaml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="43" column="1" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
+            <state relative-caret-position="220">
+              <caret line="86" lean-forward="true" selection-start-line="86" selection-end-line="86" />
             </state>
           </provider>
         </entry>
@@ -40,17 +31,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/shape_params.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="75">
+              <caret line="5" column="31" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/shape_params-aws.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
-              <caret line="141" column="16" selection-start-line="141" selection-start-column="16" selection-end-line="141" selection-end-column="16" />
+            <state relative-caret-position="2115">
+              <caret line="141" column="20" selection-start-line="141" selection-start-column="20" selection-end-line="141" selection-end-column="20" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -75,10 +75,11 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/scripts/Cell_generator.py" />
         <option value="$PROJECT_DIR$/scripts/label_patch.py" />
-        <option value="$PROJECT_DIR$/scripts/shape_params.yaml" />
         <option value="$PROJECT_DIR$/scripts/extractPatches.py" />
+        <option value="$PROJECT_DIR$/scripts/shape_params.yaml" />
+        <option value="$PROJECT_DIR$/scripts/shape_params-aws.yaml" />
+        <option value="$PROJECT_DIR$/scripts/Cell_generator.py" />
       </list>
     </option>
   </component>
@@ -162,12 +163,12 @@
       <workItem from="1557480447814" duration="7622000" />
       <workItem from="1557942783308" duration="898000" />
       <workItem from="1557995571437" duration="4202000" />
-      <workItem from="1558069103954" duration="261000" />
+      <workItem from="1558069103954" duration="7152000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12983000" />
+    <option name="totallyTimeSpent" value="19874000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="16" y="45" width="1400" height="774" extended-state="0" />
@@ -207,24 +208,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/shape_params-aws.yaml">
+    <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="14" lean-forward="true" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="43" column="1" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
+        <state relative-caret-position="145">
+          <caret line="173" column="8" selection-start-line="173" selection-start-column="8" selection-end-line="173" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/shape_params.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        <state relative-caret-position="75">
+          <caret line="5" column="31" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/shape_params-aws.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
         </state>
       </provider>
     </entry>
@@ -237,11 +238,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="141" column="16" selection-start-line="141" selection-start-column="16" selection-end-line="141" selection-end-column="16" />
+        <state relative-caret-position="2115">
+          <caret line="141" column="20" selection-start-line="141" selection-start-column="20" selection-end-line="141" selection-end-column="20" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="86" lean-forward="true" selection-start-line="86" selection-end-line="86" />
         </state>
       </provider>
     </entry>
