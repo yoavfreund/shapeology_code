@@ -2,10 +2,11 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("stack", type=str, help="The name of the stack")
+parser.add_argument("structure_id", type=int, help="The nth group of structures")
 parser.add_argument("yaml", type=str, help="Path to Yaml file with parameters")
 args = parser.parse_args()
 stack = args.stack
-
+seq = args.structure_id
 import cv2
 #from cv2 import moments,HuMoments
 import pickle
@@ -22,13 +23,13 @@ from extractPatches import patch_extractor
 from lib.utils import mark_contours, configuration
 
 import ray
-ray.init()
+ray.init(object_store_memory=70000000000,redis_max_memory=30000000000)
 
 @ray.remote
 def generator(structure, cell_dir, patch_dir, stack, params):
     t1 = time()
     for state in ['positive','negative']:
-
+        t2 = time()
         savepath = cell_dir + structure + '/'
         pkl_out_file = savepath+stack+'_'+structure+'_'+state+'.pkl'
 
@@ -71,7 +72,7 @@ def generator(structure, cell_dir, patch_dir, stack, params):
                     #     except:
                     #         continue
                 count = len(cells)
-                if 0<=count%1000 and count%1000<=30:
+                if 0<=count%20000 and count%20000<=30:
                     print(structure, count)
                 if count>100000 and save==0:
                     print(structure, i,len(patches))
@@ -80,6 +81,7 @@ def generator(structure, cell_dir, patch_dir, stack, params):
                     pickle.dump(cells, open(pkl_out, 'wb'))
         print(structure,count)
         pickle.dump(cells, open(pkl_out_file, 'wb'))
+        print(structure + '_'+state+ ' finished in %5.1f seconds' % (time() - t2))
     print(structure + ' finished in %5.1f seconds' % (time() - t1))
 
 yamlfile=os.environ['REPO_DIR']+args.yaml
@@ -102,7 +104,7 @@ t0=time()
 
 #assert structure
 
-ray.get([generator.remote(structure, cell_dir, patch_dir, stack, params) for structure in all_structures])
+ray.get([generator.remote(structure, cell_dir, patch_dir, stack, params) for structure in all_structures[(seq-1)*2:seq*2]])
 
 
 print('Finished in %5.1f seconds'%(time()-t0))

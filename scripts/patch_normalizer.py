@@ -8,7 +8,7 @@ def calc_width(im):
     im=im/np.sum(im)
     _sum=im.sum(axis=0)
     x=np.arange(0,len(_sum))
-    return np.sqrt(np.dot(x**2,_sum)-np.dot(x,_sum)**2)
+    return np.sqrt(abs(np.dot(x**2,_sum)-np.dot(x,_sum)**2))
 
 class normalizer:
     """ a class for normalizing patches """
