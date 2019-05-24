@@ -2,11 +2,13 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("stack", type=str, help="The name of the stack")
-parser.add_argument("structure_id", type=int, help="The nth group of structures")
+parser.add_argument("structure", type=str, help="The nth group of structures")
+parser.add_argument("state", type=str, help="Positive or negative samples")
 parser.add_argument("yaml", type=str, help="Path to Yaml file with parameters")
 args = parser.parse_args()
 stack = args.stack
-seq = args.structure_id
+struc = args.structure
+state = args.state
 import cv2
 #from cv2 import moments,HuMoments
 import pickle
@@ -20,16 +22,15 @@ from glob import glob
 from extractPatches import patch_extractor
 #from label_patch import diffusionMap
 #from patch_normalizer import normalizer
-from lib.utils import mark_contours, configuration
+from lib.utils import mark_contours, configuration, run
 
 import ray
 ray.init(object_store_memory=70000000000,redis_max_memory=30000000000)
 
 @ray.remote
-def generator(structure, cell_dir, patch_dir, stack, params):
-    t1 = time()
-    for state in ['positive','negative']:
-        t2 = time()
+def generator(structure, state, cell_dir, patch_dir, stack, params):
+    for state in [state]:
+        t1 = time()
         savepath = cell_dir + structure + '/'
         pkl_out_file = savepath+stack+'_'+structure+'_'+state+'.pkl'
 
@@ -73,16 +74,17 @@ def generator(structure, cell_dir, patch_dir, stack, params):
                     #         continue
                 count = len(cells)
                 if 0<=count%20000 and count%20000<=30:
-                    print(structure, count)
+                    print(structure + '_'+state, count,'/',len(patches))
                 if count>100000 and save==0:
                     print(structure, i,len(patches))
                     save=1
                     pkl_out = savepath + stack + '_' + structure + '_' + state + '_part.pkl'
                     pickle.dump(cells, open(pkl_out, 'wb'))
-        print(structure,count)
+        print(structure + '_'+state,count)
         pickle.dump(cells, open(pkl_out_file, 'wb'))
-        print(structure + '_'+state+ ' finished in %5.1f seconds' % (time() - t2))
-    print(structure + ' finished in %5.1f seconds' % (time() - t1))
+        #s3_directory = 's3://mousebrainatlas-data/CSHL_cells_dm/'+stack+'/'+structure+'/'
+        #run('aws s3 cp "{0}" {1}/'.format(pkl_out_file,s3_directory))
+        print(structure + '_'+state+ ' finished in %5.1f seconds' % (time() - t1))
 
 yamlfile=os.environ['REPO_DIR']+args.yaml
 params=configuration(yamlfile).getParams()
@@ -100,12 +102,12 @@ print(cell_dir)
 if not os.path.exists(cell_dir):
     os.mkdir(cell_dir)
 
-t0=time()
+#t0=time()
 
 #assert structure
 
-ray.get([generator.remote(structure, cell_dir, patch_dir, stack, params) for structure in all_structures[(seq-1)*2:seq*2]])
+ray.get(generator.remote(struc, state, cell_dir, patch_dir, stack, params))
 
 
-print('Finished in %5.1f seconds'%(time()-t0))
+#print('Finished in %5.1f seconds'%(time()-t0))
 
