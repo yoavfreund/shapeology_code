@@ -74,7 +74,7 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
                     #         continue
                 count = len(cells)
                 if 0<=count%20000 and count%20000<=30:
-                    print(structure + '_'+state, count,'/',len(patches))
+                    print(structure + '_'+state, count,i,'/',len(patches))
                 if count>100000 and save==0:
                     print(structure, i,len(patches))
                     save=1
