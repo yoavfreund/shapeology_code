@@ -73,8 +73,9 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
                     #         cv2.imwrite(filename, img)
                     #     except:
                     #         continue
-                count = len(cells)
-                print(structure + '_' + state, count, i, '/', len(patches))
+                if i%10==0:
+                    count = len(cells)
+                    print(structure + '_' + state, count, i, '/', len(patches))
                 # if 0<=count%20000 and count%20000<=30:
                 #     print(structure + '_'+state, count,i,'/',len(patches))
                 # if count>100000 and save==0:
@@ -82,6 +83,7 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
                 #     save=1
                 #     pkl_out = savepath + stack + '_' + structure + '_' + state + '_part.pkl'
                 #     pickle.dump(cells, open(pkl_out, 'wb'))
+        count = len(cells)
         print(structure + '_'+state,count)
         pickle.dump(cells, open(pkl_out_file, 'wb'))
         #s3_directory = 's3://mousebrainatlas-data/CSHL_cells_dm/'+stack+'/'+structure+'/'

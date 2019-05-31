@@ -96,7 +96,11 @@ class patch_extractor:
                         'width':width[i],
                         'height':height[i],
                         'area':area[i]}
-            more_properties = self.Norm.normalize_patch(masked_image, properties)
+            try:
+                more_properties = self.Norm.normalize_patch(masked_image, properties)
+            except:
+                continue
+            
             properties.update(more_properties)
             extracted.append(properties)
 
