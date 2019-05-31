@@ -1,0 +1,14 @@
+opencv-python
+astropy
+scipy
+scikit-image
+photutils
+glymur
+pydiffmap
+psutil
+pyyaml
+dill
+ray
+datajoint
+ipykernel
+scikit-learn==0.20.0

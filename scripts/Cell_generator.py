@@ -25,7 +25,8 @@ from extractPatches import patch_extractor
 from lib.utils import mark_contours, configuration, run
 
 import ray
-ray.init(object_store_memory=70000000000,redis_max_memory=30000000000)
+ray.init()
+#ray.init(object_store_memory=70000000000,redis_max_memory=30000000000)
 
 @ray.remote
 def generator(structure, state, cell_dir, patch_dir, stack, params):
@@ -47,7 +48,7 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
             patches = [dir for dir in glob(patch_dir+structure+'_surround_200um_noclass/*')]
 
         cells=[]
-        save=0
+        #save=0
         for i in range(len(patches)):
             extractor=patch_extractor(patches[i],params)
             tile=cv2.imread(patches[i],0)
@@ -57,7 +58,7 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
             _std = np.std(tile.flatten())
 
             if _std < min_std:
-                continue #print('image',patches[i],'std=',_std, 'too blank, skipping')
+                print('image',patches[i],'std=',_std, 'too blank, skipping')
             else:
                 Stats=extractor.segment_cells(tile)
                 extracted= extractor.extract_blobs(Stats,tile)
@@ -73,13 +74,14 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
                     #     except:
                     #         continue
                 count = len(cells)
-                if 0<=count%20000 and count%20000<=30:
-                    print(structure + '_'+state, count,i,'/',len(patches))
-                if count>100000 and save==0:
-                    print(structure, i,len(patches))
-                    save=1
-                    pkl_out = savepath + stack + '_' + structure + '_' + state + '_part.pkl'
-                    pickle.dump(cells, open(pkl_out, 'wb'))
+                print(structure + '_' + state, count, i, '/', len(patches))
+                # if 0<=count%20000 and count%20000<=30:
+                #     print(structure + '_'+state, count,i,'/',len(patches))
+                # if count>100000 and save==0:
+                #     print(structure, i,len(patches))
+                #     save=1
+                #     pkl_out = savepath + stack + '_' + structure + '_' + state + '_part.pkl'
+                #     pickle.dump(cells, open(pkl_out, 'wb'))
         print(structure + '_'+state,count)
         pickle.dump(cells, open(pkl_out_file, 'wb'))
         #s3_directory = 's3://mousebrainatlas-data/CSHL_cells_dm/'+stack+'/'+structure+'/'

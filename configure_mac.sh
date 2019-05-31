@@ -26,16 +26,7 @@ if [ ! -d $venv_dir ]; then
         
         echo ""
         echo -e "${green}[virtualenv] Installing Python packages${NC}"
-        sudo pip3 install opencv-python
-        sudo pip3 install astropy
-        sudo pip3 install scipy
-        sudo pip3 install scikit-image
-        sudo pip3 install photutils
-        sudo pip3 install glymur
-        sudo pip3 install pydiffmap
-        sudo pip3 install psutil
-        sudo pip3 install pyyaml
-        sudo pip3 install scikit-learn==0.20.0
+        pip3 install -r $PROJECT_DIR/requirements.txt
 fi
 
 echo ""
