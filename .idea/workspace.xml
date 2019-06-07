@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/Cell_generator.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Cell_generator.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/DiffusionmapShow.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/DiffusionmapShow.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Create_Structure_Table.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Create_Structure_Table.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/DIffusionmap_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/DIffusionmap_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/output" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/test.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Cell_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ParallelRun-Copy1.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ParallelRun-Copy2.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/ParallelRun.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ParallelRun.ipynb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,26 +20,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="10" lean-forward="true" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/shape_params.yaml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="14" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/shape_params-aws.yaml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
+            <state relative-caret-position="288">
+              <caret line="91" column="70" lean-forward="true" selection-start-line="91" selection-start-column="70" selection-end-line="91" selection-end-column="70" />
             </state>
           </provider>
         </entry>
@@ -50,8 +29,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="784">
-              <caret line="84" column="100" selection-start-line="84" selection-start-column="100" selection-end-line="84" selection-end-column="100" />
+            <state relative-caret-position="312">
+              <caret line="106" column="51" selection-start-line="106" selection-start-column="51" selection-end-line="106" selection-end-column="51" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -62,17 +41,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/DIffusionmap_datajoint.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
+            <state relative-caret-position="314">
               <caret line="39" column="46" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/label_patch.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="49" column="20" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -121,11 +91,6 @@
             <path>
               <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
               <item name="shapeology_code" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shapeology_code" type="462c0819:PsiDirectoryNode" />
-              <item name="notebooks" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
@@ -197,13 +162,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32602000" />
+    <option name="totallyTimeSpent" value="38015000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="16" y="45" width="1400" height="774" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27540502" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28645065" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -237,13 +201,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="173" column="8" selection-start-line="173" selection-start-column="8" selection-end-line="173" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/__init__.py" />
     <entry file="file://$PROJECT_DIR$/scripts/dj_local_conf.json" />
     <entry file="file://$PROJECT_DIR$/configure.sh">
@@ -251,20 +208,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/notebooks/Cell_generator.ipynb">
       <provider selected="true" editor-type-id="jupyter-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/DIffusionmap_datajoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="39" column="46" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/label_patch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="49" column="20" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/process_file.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -287,10 +230,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/label_patch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="542">
+          <caret line="49" column="20" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/DIffusionmap_datajoint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="39" column="46" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="173" column="8" selection-start-line="173" selection-start-column="8" selection-end-line="173" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="784">
-          <caret line="84" column="100" selection-start-line="84" selection-start-column="100" selection-end-line="84" selection-end-column="100" />
+        <state relative-caret-position="312">
+          <caret line="106" column="51" selection-start-line="106" selection-start-column="51" selection-end-line="106" selection-end-column="51" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -299,8 +263,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="10" lean-forward="true" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
+        <state relative-caret-position="288">
+          <caret line="91" column="70" lean-forward="true" selection-start-line="91" selection-start-column="70" selection-end-line="91" selection-end-column="70" />
         </state>
       </provider>
     </entry>

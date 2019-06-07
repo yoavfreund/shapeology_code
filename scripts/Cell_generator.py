@@ -13,7 +13,7 @@ import cv2
 #from cv2 import moments,HuMoments
 import pickle
 import numpy as np
-
+import pandas as pd
 
 import os
 import sys
@@ -32,15 +32,17 @@ ray.init()
 def generator(structure, state, cell_dir, patch_dir, stack, params):
     for state in [state]:
         t1 = time()
-        savepath = cell_dir + structure + '/'
+        savepath = cell_dir + 'Properties/' + structure + '/'
+        img_path = cell_dir + 'Images/' + structure + '/'
         pkl_out_file = savepath+stack+'_'+structure+'_'+state+'.pkl'
-
+        img_out_file = img_path+stack+'_'+structure+'_'+state+'_images.pkl'
         if os.path.exists(pkl_out_file):
             print(structure +'_'+state+ ' ALREADY EXIST')
             continue
         else:
             if not os.path.exists(savepath):
                 os.mkdir(savepath)
+                os.mkdir(img_path)
 
         if state=='positive':
             patches = [dir for dir in glob(patch_dir+structure+'/*')]
@@ -48,7 +50,7 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
             patches = [dir for dir in glob(patch_dir+structure+'_surround_200um_noclass/*')]
 
         cells=[]
-        #save=0
+
         for i in range(len(patches)):
             extractor=patch_extractor(patches[i],params)
             tile=cv2.imread(patches[i],0)
@@ -76,16 +78,16 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
                 if i%10==0:
                     count = len(cells)
                     print(structure + '_' + state, count, i, '/', len(patches))
-                # if 0<=count%20000 and count%20000<=30:
-                #     print(structure + '_'+state, count,i,'/',len(patches))
-                # if count>100000 and save==0:
-                #     print(structure, i,len(patches))
-                #     save=1
-                #     pkl_out = savepath + stack + '_' + structure + '_' + state + '_part.pkl'
-                #     pickle.dump(cells, open(pkl_out, 'wb'))
+
+        cells = pd.DataFrame(cells)
+        cells = cells[cells['padded_patch'].notnull()]
+        images = cells[['padded_size','padded_patch']]
+        cells = cells.drop('padded_patch',1)
         count = len(cells)
-        print(structure + '_'+state,count)
-        pickle.dump(cells, open(pkl_out_file, 'wb'))
+        print(structure + '_' + state, count)
+        cells.to_pickle(pkl_out_file)
+        images.to_pickle(img_out_file)
+        #pickle.dump(cells, open(pkl_out_file, 'wb'))
         #s3_directory = 's3://mousebrainatlas-data/CSHL_cells_dm/'+stack+'/'+structure+'/'
         #run('aws s3 cp "{0}" {1}/'.format(pkl_out_file,s3_directory))
         print(structure + '_'+state+ ' finished in %5.1f seconds' % (time() - t1))
@@ -98,13 +100,16 @@ paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VL
 singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
-patch_dir = os.environ['ROOT_DIR']+'CSHL_patches/'+stack+'/'
-if not os.path.exists(os.environ['ROOT_DIR']+'CSHL_cells_dm/'):
-    os.mkdir(os.environ['ROOT_DIR']+'CSHL_cells_dm/')
-cell_dir = os.environ['ROOT_DIR']+'CSHL_cells_dm/'+stack+'/'
+patch_dir = os.environ['ROOT_DIR']+'CSHL_regions/'+stack+'/'
+cell_dir = os.environ['ROOT_DIR']+'CSHL_cells_features/'
+if not os.path.exists(cell_dir):
+    os.mkdir(cell_dir)
+cell_dir = cell_dir+stack+'/'
 print(cell_dir)
 if not os.path.exists(cell_dir):
     os.mkdir(cell_dir)
+    os.mkdir(cell_dir+'Images/')
+    os.mkdir(cell_dir+'Properties/')
 
 #t0=time()
 
