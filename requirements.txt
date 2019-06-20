@@ -12,3 +12,4 @@ ray
 datajoint
 ipykernel
 scikit-learn==0.20.0
+xgboost
