@@ -54,31 +54,36 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
         if state=='positive':
             patches = [dir for dir in glob(patch_dir+structure+'/*')]
         else:
-            patches = [dir for dir in glob(patch_dir+structure+'_surround_200um_noclass/*')]
+            patches = [dir for dir in glob(patch_dir+structure+'_surround_500um_noclass/*')]
 
         features=[]
+
+        n_choose = min(len(patches), 1000)
+        indices_choose = np.random.choice(range(len(patches)), n_choose, replace=False)
+        patches = np.array(patches)
+        patches = patches[indices_choose]
 
         for i in range(len(patches)):
             extractor=patch_extractor(patches[i],params)
             tile=cv2.imread(patches[i],0)
-            contours, _ = cv2.findContours(tile.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-            if state=='positive':
-                if len(contours)==1:
-                    object_area = cv2.contourArea(contours[0])
-                else:
-                    areas=[]
-                    for j in range(len(contours)):
-                        areas.extend([cv2.contourArea(contours[j])])
-                    object_area = max(areas)
-            else:
-                if len(contours)==2:
-                    object_area = cv2.contourArea(contours[0])-cv2.contourArea(contours[1])
-                else:
-                    areas=[]
-                    for j in range(len(contours)):
-                        areas.extend([cv2.contourArea(contours[j])])
-                    areas=np.sort(areas)
-                    object_area = areas[-1]-areas[-2]
+            # contours, _ = cv2.findContours(tile.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            # if state=='positive':
+            #     if len(contours)==1:
+            #         object_area = cv2.contourArea(contours[0])
+            #     else:
+            #         areas=[]
+            #         for j in range(len(contours)):
+            #             areas.extend([cv2.contourArea(contours[j])])
+            #         object_area = max(areas)
+            # else:
+            #     if len(contours)==2:
+            #         object_area = cv2.contourArea(contours[0])-cv2.contourArea(contours[1])
+            #     else:
+            #         areas=[]
+            #         for j in range(len(contours)):
+            #             areas.extend([cv2.contourArea(contours[j])])
+            #         areas=np.sort(areas)
+            #         object_area = areas[-1]-areas[-2]
             
             if params['preprocessing']['polarity']==-1:
                 tile = 255-tile
@@ -102,7 +107,7 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
                     x, y = CDF(origin[:,k])
                     ten = [x[np.argmin(np.absolute(y-0.1*(j+1)))] for j in range(10)]
                     extracted.extend(ten)
-                extracted.extend([cells.shape[0]/object_area*1000])
+                extracted.extend([cells.shape[0]/100])
                 features.append(extracted)
                 
                 if i%10==0:
@@ -145,8 +150,8 @@ paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VL
 singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
-patch_dir = os.environ['ROOT_DIR']+'CSHL_new_regions/'+stack+'/'
-cell_dir = os.environ['ROOT_DIR']+'CSHL_new_regions_features/'
+patch_dir = os.environ['ROOT_DIR']+'CSHL_patches/'+stack+'/'
+cell_dir = os.environ['ROOT_DIR']+'CSHL_patches_features/'
 if not os.path.exists(cell_dir):
     os.mkdir(cell_dir)
 cell_dir = cell_dir+stack+'/'
