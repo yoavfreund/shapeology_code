@@ -5,10 +5,12 @@ parser.add_argument("stack", type=str, help="The name of the stack")
 parser.add_argument("structure", type=str, help="The nth group of structures")
 parser.add_argument("state", type=str, help="Positive or negative samples")
 parser.add_argument("yaml", type=str, help="Path to Yaml file with parameters")
+parser.add_argument("filename", type=str, help="Path to patch file")
 args = parser.parse_args()
 stack = args.stack
 struc = args.structure
 state = args.state
+
 import cv2
 #from cv2 import moments,HuMoments
 import pickle
@@ -94,22 +96,24 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
             if _std < min_std:
                 print('image',patches[i],'std=',_std, 'too blank, skipping')
             else:
-                Stats = extractor.segment_cells(tile)
-                cells = extractor.extract_blobs(Stats,tile)
-                cells = pd.DataFrame(cells)
-                cells = cells[cells['padded_patch'].notnull()]
-                cells = cells.drop(['padded_patch','left','top'],1)
-                cells = np.asarray(cells)
-                for k in range(len(cells)):
-                    cells[k][0] = cells[k][0][:10]
-                origin = np.concatenate((np.array(list(cells[:,0])),cells[:,1:]),axis=1)
-                for k in range(origin.shape[1]):
-                    x, y = CDF(origin[:,k])
-                    ten = [x[np.argmin(np.absolute(y-0.1*(j+1)))] for j in range(10)]
-                    extracted.extend(ten)
-                extracted.extend([cells.shape[0]/100])
-                features.append(extracted)
-                
+                try:
+                    Stats = extractor.segment_cells(tile)
+                    cells = extractor.extract_blobs(Stats,tile)
+                    cells = pd.DataFrame(cells)
+                    cells = cells[cells['padded_patch'].notnull()]
+                    cells = cells.drop(['padded_patch','left','top'],1)
+                    cells = np.asarray(cells)
+                    for k in range(len(cells)):
+                        cells[k][0] = cells[k][0][:10]
+                    origin = np.concatenate((np.array(list(cells[:,0])),cells[:,1:]),axis=1)
+                    for k in range(origin.shape[1]):
+                        x, y = CDF(origin[:,k])
+                        ten = [x[np.argmin(np.absolute(y-0.1*(j+1)))] for j in range(10)]
+                        extracted.extend(ten)
+                    extracted.extend([cells.shape[0]/100])
+                    features.append(extracted)
+                except:
+                    continue
                 if i%10==0:
                     count = len(features)
                     print(structure + '_' + state, count, i, '/', len(patches))
@@ -150,8 +154,8 @@ paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VL
 singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
-patch_dir = os.environ['ROOT_DIR']+'CSHL_patches/'+stack+'/'
-cell_dir = os.environ['ROOT_DIR']+'CSHL_patches_features/'
+patch_dir = os.environ['ROOT_DIR']+args.filename+'/'+stack+'/'
+cell_dir = os.environ['ROOT_DIR']+args.filename+'_features/'
 if not os.path.exists(cell_dir):
     os.mkdir(cell_dir)
 cell_dir = cell_dir+stack+'/'
