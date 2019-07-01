@@ -94,7 +94,8 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
             
             extracted = []
             if _std < min_std:
-                print('image',patches[i],'std=',_std, 'too blank, skipping')
+                print('image',patches[i],'std=',_std, 'too blank')
+                features.append([0] * 201)
             else:
                 try:
                     Stats = extractor.segment_cells(tile)
@@ -114,9 +115,9 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
                     features.append(extracted)
                 except:
                     continue
-                if i%10==0:
-                    count = len(features)
-                    print(structure + '_' + state, count, i, '/', len(patches))
+            if i%10==0:
+                count = len(features)
+                print(structure + '_' + state, count, i, '/', len(patches))
                     
 #                 Stats=extractor.segment_cells(tile)
 #                 extracted= extractor.extract_blobs(Stats,tile)
