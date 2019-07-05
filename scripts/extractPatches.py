@@ -25,7 +25,7 @@ class patch_extractor:
         self.Norm=normalizer(params)
         self.preprocess_kernel=self.Norm.circle_patch(radius=1)
         self.dm_dir=params['paths']['DiffusionMap']
-        self.tile_stats={'tile name':infile}
+        #self.tile_stats={'tile name':infile}
 
         self.size_thresholds = params['normalization']['size_thresholds']
 
