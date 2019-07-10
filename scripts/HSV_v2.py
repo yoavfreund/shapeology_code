@@ -219,7 +219,7 @@ param['max_depth']= 3   # depth of tree
 param['eta'] = 0.2      # shrinkage parameter
 param['silent'] = 1     # not silent
 param['objective'] = 'binary:logistic' #'multi:softmax'
-param['nthread'] = 7 # Number of threads used
+param['nthread'] = 3 # Number of threads used
 param['num_class']=1
 num_round = 100
 
