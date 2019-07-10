@@ -31,6 +31,19 @@ img_file = '/CSHL_hsv/'+stack+'/'
 img_fp = os.environ['ROOT_DIR']+img_file
 scripts_dir = os.environ['REPO_DIR']
 
+def setup_download_from_s3(rel_fp, recursive=True):
+    s3_fp = 's3://mousebrainatlas-data/' + rel_fp
+    local_fp = os.environ['ROOT_DIR'] + rel_fp
+
+    if os.path.exists(local_fp):
+        print('ALREADY DOWNLOADED FILE')
+        return
+
+    if recursive:
+        run('aws s3 cp --recursive {0} {1}'.format(s3_fp, local_fp))
+    else:
+        run('aws s3 cp {0} {1}'.format(s3_fp, local_fp))
+
 def setup_upload_from_s3(rel_fp, recursive=True):
     s3_fp = 's3://mousebrainatlas-data/' + rel_fp
     local_fp = os.environ['ROOT_DIR'] + rel_fp
@@ -39,6 +52,8 @@ def setup_upload_from_s3(rel_fp, recursive=True):
         run('aws s3 cp --recursive {0} {1}'.format(local_fp, s3_fp))
     else:
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
+
+setup_download_from_s3('CSHL_patches_features/')
 
 @schema
 class ImageMap(dj.Computed):
