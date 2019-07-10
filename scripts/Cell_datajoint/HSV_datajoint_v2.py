@@ -13,8 +13,8 @@ from utilities import *
 sys.path.append('../lib')
 from utils import run
 
-credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
-#credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'
+#credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
+credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'
 dj.config['database.host'] = get_dj_creds(credFiles)['database.host']
 dj.config['database.user'] = get_dj_creds(credFiles)['database.user']
 dj.config['database.port'] = get_dj_creds(credFiles)['database.port']
@@ -25,8 +25,8 @@ schema = dj.schema('kui_diffusionmap')
 schema.spawn_missing_classes()
 
 stack = 'MD594'
-yaml_file = 'shape_params-aws.yaml'
-#yaml_file = 'shape_params.yaml'
+#yaml_file = 'shape_params-aws.yaml'
+yaml_file = 'shape_params.yaml'
 img_file = '/CSHL_hsv/'+stack+'/'
 img_fp = os.environ['ROOT_DIR']+img_file
 scripts_dir = os.environ['REPO_DIR']
@@ -75,8 +75,11 @@ class ImageMap(dj.Computed):
             key[key_item] = cpt
         except:
             run('python3 {0}/HSV_v2.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
-            setup_upload_from_s3(img_file)
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
+            if cpt == 1:
+                setup_upload_from_s3(img_file, recursive=False)
+            else:
+                setup_upload_from_s3(img_file)
             key[key_item] = cpt
             shutil.rmtree(img_fp)
         self.insert1(key)
