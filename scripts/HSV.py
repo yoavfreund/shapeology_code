@@ -89,6 +89,8 @@ def image_generator(structure, savepath, cell_dir, param, params, num_round, hal
     count = 0
     for contour_id, contour in polygons:
         section = contour_id
+        if section not in all_patch_locations[structure].keys():
+            continue
         polygon = contour.copy()
         img = cv2.imread(raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif', 2)
         m, n = img.shape

@@ -144,7 +144,7 @@ def generator(structure, state, cell_dir, patch_dir, stack, params):
 #         images.to_pickle(img_out_file)
         pickle.dump(features, open(pkl_out_file, 'wb'))
         #s3_directory = 's3://mousebrainatlas-data/CSHL_cells_dm/'+stack+'/'+structure+'/'
-        #run('aws s3 cp "{0}" {1}/'.format(pkl_out_file,s3_directory))
+        #run('aws s3 cp {0} {1}'.format(pkl_out_file,s3_directory))
         print(structure + '_'+state+ ' finished in %5.1f seconds' % (time() - t1))
 
 yamlfile=os.environ['REPO_DIR']+args.yaml
