@@ -1,4 +1,4 @@
-PROJECT_DIR=/home/ubuntu/data/Github/shapeology_code
+PROJECT_DIR=/dev/shm/data/Github/shapeology_code
 virtualenv="shapeology_venv"
 ##################################################
 
@@ -11,9 +11,9 @@ NC='\033[0m' # No Color
 export REPO_DIR=$PROJECT_DIR/scripts/
 
 # FOR UCSD BRAIN
-export ROOT_DIR=/home/ubuntu/data/BstemAtlasDataBackup/ucsd_brain/
+export ROOT_DIR=/dev/shm/data/BstemAtlasDataBackup/ucsd_brain/
 
-venv_dir=/home/ubuntu/data/venv/$virtualenv
+venv_dir=/dev/shm/data/venv/$virtualenv
 
 if [ ! -d $venv_dir ]; then
     echo ""
