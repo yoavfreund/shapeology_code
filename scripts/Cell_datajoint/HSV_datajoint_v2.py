@@ -13,7 +13,7 @@ from utilities import *
 sys.path.append('../lib')
 from utils import run
 
-credFiles= '/data/Github/VaultBrain/credFiles_aws.yaml'
+credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
 #credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'
 dj.config['database.host'] = get_dj_creds(credFiles)['database.host']
 dj.config['database.user'] = get_dj_creds(credFiles)['database.user']
