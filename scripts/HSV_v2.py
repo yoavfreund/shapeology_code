@@ -108,8 +108,8 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
         polygon = contour.copy()
 
         subpath = savepath + structure + '/'
-        if not os.path.exists(subpath):
-            os.mkdir(subpath)
+        if not os.path.exists(os.environ['ROOT_DIR']+subpath):
+            os.mkdir(os.environ['ROOT_DIR']+subpath)
 
         fp = []
         fp.append(cell_dir + structure + '/MD589_' + structure + '_positive.pkl')
@@ -186,7 +186,8 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
         rgb = rgb.astype(np.uint8)
         com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [0, 255, 0], 15, lineType=8)
         filename = subpath + structure + '_' + str(section) + '.tif'
-        cv2.imwrite(filename, com)
+        cv2.imwrite(os.environ['ROOT_DIR']+filename, com)
+        setup_upload_from_s3(filename, recursive=False)
         count += 1
         print(section, structure, count, '/', len(polygons))
     if NotUpload:
@@ -235,12 +236,12 @@ features_fn = features_fn+stack+'/'
 if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
     os.mkdir(os.environ['ROOT_DIR']+features_fn)
 
-savepath = os.environ['ROOT_DIR']+'CSHL_hsv/'
-if not os.path.exists(savepath):
-    os.mkdir(savepath)
+savepath = 'CSHL_hsv/'
+if not os.path.exists(os.environ['ROOT_DIR']+savepath):
+    os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
-if not os.path.exists(savepath):
-    os.mkdir(savepath)
+if not os.path.exists(os.environ['ROOT_DIR']+savepath):
+    os.mkdir(os.environ['ROOT_DIR']+savepath)
 
 resol = 0.46
 half_size = 112
