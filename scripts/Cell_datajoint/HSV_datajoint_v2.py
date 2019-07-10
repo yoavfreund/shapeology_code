@@ -13,8 +13,8 @@ from utilities import *
 sys.path.append('../lib')
 from utils import run
 
-#credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
-credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'
+credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
+#credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'
 dj.config['database.host'] = get_dj_creds(credFiles)['database.host']
 dj.config['database.user'] = get_dj_creds(credFiles)['database.user']
 dj.config['database.port'] = get_dj_creds(credFiles)['database.port']
@@ -25,8 +25,8 @@ schema = dj.schema('kui_diffusionmap')
 schema.spawn_missing_classes()
 
 stack = 'MD594'
-#yaml_file = 'shape_params-aws.yaml'
-yaml_file = 'shape_params.yaml'
+yaml_file = 'shape_params-aws.yaml'
+#yaml_file = 'shape_params.yaml'
 img_file = '/CSHL_hsv/'+stack+'/'
 img_fp = os.environ['ROOT_DIR']+img_file
 scripts_dir = os.environ['REPO_DIR']
