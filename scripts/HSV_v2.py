@@ -107,6 +107,9 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
             continue
         polygon = contour.copy()
 
+        if structure == '7n':
+            structure = '7nn'
+
         subpath = savepath + structure + '/'
         if not os.path.exists(os.environ['ROOT_DIR']+subpath):
             os.mkdir(os.environ['ROOT_DIR']+subpath)
