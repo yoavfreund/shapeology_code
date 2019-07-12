@@ -30,7 +30,7 @@ class patch_extractor:
         self.size_thresholds = params['normalization']['size_thresholds']
 
         self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
-        #self.timestamps=[]
+        self.timestamps=[]
 
     def segment_cells(self,gray):
         offset = self.params['preprocessing']['offset']
@@ -115,9 +115,9 @@ class patch_extractor:
             #cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
-        #self.timestamps.append(('before DM',time()))
+        self.timestamps.append(('before DM',time()))
         self.computeDMs(extracted)
-        #self.timestamps.append(('after DM',time()))
+        self.timestamps.append(('after DM',time()))
             
         return extracted #,marked_tile
 
@@ -150,10 +150,10 @@ class patch_extractor:
                 for i in range(_len):
                     asMat[i,:]=asList[i]
                 #print('size os asMat:',asMat.shape)
-                #self.timestamps.append(('befor transform DM', time()))
+                self.timestamps.append(('befor transform DM', time()))
 
                 DMMat=self.DM.transform(asMat)
-                #self.timestamps.append(('after transform DM', time()))
+                self.timestamps.append(('after transform DM', time()))
 
                 #print(asMat.shape,DMMat.shape)
 

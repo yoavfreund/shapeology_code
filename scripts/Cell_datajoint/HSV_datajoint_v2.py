@@ -73,7 +73,7 @@ class ImageMap(dj.Computed):
     """
 
     bucket = "mousebrainatlas-data"
-    client = get_s3_client(credFiles)
+    #client = get_s3_client(credFiles)
     def make(self, key):
         section = (Section & key).fetch1('section_id')
         print('populating for ', section, end='\n')
