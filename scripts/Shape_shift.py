@@ -272,12 +272,12 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
         count += 1
         print(section, structure, count, '/', len(polygons))
 
-    if NotUpload:
-        pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
-        setup_upload_from_s3(grid_fn, recursive=False)
-    filename = savepath + str(section) + '.pkl'
-    pickle.dump(Scores, open(os.environ['ROOT_DIR'] + filename, 'wb'))
-    setup_upload_from_s3(filename, recursive=False)
+    # if NotUpload:
+    #     pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
+    #     setup_upload_from_s3(grid_fn, recursive=False)
+    # filename = savepath + str(section) + '.pkl'
+    # pickle.dump(Scores, open(os.environ['ROOT_DIR'] + filename, 'wb'))
+    # setup_upload_from_s3(filename, recursive=False)
     os.remove(os.environ['ROOT_DIR']+img_fn)
     print(str(section) + ' finished in %5.1f seconds' % (time() - t1))
 
