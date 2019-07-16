@@ -100,7 +100,7 @@ def features_extractor(patch,state,params,extractor):
     return extracted
 
 def image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, step_size,\
-                    contours_grouped, raw_images_root, section_to_filename):
+                    contours_grouped, raw_images_root, section_to_filename, all_structures):
     t1 = time()
     img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
     setup_download_from_s3(img_fn, recursive=False)
@@ -125,6 +125,8 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
     Scores = {}
     for contour_id, contour in polygons:
         structure = contour_id
+        if structure not in all_structures:
+            continue
         polygon = contour.copy()
         Scores[structure] = {}
 
@@ -329,5 +331,11 @@ if not os.path.exists(os.environ['ROOT_DIR']+savepath):
 resol = 0.46
 step_size = 22
 
+paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VLL', 'RMC', \
+                     'SNC', 'SNR', '3N', '4N', 'Sp5I', 'Sp5O', 'Sp5C', 'PBG', '10N', 'VCA', 'VCP', 'DC']
+singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
+
+all_structures = paired_structures + singular_structures
+
 image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, step_size,\
-                    contours_grouped, raw_images_root, section_to_filename)
+                    contours_grouped, raw_images_root, section_to_filename, all_structures)
