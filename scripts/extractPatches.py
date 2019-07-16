@@ -9,7 +9,7 @@ from lib.utils import mark_contours, configuration
 from time import time
 
 class patch_extractor:
-    def __init__(self,infile,params):
+    def __init__(self,params):
         """Initialize a patch extractor. 
         The extractor works by first checking if the gray 
         value std is too small, in which case it aborts.
@@ -28,9 +28,11 @@ class patch_extractor:
         #self.tile_stats={'tile name':infile}
 
         self.size_thresholds = params['normalization']['size_thresholds']
+        self.DM = {size: diffusionMap(self.dm_dir + '-%d.pkl'%size) for size in self.size_thresholds}
+
 
         self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
-        self.timestamps=[]
+
 
     def segment_cells(self,gray):
         offset = self.params['preprocessing']['offset']
@@ -115,9 +117,10 @@ class patch_extractor:
             #cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
-        self.timestamps.append(('before DM',time()))
+        #self.timestamps = []
+        #self.timestamps.append(('before DM',time()))
         self.computeDMs(extracted)
-        self.timestamps.append(('after DM',time()))
+        #self.timestamps.append(('after DM',time()))
             
         return extracted #,marked_tile
 
@@ -144,16 +147,14 @@ class patch_extractor:
             indexList=patchIndex[_size]
             _len=len(asList)
             if _len:
-                dm_file =  self.dm_dir + '-%d.pkl'%_size
-                self.DM = diffusionMap(dm_file)
                 asMat=np.zeros([_len,_size*_size])
                 for i in range(_len):
                     asMat[i,:]=asList[i]
                 #print('size os asMat:',asMat.shape)
-                self.timestamps.append(('befor transform DM', time()))
+                #self.timestamps.append(('befor transform DM', time()))
 
-                DMMat=self.DM.transform(asMat)
-                self.timestamps.append(('after transform DM', time()))
+                DMMat=self.DM[_size].transform(asMat)
+                #self.timestamps.append(('after transform DM', time()))
 
                 #print(asMat.shape,DMMat.shape)
 
