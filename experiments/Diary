@@ -3,12 +3,17 @@
 Add sections in reverse Chronological order
 
 Friday, July 12, 2019
-1. Show hsv images classified by good/bad, structures, train/test sequentially.
+1. Show hsv images classified by good/bad, structures, train/test sequentially. Put on Google drive.
 Further step: turn good/bad into both good, both bad, and train good but test bad. Divide images of paired structure into two sides.
 2. Show time each step took during the process.
 Further step: move load DM part to init. If possible, try to improve DM source codes.
 
 Next step:
-1. Perform cell extraction on the whole section with patches with no overlap. Experiment with patch size on EC2.
-2. Store patches in pandas table. (Suggest: SQLite)
+1. Perform cell extraction on the whole section with tiles with no overlap. 
+2. Store cells in pandas table instead of dictionary. (Suggest: SQLite)
+Each row contains x,y,section relative to the whole brain, feature vector
+
 3. Calculate scores for shifted structures.
+for each structure, we have positive and negative volumes 
+for a given x,y,z shift, compute the region-based features and a score using xgboost
+calculate score in correct place with different dx, dy, dz
