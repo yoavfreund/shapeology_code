@@ -85,12 +85,12 @@ class Shift(dj.Computed):
             key[key_item] = int(report.size/1000)
         except:
             if os.path.exists(os.environ['ROOT_DIR']+s3_fp):
-                setup_upload_from_s3(s3_fp)
-                setup_upload_from_s3(feature_fp+ str(section) + '.pkl')
+                setup_upload_from_s3(s3_fp, recursive=False)
+                setup_upload_from_s3(feature_fp+ str(section) + '.pkl', recursive=False)
             else:
                 run('python3 {0}/Shape_shift.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
-                setup_upload_from_s3(s3_fp)
-                setup_upload_from_s3(feature_fp + str(section) + '.pkl')
+                setup_upload_from_s3(s3_fp, recursive=False)
+                setup_upload_from_s3(feature_fp + str(section) + '.pkl', recursive=False)
             report = self.client.stat_object(self.bucket, s3_fp)
             key[key_item] = int(report.size / 1000)
         self.insert1(key)
