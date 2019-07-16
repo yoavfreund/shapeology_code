@@ -36,7 +36,7 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-pkl_fp = '/CSHL_shift/'+stack+'/'
+pkl_fp = 'CSHL_shift/'+stack+'/'
 #img_fp = os.environ['ROOT_DIR']+img_file
 scripts_dir = os.environ['REPO_DIR']
 
@@ -67,7 +67,7 @@ setup_download_from_s3('CSHL_patches_features/')
 @schema
 class Shift(dj.Computed):
     definition="""
-    -> Section
+    -> SectionV2
     -----
     size_of_file : int   #size of pkl file of each section
     """
@@ -75,7 +75,7 @@ class Shift(dj.Computed):
     bucket = "mousebrainatlas-data"
     client = get_s3_client(credFiles)
     def make(self, key):
-        section = (Section & key).fetch1('section_id')
+        section = (SectionV2 & key).fetch1('section_id')
         print('populating for ', section, end='\n')
         key_item = 'size_of_file'
         s3_fp = pkl_fp + str(section) + '.pkl'
