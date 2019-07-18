@@ -19,28 +19,6 @@ from utilities import *
 sys.path.append('../lib')
 from utils import run
 
-if args.Environment == 'AWS':
-    credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
-    yaml_file = 'shape_params-aws.yaml'
-else:
-    credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'
-    yaml_file = 'shape_params.yaml'
-dj.config['database.host'] = get_dj_creds(credFiles)['database.host']
-dj.config['database.user'] = get_dj_creds(credFiles)['database.user']
-dj.config['database.port'] = get_dj_creds(credFiles)['database.port']
-dj.config['database.password'] = get_dj_creds(credFiles)['database.password']
-dj.conn()
-
-schema = dj.schema('kui_diffusionmap')
-schema.spawn_missing_classes()
-
-stack = args.stack
-
-pkl_fp = 'CSHL_shift/'+stack+'/'
-feature_fp = 'CSHL_region_features/'+stack+'/'
-#img_fp = os.environ['ROOT_DIR']+img_file
-scripts_dir = os.environ['REPO_DIR']
-
 def setup_download_from_s3(rel_fp, recursive=True):
     s3_fp = 's3://mousebrainatlas-data/' + rel_fp
     local_fp = os.environ['ROOT_DIR'] + rel_fp
@@ -62,6 +40,30 @@ def setup_upload_from_s3(rel_fp, recursive=True):
         run('aws s3 cp --recursive {0} {1}'.format(local_fp, s3_fp))
     else:
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
+
+if args.Environment == 'AWS':
+    credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
+    yaml_file = 'shape_params-aws.yaml'
+else:
+    credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'
+    yaml_file = 'shape_params.yaml'
+
+
+dj.config['database.host'] = get_dj_creds(credFiles)['database.host']
+dj.config['database.user'] = get_dj_creds(credFiles)['database.user']
+dj.config['database.port'] = get_dj_creds(credFiles)['database.port']
+dj.config['database.password'] = get_dj_creds(credFiles)['database.password']
+dj.conn()
+
+schema = dj.schema('kui_diffusionmap')
+schema.spawn_missing_classes()
+
+stack = args.stack
+
+pkl_fp = 'CSHL_shift/'+stack+'/'
+feature_fp = 'CSHL_region_features/'+stack+'/'
+#img_fp = os.environ['ROOT_DIR']+img_file
+scripts_dir = os.environ['REPO_DIR']
 
 setup_download_from_s3('CSHL_patches_features/')
 
@@ -98,5 +100,5 @@ class Shift(dj.Computed):
         # key[key_item] = int(report.size / 1000)
         self.insert1(key)
 
-Shift.populate(reserve_jobs=True)
+Shift.populate(suppress_errors=True,reserve_jobs=True)
 

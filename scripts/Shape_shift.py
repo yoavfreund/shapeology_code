@@ -212,13 +212,15 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
         Scores[structure][str(section)+'_positive']['x'] = x_shift
         Scores[structure][str(section)+'_positive']['y'] = y_shift
 
+        try:
+            surround = Polygon(polygon).buffer(margin, resolution=2)
+            path = Path(list(surround.exterior.coords))
 
-        surround = Polygon(polygon).buffer(margin, resolution=2)
-        path = Path(list(surround.exterior.coords))
-
-        indices_sur = np.where(path.contains_points(locations))[0]
-        indices_outside = np.setdiff1d(indices_sur, indices_inside)
-        indices_out = locations[indices_outside]
+            indices_sur = np.where(path.contains_points(locations))[0]
+            indices_outside = np.setdiff1d(indices_sur, indices_inside)
+            indices_out = locations[indices_outside]
+        except:
+            continue
         x_raw = indices_out[:, 0] - left
         y_raw = indices_out[:, 1] - up
         mask = np.zeros((down - up + 1, right - left + 1))
