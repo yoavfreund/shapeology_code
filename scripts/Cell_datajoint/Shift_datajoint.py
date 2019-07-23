@@ -76,28 +76,28 @@ class Shift(dj.Computed):
     """
 
     bucket = "mousebrainatlas-data"
-    # client = get_s3_client(credFiles)
+    client = get_s3_client(credFiles)
     def make(self, key):
         section = (SectionV2 & key).fetch1('section_id')
         print('populating for ', section, end='\n')
         key_item = 'size_of_file'
         s3_fp = pkl_fp + str(section) + '.pkl'
         try:
-            setup_download_from_s3(s3_fp, recursive=False)
-            key[key_item] = os.path.getsize(os.environ['ROOT_DIR']+s3_fp)
-            # report = self.client.stat_object(self.bucket, s3_fp)
+            # setup_download_from_s3(s3_fp, recursive=False)
+            # key[key_item] = os.path.getsize(os.environ['ROOT_DIR']+s3_fp)
+            report = self.client.stat_object(self.bucket, s3_fp)
             # key[key_item] = int(report.size/1000)
         except:
         # if os.path.exists(os.environ['ROOT_DIR']+s3_fp):
         #     # setup_upload_from_s3(s3_fp, recursive=False)
         #     # setup_upload_from_s3(feature_fp+ str(section) + '.pkl', recursive=False)
         # else:
-            run('python3 {0}/Shape_shift.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
-            key[key_item] = os.path.getsize(os.environ['ROOT_DIR'] + s3_fp)
+            run('python {0}/Shape_shift.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
+            # key[key_item] = os.path.getsize(os.environ['ROOT_DIR'] + s3_fp)
             # setup_upload_from_s3(s3_fp, recursive=False)
             # setup_upload_from_s3(feature_fp + str(section) + '.pkl', recursive=False)
-        # report = self.client.stat_object(self.bucket, s3_fp)
-        # key[key_item] = int(report.size / 1000)
+            report = self.client.stat_object(self.bucket, s3_fp)
+        key[key_item] = int(report.size / 1000)
         self.insert1(key)
 
 Shift.populate(suppress_errors=True,reserve_jobs=True)
