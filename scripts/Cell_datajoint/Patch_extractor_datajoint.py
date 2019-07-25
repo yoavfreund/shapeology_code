@@ -115,7 +115,7 @@ class RandomPatches(dj.Computed):
                     patch = img[y-half_size:y+half_size,x-half_size:x+half_size]
                     filename = img_fp + str(section) + '_' + str(index) + '.tif'
                     cv2.imwrite(filename, patch)
-                #os.remove(os.environ['ROOT_DIR'] + section_fn)
+                os.remove(os.environ['ROOT_DIR'] + section_fn)
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[state+'_patches_number'] = cpt
             setup_upload_from_s3(img_file + struc)
