@@ -36,7 +36,7 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-img_file = '/CSHL_hsv/'+stack+'/'
+img_file = '/CSHL_hsv_new/'+stack+'/'
 img_fp = os.environ['ROOT_DIR']+img_file
 scripts_dir = os.environ['REPO_DIR']
 
@@ -62,7 +62,7 @@ def setup_upload_from_s3(rel_fp, recursive=True):
     else:
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
 
-setup_download_from_s3('CSHL_patches_features/')
+setup_download_from_s3('CSHL_patch_samples_features/')
 
 @schema
 class ImageMap(dj.Computed):

@@ -51,9 +51,8 @@ def setup_upload_from_s3(rel_fp, recursive=True):
     else:
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
 
-def features_extractor(patch,params):
-    extractor=patch_extractor(patch,params)
-    tile=patch #cv2.imread(patch,0)
+def features_extractor(patch, params, extractor, threshold):
+    tile=patch
     if params['preprocessing']['polarity']==-1:
         tile = 255-tile
     min_std=params['preprocessing']['min_std']
@@ -74,19 +73,19 @@ def features_extractor(patch,params):
         origin = np.concatenate((np.array(list(cells[:,0])),cells[:,1:]),axis=1)
         for k in range(origin.shape[1]):
             x, y = CDF(origin[:,k])
-            ten = [x[np.argmin(np.absolute(y-0.1*(j+1)))] for j in range(10)]
+            ten = [y[np.argmin(np.absolute(x-threshold[10*k+j]))] for j in range(10)]
             extracted.extend(ten)
         extracted.extend([cells.shape[0]/100])
     return extracted
 
 def image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, half_size,\
-                    contours_grouped, raw_images_root, section_to_filename, all_patch_locations):
+                    contours_grouped, raw_images_root, section_to_filename, all_patch_locations, thresholds):
     t1 = time()
     img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
     setup_download_from_s3(img_fn, recursive=False)
     img = cv2.imread(os.environ['ROOT_DIR']+img_fn, 2)
     m, n = img.shape
-
+    extractor = patch_extractor(params)
 
     polygons = [(contour['name'], contour['vertices']) \
                 for contour_id, contour in contours_grouped.get_group(section).iterrows()]
@@ -106,9 +105,12 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
         if structure not in all_patch_locations[section].keys():
             continue
         polygon = contour.copy()
+        grid_features[structure] = {}
 
         if structure == '7n':
             structure = '7nn'
+
+        threshold = thresholds[structure]
 
         subpath = savepath + structure + '/'
         if not os.path.exists(os.environ['ROOT_DIR']+subpath):
@@ -164,11 +166,11 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
                     y = int(float(windows[state][index][1]))
                     patch = img[y - half_size:y + half_size, x - half_size:x + half_size].copy()
                     grid_index = str(section)+'_'+str(x)+'_'+str(y)
-                    if grid_index in grid_features.keys():
-                        extracted = grid_features[grid_index]
+                    if grid_index in grid_features[structure].keys():
+                        extracted = grid_features[structure][grid_index]
                     else:
-                        extracted = features_extractor(patch, params)
-                        grid_features[grid_index] = extracted
+                        extracted = features_extractor(patch, params, extractor, threshold)
+                        grid_features[structure][grid_index] = extracted
 
                     xtest = xgb.DMatrix(extracted)
                     score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
@@ -178,7 +180,7 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
                     origin = hsv[y - half_size - up:y + half_size - up, x - half_size - left:x + half_size - left, 1]
                     comp = np.absolute(origin) - np.absolute(satua_img)
                     hsv[y - half_size - up:y + half_size - up, x - half_size - left:x + half_size - left, \
-                    1] = origin * (comp > 0) + satua_img * (comp < 0)
+                        1] = origin * (comp > 0) + satua_img * (comp < 0)
                 except:
                     continue
         hsv[:, :, 0] = (hsv[:, :, 1] < 0) * 0.66 + (hsv[:, :, 1] > 0) * 1.0
@@ -210,6 +212,10 @@ fname = os.path.join('CSHL_data_processed', stack, 'All_patch_locations.pkl')
 setup_download_from_s3(fname, recursive=False)
 all_patch_locations = pickle.load(open(os.environ['ROOT_DIR']+fname, 'rb'), encoding='latin1')
 
+fn = 'CSHL_data_processed/MD589/Thresholds.pkl'
+setup_download_from_s3(fn, recursive=False)
+thresholds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
+
 fname = os.path.join('CSHL_data_processed', stack, 'Annotation.npy')
 setup_download_from_s3(fname, recursive=False)
 annotation = np.load(os.environ['ROOT_DIR']+fname, allow_pickle = True, encoding='latin1')
@@ -230,16 +236,16 @@ num_round = 100
 yamlfile=os.environ['REPO_DIR']+args.yaml
 params=configuration(yamlfile).getParams()
 
-cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patches_features/MD589/'
+cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD589/'
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
-features_fn = 'CSHL_grid_features/'
+features_fn = 'CSHL_grid_features_new/'
 if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
     os.mkdir(os.environ['ROOT_DIR']+features_fn)
 features_fn = features_fn+stack+'/'
 if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
     os.mkdir(os.environ['ROOT_DIR']+features_fn)
 
-savepath = 'CSHL_hsv/'
+savepath = 'CSHL_hsv_new/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
@@ -250,4 +256,4 @@ resol = 0.46
 half_size = 112
 
 image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, half_size,\
-                    contours_grouped, raw_images_root, section_to_filename, all_patch_locations)
+                    contours_grouped, raw_images_root, section_to_filename, all_patch_locations, thresholds)
