@@ -37,7 +37,7 @@ schema.spawn_missing_classes()
 stack = args.stack
 
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
-img_file = '/CSHL_patch_samples/'
+img_file = 'CSHL_patch_samples/'
 if not os.path.exists(os.environ['ROOT_DIR']+img_file):
     os.mkdir(os.environ['ROOT_DIR']+img_file)
 img_file = img_file+stack+'/'
