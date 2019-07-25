@@ -117,10 +117,10 @@ class patch_extractor:
             #cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
-        self.timestamps = []
-        self.timestamps.append(('before DM',time()))
+        # self.timestamps = []
+        # self.timestamps.append(('before DM',time()))
         self.computeDMs(extracted)
-        self.timestamps.append(('after DM',time()))
+        # self.timestamps.append(('after DM',time()))
             
         return extracted #,marked_tile
 
@@ -151,10 +151,10 @@ class patch_extractor:
                 for i in range(_len):
                     asMat[i,:]=asList[i]
                 #print('size os asMat:',asMat.shape)
-                self.timestamps.append(('befor transform DM', time()))
+                # self.timestamps.append(('befor transform DM', time()))
 
                 DMMat=self.DM[_size].transform(asMat)
-                self.timestamps.append(('after transform DM', time()))
+                # self.timestamps.append(('after transform DM', time()))
 
                 #print(asMat.shape,DMMat.shape)
 
