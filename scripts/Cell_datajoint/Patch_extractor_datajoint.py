@@ -78,50 +78,49 @@ if not os.path.exists(os.environ['ROOT_DIR']+img_file):
 img_dir = os.environ['ROOT_DIR']+img_file
 
 patch_size = 224
+half_size = int(patch_size/2)
 
 @schema
 class RandomPatches(dj.Computed):
     definition="""
     -> Structure
     -----
-    Positive_patches_number : int   #number of positive patches
-    Negative_patches_number : int   #number of negative patches
+    positive_patches_number : int   #number of positive patches
+    negative_patches_number : int   #number of negative patches
     """
 
     bucket = "mousebrainatlas-data"
     def make(self, key):
         struc = (Structure & key).fetch1('structure')
+        if struc=='7nn':
+            struc = '7n'
         print('populating for ', struc, end='\n')
-        for state in ['Positive', 'Negative']:
+        for state in ['positive', 'negative']:
             t1 = time()
-            if state=='Negative':
+            if state=='negative':
                 struc = struc + '_surround_500um_noclass'
             img_fp = img_dir + struc + '/'
-            try:
-                cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
-                key[state+'_patches_number'] = cpt
-            except:
-                os.mkdir(img_fp)
-                for section in all_patch_locations[struc].keys():
-                    section_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
-                    setup_download_from_s3(section_fn)
-                    img = cv2.imread(os.environ['ROOT_DIR']+section_fn, 2)
-                    n_choose = min(len(all_patch_locations[struc][section]), 10)
-                    indices_choose = np.random.choice(range(len(all_patch_locations[struc][section])), n_choose,
-                                                      replace=False)
-                    patches_choose = all_patch_locations[struc][section][indices_choose, :]
-                    for index in range(n_choose):
-                        x = int(float(patches_choose[index][0]))
-                        y = int(float(patches_choose[index][1]))
-                        patch = img[y-patch_size/2:y+patch_size/2,x-patch_size/2:x+patch_size/2]
-                        filename = img_fp + str(section) + '_' + str(index) + '.tif'
-                        cv2.imwrite(filename, patch)
-                    os.remove(os.environ['ROOT_DIR'] + section_fn)
-                cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
-                key[state+'_patches_number'] = cpt
-                setup_upload_from_s3(img_file + struc)
-                shutil.rmtree(img_fp)
-                print(struc + ' finished in %5.1f seconds' % (time() - t1))
+            os.mkdir(img_fp)
+            for section in all_patch_locations[struc].keys():
+                section_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
+                setup_download_from_s3(section_fn, recursive=False)
+                img = cv2.imread(os.environ['ROOT_DIR']+section_fn, 2)
+                n_choose = min(len(all_patch_locations[struc][section]), 10)
+                indices_choose = np.random.choice(range(len(all_patch_locations[struc][section])), n_choose,
+                                                  replace=False)
+                patches_choose = all_patch_locations[struc][section][indices_choose, :]
+                for index in range(n_choose):
+                    x = patches_choose[index][0]
+                    y = patches_choose[index][1]
+                    patch = img[y-half_size:y+half_size,x-half_size:x+half_size]
+                    filename = img_fp + str(section) + '_' + str(index) + '.tif'
+                    cv2.imwrite(filename, patch)
+                #os.remove(os.environ['ROOT_DIR'] + section_fn)
+            cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
+            key[state+'_patches_number'] = cpt
+            setup_upload_from_s3(img_file + struc)
+            shutil.rmtree(img_fp)
+            print(struc + ' finished in %5.1f seconds' % (time() - t1))
         self.insert1(key)
 
 RandomPatches.populate(reserve_jobs=True)
