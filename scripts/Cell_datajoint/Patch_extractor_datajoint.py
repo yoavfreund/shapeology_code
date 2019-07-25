@@ -36,15 +36,6 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
-img_file = 'CSHL_patch_samples/'
-if not os.path.exists(os.environ['ROOT_DIR']+img_file):
-    os.mkdir(os.environ['ROOT_DIR']+img_file)
-img_file = img_file+stack+'/'
-if not os.path.exists(os.environ['ROOT_DIR']+img_file):
-    os.mkdir(os.environ['ROOT_DIR']+img_file)
-img_dir = os.environ['ROOT_DIR']+img_file
-
 def setup_download_from_s3(rel_fp, recursive=True):
     s3_fp = 's3://mousebrainatlas-data/' + rel_fp
     local_fp = os.environ['ROOT_DIR'] + rel_fp
@@ -76,6 +67,15 @@ with open(os.environ['ROOT_DIR']+fp, 'r') as f:
 fname = os.path.join('CSHL_data_processed', stack, 'All_patch_locations_structures.pkl')
 setup_download_from_s3(fname, recursive=False)
 all_patch_locations = pickle.load(open(os.environ['ROOT_DIR']+fname, 'rb'), encoding='latin1')
+
+raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
+img_file = 'CSHL_patch_samples/'
+if not os.path.exists(os.environ['ROOT_DIR']+img_file):
+    os.mkdir(os.environ['ROOT_DIR']+img_file)
+img_file = img_file+stack+'/'
+if not os.path.exists(os.environ['ROOT_DIR']+img_file):
+    os.mkdir(os.environ['ROOT_DIR']+img_file)
+img_dir = os.environ['ROOT_DIR']+img_file
 
 patch_size = 224
 
