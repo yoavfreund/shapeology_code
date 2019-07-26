@@ -185,7 +185,7 @@ thresholds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
 # threshold = thresholds[struc]
 
 patch_dir = args.filename+'/'+stack+'/'
-cell_dir = os.environ['ROOT_DIR']+args.filename+'_features/'
+cell_dir = os.environ['ROOT_DIR']+args.filename+'_features_V2/'
 if not os.path.exists(cell_dir):
     os.mkdir(cell_dir)
 cell_dir = cell_dir+stack+'/'
