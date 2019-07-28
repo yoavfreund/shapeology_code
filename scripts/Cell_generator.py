@@ -179,13 +179,13 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
 yamlfile=os.environ['REPO_DIR']+args.yaml
 params=configuration(yamlfile).getParams()
 
-fn = 'CSHL_data_processed/MD589/ThresholdsV2.pkl'
+fn = 'CSHL_data_processed/MD589/ThresholdsV3.pkl'
 setup_download_from_s3(fn, recursive=False)
 thresholds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
-# threshold = thresholds[struc]
+threshold = thresholds[struc]
 
 patch_dir = args.filename+'/'+stack+'/'
-cell_dir = os.environ['ROOT_DIR']+args.filename+'_features_V2/'
+cell_dir = os.environ['ROOT_DIR']+args.filename+'_features_V3/'
 if not os.path.exists(cell_dir):
     os.mkdir(cell_dir)
 cell_dir = cell_dir+stack+'/'
@@ -194,12 +194,12 @@ if not os.path.exists(cell_dir):
     #os.mkdir(cell_dir+'Images/')
     #os.mkdir(cell_dir+'Properties/')
 
-cell_dir = args.filename+'_features_V2/'+stack+'/'
+cell_dir = args.filename+'_features_V3/'+stack+'/'
 #t0=time()
 
 #assert structure
 
-ray.get(generator.remote(struc, state, thresholds, cell_dir, patch_dir, stack, params))
+ray.get(generator.remote(struc, state, threshold, cell_dir, patch_dir, stack, params))
 
 
 #print('Finished in %5.1f seconds'%(time()-t0))
