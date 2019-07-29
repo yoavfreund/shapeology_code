@@ -122,8 +122,8 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
             extracted = []
             if _std < min_std:
                 print('image',patches[i],'std=',_std, 'too blank')
-                features.append([0] * 201)
-                #features.append([0] * 1981)
+                # features.append([0] * 201)
+                features.append([0] * 1981)
             else:
                 try:
                     Stats = extractor.segment_cells(tile)
@@ -137,8 +137,8 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
                     origin = np.concatenate((np.array(list(cells[:,0])),cells[:,1:]),axis=1)
                     for k in range(origin.shape[1]):
                         x, y = CDF(origin[:,k])
-                        ten = [x[np.argmin(np.absolute(y - 0.1*(1+j)))] for j in range(10)]
-                        # ten = [y[np.argmin(np.absolute(x-threshold[k][j]))] for j in range(99)]
+                        # ten = [x[np.argmin(np.absolute(y - 0.1*(1+j)))] for j in range(10)]
+                        ten = [y[np.argmin(np.absolute(x-threshold[k][j]))] for j in range(99)]
                         extracted.extend(ten)
                     extracted.extend([cells.shape[0]])
                     features.append(extracted)
