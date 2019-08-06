@@ -65,8 +65,6 @@ def setup_upload_from_s3(rel_fp, recursive=True):
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
 
 pkl_file = 'CSHL_cells_threshold/'
-if not os.path.exists(os.environ['ROOT_DIR']+pkl_file):
-    os.mkdir(os.environ['ROOT_DIR']+pkl_file)
 pkl_dir = os.environ['ROOT_DIR']+pkl_file
 
 
