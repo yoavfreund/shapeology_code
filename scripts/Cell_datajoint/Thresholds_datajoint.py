@@ -67,7 +67,6 @@ def setup_upload_from_s3(rel_fp, recursive=True):
 pkl_file = 'CSHL_cells_threshold/'
 pkl_dir = os.environ['ROOT_DIR']+pkl_file
 
-
 cell_fp = 'CSHL_cells_features/MD589/Properties/'
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_cells_features/MD589/Properties/'
 
@@ -122,6 +121,8 @@ class Thresholds(dj.Computed):
             ten = [x[np.argmin(np.absolute(y - 0.01 * (j + 1)))] for j in range(99)]
             tens.append(ten)
         thresholds[struc] = tens
+        if not os.path.exists(pkl_dir):
+            os.mkdir(pkl_dir)
         filename = pkl_file + struc + '.pkl'
         pickle.dump(thresholds, open(os.environ['ROOT_DIR']+filename, 'wb'))
         setup_upload_from_s3(filename, recursive=False)
