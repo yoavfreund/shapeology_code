@@ -82,7 +82,7 @@ class Thresholds(dj.Computed):
     bucket = "mousebrainatlas-data"
     client = get_s3_client(credFiles)
     def make(self, key):
-        struc = (Structure & key).fetch1('structure')
+        struc = (StructureLeft & key).fetch1('structure')
         print('populating for ', struc, end='\n')
         setup_download_from_s3(cell_fp+struc)
         thresholds = {}
