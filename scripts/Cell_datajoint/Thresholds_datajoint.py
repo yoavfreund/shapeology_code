@@ -112,6 +112,10 @@ class Thresholds(dj.Computed):
             else:
                 x, y = x2, y2
                 xc, yc = x1, y1
+            if len(x) > 50000:
+                times = int(len(x)/50000)
+                x = x[0::times]
+                y = y[0::times]
             for i in range(len(x)):
                 if x[i] in xc:
                     index = np.where(xc == x[i])[0][0]
