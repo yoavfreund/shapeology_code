@@ -125,3 +125,6 @@ img_out_file = img_dir + str(section) + '.pkl'
 images_all.to_pickle(os.environ['ROOT_DIR']+img_out_file)
 setup_upload_from_s3(img_out_file, recursive=False)
 setup_upload_from_s3(db_fp, recursive=False)
+
+os.remove(os.environ['ROOT_DIR']+img_fn)
+os.remove(os.environ['ROOT_DIR']+img_out_file)
