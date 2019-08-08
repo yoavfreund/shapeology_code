@@ -112,8 +112,8 @@ class Thresholds(dj.Computed):
             else:
                 x, y = x2, y2
                 xc, yc = x1, y1
-            if len(x) > 50000:
-                times = int(len(x)/50000)
+            if len(x) > 10000:
+                times = int(len(x)/10000)
                 x = x[0::times]
                 y = y[0::times]
             for i in range(len(x)):
