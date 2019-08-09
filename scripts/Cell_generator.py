@@ -122,8 +122,8 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
             extracted = []
             if _std < min_std:
                 print('image',patches[i],'std=',_std, 'too blank')
-                # features.append([0] * 201)
-                features.append([0] * 1981)
+                features.append([0] * 201)
+                # features.append([0] * 1981)
                 # features.append([0] * 1581)
             else:
                 try:
@@ -139,7 +139,7 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
                     for k in range(origin.shape[1]):
                         x, y = CDF(origin[:,k])
                         # ten = [x[np.argmin(np.absolute(y - 0.1*(1+j)))] for j in range(10)]
-                        ten = [y[np.argmin(np.absolute(x-threshold[k][j]))] for j in range(99)]
+                        ten = [y[np.argmin(np.absolute(x-threshold[k][j]))] for j in range(10)]
                         extracted.extend(ten)
                     extracted.extend([cells.shape[0]])
                     features.append(extracted)
@@ -181,13 +181,13 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
 yamlfile=os.environ['REPO_DIR']+args.yaml
 params=configuration(yamlfile).getParams()
 
-fn = 'CSHL_data_processed/MD589/ThresholdsV3.pkl'
+fn = 'CSHL_data_processed/MD589/Thresholds.pkl'
 setup_download_from_s3(fn, recursive=False)
 thresholds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
 threshold = thresholds[struc]
 
 patch_dir = args.filename+'/'+stack+'/'
-cell_dir = os.environ['ROOT_DIR']+args.filename+'_features_V3/'
+cell_dir = os.environ['ROOT_DIR']+args.filename+'_features/'
 if not os.path.exists(cell_dir):
     os.mkdir(cell_dir)
 cell_dir = cell_dir+stack+'/'
@@ -196,7 +196,7 @@ if not os.path.exists(cell_dir):
     #os.mkdir(cell_dir+'Images/')
     #os.mkdir(cell_dir+'Properties/')
 
-cell_dir = args.filename+'_features_V3/'+stack+'/'
+cell_dir = args.filename+'_features/'+stack+'/'
 #t0=time()
 
 #assert structure
