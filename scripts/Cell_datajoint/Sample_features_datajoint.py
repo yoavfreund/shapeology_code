@@ -38,7 +38,7 @@ stack = args.stack
 
 patch_file = 'CSHL_patch_samples'
 img_fp = patch_file+'/'+stack+'/'
-feature_fp = patch_file+'_features/'+stack+'/'
+feature_fp = patch_file+'_features_V4/'+stack+'/'
 scripts_dir = os.environ['REPO_DIR']
 
 def setup_download_from_s3(rel_fp, recursive=True):
