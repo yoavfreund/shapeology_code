@@ -139,7 +139,8 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
                     for k in range(origin.shape[1]):
                         x, y = CDF(origin[:,k])
                         # ten = [x[np.argmin(np.absolute(y - 0.1*(1+j)))] for j in range(10)]
-                        ten = [y[np.argmin(np.absolute(x-threshold[k][j]))] for j in range(10)]
+                        # ten = [y[np.argmin(np.absolute(x - threshold[k][j]))] for j in range(10)]
+                        ten = [y[np.argmin(np.absolute(x-threshold[10*k+j]))] for j in range(10)]
                         extracted.extend(ten)
                     extracted.extend([cells.shape[0]])
                     features.append(extracted)
