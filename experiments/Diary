@@ -8,6 +8,15 @@ Progress:
 2. Add the part to draw annotations and test successfully on the brain MD594.
 
 **Yoav:** Kui, can you put here pointers to (some of) the generated scoremaps?
+s3: https://s3.console.aws.amazon.com/s3/buckets/mousebrainatlas-data/CSHL_scoremaps_new/?region=us-west-1&tab=overview
+Google Drive: https://drive.google.com/drive/u/1/folders/1jfYEaa3AXwDW3Mh90lkCnuhYn3sonPbO
+
+Note: Here are some results for MD594. Annotations only appear in the images that this structure shows in this section. 
+Current results of VCA are recommended to review cause they include one whole side of this structure.
+It takes about 50 minutes for one section (28 scoremaps) on EC2. 
+And the sliding window is 103.04um (224 pixels) on the edge with a stride of 51.52um (112 pixles). But the resolution of results seems low. I will ask Alex about the window size of previous results.
+Sigmoid is used to normalize the scoremaps in order to make scores have same gray values across sections. 
+
 
 Problems:
 1. Annotations for brains except MD585, 589 and 594 are not consistent with the prep2 images. 
