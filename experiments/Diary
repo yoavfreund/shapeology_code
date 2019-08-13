@@ -2,6 +2,15 @@
 
 Add sections in reverse Chronological order
 
+Monday, Auguest 12, 2019
+Progress:
+1. Get the codes for generating scoremaps run locally successfully.
+2. Add the part to draw annotations and test successfully on the brain MD594.
+
+Problems:
+1. Annotations for brains except MD585, 589 and 594 are not consistent with the prep2 images. Need to realign these annotations. I will discuss this with Alex.
+
+
 Friday, July 12, 2019
 1. Show hsv images classified by good/bad, structures, train/test sequentially. Put on Google drive.
 Further step: turn good/bad into both good, both bad, and train good but test bad. Divide images of paired structure into two sides.
