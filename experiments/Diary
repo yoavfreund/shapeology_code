@@ -9,7 +9,7 @@ Progress:
 
 **Yoav:** Kui, can you put here pointers to (some of) the generated scoremaps?
 s3: https://s3.console.aws.amazon.com/s3/buckets/mousebrainatlas-data/CSHL_scoremaps_new/?region=us-west-1&tab=overview
-Google Drive: https://drive.google.com/drive/u/1/folders/1jfYEaa3AXwDW3Mh90lkCnuhYn3sonPbO
+Google Drive: https://drive.google.com/open?id=1YGXhe4mnfsY1RRxqGFMTR_RpKrr3NkXV
 
 Note: Here are some results for MD594. Annotations only appear in the images that this structure shows in this section. 
 Current results of VCA are recommended to review cause they include one whole side of this structure.
