@@ -7,6 +7,8 @@ Progress:
 1. Get the codes for generating scoremaps run locally successfully.
 2. Add the part to draw annotations and test successfully on the brain MD594.
 
+**Yoav:** Kui, can you put here pointers to (some of) the generated scoremaps?
+
 Problems:
 1. Annotations for brains except MD585, 589 and 594 are not consistent with the prep2 images. 
 Need to realign these annotations. I will discuss this with Alex.
