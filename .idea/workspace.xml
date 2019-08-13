@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/Diary" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/Diary" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/PointCloud.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/PointCloud.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/SQLite_test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/SQLite_test.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/Xgboost_test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Xgboost_test.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/PointCloudFeature.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/PointCloudFeature.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/Scoremap_test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Scoremap_test.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint_v2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint_v2.ipynb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,20 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="258">
               <caret line="162" column="56" lean-forward="true" selection-start-line="162" selection-start-column="56" selection-end-line="162" selection-end-column="56" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/Shape_shift.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4320">
-              <caret line="288" column="69" selection-start-line="288" selection-start-column="69" selection-end-line="288" selection-end-column="69" />
             </state>
           </provider>
         </entry>
@@ -81,8 +67,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/HSV_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="193" column="57" lean-forward="true" selection-start-line="193" selection-start-column="57" selection-end-line="193" selection-end-column="57" />
+            <state relative-caret-position="1139">
+              <caret line="254" column="12" lean-forward="true" selection-start-line="254" selection-start-column="12" selection-end-line="254" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/Scoremap.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2835">
+              <caret line="235" column="24" selection-start-line="235" selection-start-column="4" selection-end-line="235" selection-end-column="24" />
+              <folding>
+                <element signature="e#623#699#0" />
+                <element signature="e#758#1095#0" />
+                <element signature="e#1151#1398#0" />
+                <element signature="e#1464#2404#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Scoremap_datajoint.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="409">
+              <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
             </state>
           </provider>
         </entry>
@@ -90,8 +100,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="41" selection-start-line="41" selection-end-line="41" />
+            <state relative-caret-position="165">
+              <caret line="11" column="14" lean-forward="true" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -134,6 +144,8 @@
         <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_generator.py" />
         <option value="$PROJECT_DIR$/scripts/HSV_v2.py" />
+        <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Scoremap_datajoint.py" />
+        <option value="$PROJECT_DIR$/scripts/Scoremap.py" />
       </list>
     </option>
   </component>
@@ -241,12 +253,12 @@
       <workItem from="1564296715897" duration="33574000" />
       <workItem from="1565306526756" duration="6864000" />
       <workItem from="1565390028709" duration="5141000" />
-      <workItem from="1565665587056" duration="2099000" />
+      <workItem from="1565665587056" duration="5092000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="250451000" />
+    <option name="totallyTimeSpent" value="253444000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -258,10 +270,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="822" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="821" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.23104435" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.23104435" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5010941" side_tool="true" weight="0.29086894" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -272,7 +284,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32963988" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" visible="true" weight="0.32876712" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.32921812" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32991204" />
       <window_info anchor="bottom" id="Terminal" order="11" />
@@ -401,9 +413,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint_v2.ipynb">
-      <provider selected="true" editor-type-id="jupyter-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint.ipynb">
       <provider selected="true" editor-type-id="jupyter-editor" />
     </entry>
@@ -492,13 +501,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" selection-start-line="41" selection-end-line="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Sqlite.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-115">
@@ -506,17 +508,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/HSV_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="193" column="57" lean-forward="true" selection-start-line="193" selection-start-column="57" selection-end-line="193" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="258">
           <caret line="162" column="56" lean-forward="true" selection-start-line="162" selection-start-column="56" selection-end-line="162" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/HSV_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1139">
+          <caret line="254" column="12" lean-forward="true" selection-start-line="254" selection-start-column="12" selection-end-line="254" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint_v2.ipynb">
+      <provider selected="true" editor-type-id="jupyter-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="14" lean-forward="true" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Scoremap_datajoint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Scoremap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2835">
+          <caret line="235" column="24" selection-start-line="235" selection-start-column="4" selection-end-line="235" selection-end-column="24" />
+          <folding>
+            <element signature="e#623#699#0" />
+            <element signature="e#758#1095#0" />
+            <element signature="e#1151#1398#0" />
+            <element signature="e#1464#2404#0" />
+          </folding>
         </state>
       </provider>
     </entry>
