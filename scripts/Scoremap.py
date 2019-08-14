@@ -155,14 +155,15 @@ for contour_id, contour in polygons:
     valid_structure[contour_id] = contour
 
 grid_fn = features_fn + str(section) + '.pkl'
-try:
-    setup_download_from_s3(grid_fn, recursive=False)
-    grid_features = pickle.load(open(os.environ['ROOT_DIR']+grid_fn,'rb'))
-    NotUpload = False
-except:
-    grid_features = {}
-    NotUpload = True
+# try:
+#     setup_download_from_s3(grid_fn, recursive=False)
+#     grid_features = pickle.load(open(os.environ['ROOT_DIR']+grid_fn,'rb'))
+#     NotUpload = False
+# except:
+#     grid_features = {}
+#     NotUpload = True
 
+grid_features = {}
 for i in range(len(locations)):
     # print(i, len(locations))
     left = locations[i][0]
@@ -180,9 +181,9 @@ for i in range(len(locations)):
     except:
         continue
 
-if NotUpload:
-    pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
-    setup_upload_from_s3(grid_fn, recursive=False)
+# if NotUpload:
+#     pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
+#     setup_upload_from_s3(grid_fn, recursive=False)
 
 count = 0
 for structure in all_structures:
