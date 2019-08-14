@@ -238,7 +238,8 @@ for structure in all_structures:
         polygon = valid_structure[structure]
         rgb = cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB)
         com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [0, 255, 0], 15, lineType=8)
-        com32 = com[::32,::32,:]
+        polygon = polygon / 32
+        com32 = cv2.polylines(rgb[::32, ::32, :].copy(), [polygon.astype(np.int32)], True, [0, 255, 0], 2, lineType=8)
     else:
         com = gray
         com32 = com[::32,::32]
