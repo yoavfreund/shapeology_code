@@ -121,6 +121,12 @@ if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
 savepath = 'CSHL_scoremaps_new/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
+downsample_fp = savepath+'down32/'
+if not os.path.exists(os.environ['ROOT_DIR']+downsample_fp):
+    os.mkdir(os.environ['ROOT_DIR']+downsample_fp)
+downsample_fp = downsample_fp+stack+'/'
+if not os.path.exists(os.environ['ROOT_DIR']+downsample_fp):
+    os.mkdir(os.environ['ROOT_DIR']+downsample_fp)
 savepath = savepath+stack+'/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
@@ -131,7 +137,7 @@ singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
 window_size = 224
-half_size = int(window_size/2)
+stride = int(30/0.46)
 
 img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
 setup_download_from_s3(img_fn, recursive=False)
@@ -142,7 +148,7 @@ extractor = patch_extractor(params)
 polygons = [(contour['name'], contour['vertices']) \
                 for contour_id, contour in contours_grouped.get_group(section).iterrows()]
 
-xs, ys = np.meshgrid(np.arange(0, n, half_size), np.arange(0, m, half_size), indexing='xy')
+xs, ys = np.meshgrid(np.arange(0, n, stride), np.arange(0, m, stride), indexing='xy')
 locations = np.c_[xs.flat, ys.flat]
 valid_structure = {}
 for contour_id, contour in polygons:
@@ -183,6 +189,9 @@ for structure in all_structures:
     subpath = savepath + structure + '/'
     if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
         os.mkdir(os.environ['ROOT_DIR'] + subpath)
+    downsubpath = downsample_fp + structure + '/'
+    if not os.path.exists(os.environ['ROOT_DIR'] + downsubpath):
+        os.mkdir(os.environ['ROOT_DIR'] + downsubpath)
 
     fp = []
     fp.append(cell_dir + structure + '/MD589_' + structure + '_positive.pkl')
@@ -229,10 +238,16 @@ for structure in all_structures:
         polygon = valid_structure[structure]
         rgb = cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB)
         com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [0, 255, 0], 15, lineType=8)
+        com32 = com[::32,::32,:]
     else:
         com = gray
+        com32 = com[::32,::32]
     filename = subpath + structure + '_' + str(section) + '.tif'
     cv2.imwrite(os.environ['ROOT_DIR'] + filename, com)
+    setup_upload_from_s3(filename, recursive=False)
+
+    filename = downsubpath + structure + '_' + str(section) + '.tif'
+    cv2.imwrite(os.environ['ROOT_DIR'] + filename, com32)
     setup_upload_from_s3(filename, recursive=False)
     count += 1
     print(section, structure, count, '/', len(all_structures))
