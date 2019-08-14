@@ -2,6 +2,15 @@
 
 Add sections in reverse Chronological order
 
+Tuesday, Auguest 13, 2019
+Progress:
+1. Get the codes for scoremaps run on multiple EC2 instances successfully.
+2. Change the stride of sliding windows to 30um. This may extend computation time by 3 times.
+
+Problems:
+1. Lack some preprocessed files to convert annotations to ones applicable to prep2 images. I will discuss this with Alex.
+
+
 Monday, Auguest 12, 2019
 Progress:
 1. Get the codes for generating scoremaps run locally successfully.
