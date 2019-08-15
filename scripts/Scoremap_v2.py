@@ -155,8 +155,47 @@ valid_structure = {}
 for contour_id, contour in polygons:
     valid_structure[contour_id] = contour
 
-models = {}
-for structure in all_structures:
+grid_fn = features_fn + str(section) + '.pkl'
+try:
+    setup_download_from_s3(grid_fn, recursive=False)
+    grid_features = pickle.load(open(os.environ['ROOT_DIR']+grid_fn,'rb'))
+    NotUpload = False
+except:
+    grid_features = {}
+    NotUpload = True
+
+# grid_features = {}
+for i in range(len(locations)):
+    left = locations[i][0]
+    right = int(min(left + window_size, n))
+    up = locations[i][1]
+    down = int(min(up + window_size, m))
+    tile = img[up:down, left:right]
+    grid_index = str(section)+'_'+str(left)+'_'+str(up)
+    try:
+        if grid_index in grid_features.keys():
+            extracted = grid_features[grid_index]
+        else:
+            extracted = features_extractor(tile, params, extractor, thresholds)
+            grid_features[grid_index] = extracted
+    except:
+        continue
+    if i % 1000 == 0:
+        print(i, len(locations))
+
+if NotUpload:
+    pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
+    setup_upload_from_s3(grid_fn, recursive=False)
+
+for j in range(len(all_structures)):
+    structure = all_structures[j]
+    subpath = savepath + structure + '/'
+    if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
+        os.mkdir(os.environ['ROOT_DIR'] + subpath)
+    downsubpath = downsample_fp + structure + '/'
+    if not os.path.exists(os.environ['ROOT_DIR'] + downsubpath):
+        os.mkdir(os.environ['ROOT_DIR'] + downsubpath)
+
     fp = []
     fp.append(cell_dir + structure + '/MD589_' + structure + '_positive.pkl')
     fp.append(cell_dir + structure + '/MD589_' + structure + '_negative.pkl')
@@ -178,72 +217,23 @@ for structure in all_structures:
     y_train = np.array(y_train)
     dtrain = xgb.DMatrix(X_train, label=y_train)
     bst = xgb.train(param, dtrain, num_round, verbose_eval=False)
-    models[structure] = bst
-print('Finish training')
-# grid_fn = features_fn + str(section) + '.pkl'
-# try:
-#     setup_download_from_s3(grid_fn, recursive=False)
-#     grid_features = pickle.load(open(os.environ['ROOT_DIR']+grid_fn,'rb'))
-#     NotUpload = False
-# except:
-#     grid_features = {}
-#     NotUpload = True
-
-# grid_features = {}
-scoremaps = np.zeros([m, n, 28], dtype=np.float16)
-for i in range(len(locations)):
-    # print(i, len(locations))
-    left = locations[i][0]
-    right = int(min(left + window_size, n))
-    up = locations[i][1]
-    down = int(min(up + window_size, m))
-    tile = img[up:down, left:right]
-    grid_index = str(section)+'_'+str(left)+'_'+str(up)
-    try:
-        # if grid_index in grid_features.keys():
-        #     extracted = grid_features[grid_index]
-        # else:
-        extracted = features_extractor(tile, params, extractor, thresholds)
-        # grid_features[grid_index] = extracted
-    except:
-        continue
-
-# if NotUpload:
-#     pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
-#     setup_upload_from_s3(grid_fn, recursive=False)
-
-# count = 0
-    for j in range(len(all_structures)):
-        structure = all_structures[j]
-
-        # for x, y in locations:
-        #     try:
-        #         grid_index = str(section) + '_' + str(x) + '_' + str(y)
-        #         feature_vector = grid_features[grid_index]
-        feature_vector = extracted
-        xtest = xgb.DMatrix(feature_vector)
-        bst = models[structure]
-        score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
-        origin = scoremaps[up:down, left:right, j]
-        comp = np.absolute(origin) - np.absolute(score)
-        scoremaps[up:down, left:right, j] = origin * (comp > 0) + score * (comp < 0)
-            # except:
-            #     continue
-    if i%1000==0:
-        print(i,len(locations))
-
-for j in range(len(all_structures)):
-    structure = all_structures[j]
-    subpath = savepath + structure + '/'
-    if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
-        os.mkdir(os.environ['ROOT_DIR'] + subpath)
-    downsubpath = downsample_fp + structure + '/'
-    if not os.path.exists(os.environ['ROOT_DIR'] + downsubpath):
-        os.mkdir(os.environ['ROOT_DIR'] + downsubpath)
 
     if structure == '7nn':
         structure = '7n'
-    scoremap = scoremaps[:, :, j]
+
+    scoremap = np.zeros([m, n], dtype=np.float16)
+    for x, y in locations:
+        try:
+            grid_index = str(section) + '_' + str(x) + '_' + str(y)
+            feature_vector = grid_features[grid_index]
+            xtest = xgb.DMatrix(feature_vector)
+            score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
+            origin = scoremap[y:y+stride, x:x+stride]
+            comp = np.absolute(origin) - np.absolute(score)
+            scoremap[y:y+stride, x:x+stride] = origin * (comp > 0) + score * (comp < 0)
+        except:
+            continue
+
     scoremap = 1 / (1 + np.exp(-scoremap))
     # scoremap = (scoremap - scoremap.min()) / (scoremap.max() - scoremap.min())
     gray = scoremap * 255
@@ -277,4 +267,4 @@ for j in range(len(all_structures)):
     print(section, structure, j, '/', len(all_structures))
 
 os.remove(os.environ['ROOT_DIR']+img_fn)
-# os.remove(os.environ['ROOT_DIR']+grid_fn)
+os.remove(os.environ['ROOT_DIR']+grid_fn)
