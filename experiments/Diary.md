@@ -2,6 +2,17 @@
 
 Add sections in reverse Chronological order
 
+Wednesday, Auguest 14, 2019
+Progress:
+1. Correct the downsample part for score maps.
+2. Debug the codes on EC2 instances.
+
+Problems:
+1. For the stride of 30um, it will takes about 5 hours for one section and more than 1000 hours in total.
+Wall time is much greater than cpu time.
+
+
+
 Tuesday, Auguest 13, 2019
 Progress:
 1. Get the codes for scoremaps run on multiple EC2 instances successfully.

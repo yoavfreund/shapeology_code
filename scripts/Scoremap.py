@@ -190,7 +190,7 @@ print('Finish training')
 #     NotUpload = True
 
 # grid_features = {}
-scoremaps = np.zeros([m, n, 28])
+scoremaps = np.zeros([m, n, 28],dtype=np.float32)
 for i in range(len(locations)):
     # print(i, len(locations))
     left = locations[i][0]
