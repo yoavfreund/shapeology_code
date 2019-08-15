@@ -138,7 +138,7 @@ singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
 window_size = 224
-stride = int(30/0.46)
+stride = 112 #int(30/0.46)
 
 img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
 setup_download_from_s3(img_fn, recursive=False)
@@ -190,7 +190,7 @@ print('Finish training')
 #     NotUpload = True
 
 # grid_features = {}
-scoremaps = np.zeros([m, n, 28],dtype=np.float32)
+scoremaps = np.zeros([m, n, 28],dtype=np.float16)
 for i in range(len(locations)):
     # print(i, len(locations))
     left = locations[i][0]
@@ -229,8 +229,8 @@ for i in range(len(locations)):
         scoremaps[up:down, left:right, j] = origin * (comp > 0) + score * (comp < 0)
             # except:
             #     continue
-    if i%100==0:
-        print(i,len(locations))
+    # if i%1000==0:
+    #     print(i,len(locations))
     #     scoremap = (scoremap - scoremap.min()) / (scoremap.max() - scoremap.min())
 
 for j in range(len(all_structures)):
