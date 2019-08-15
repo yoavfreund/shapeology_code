@@ -15,6 +15,7 @@ import pickle
 import xgboost as xgb
 #from matplotlib import pyplot as plt
 import skimage
+from skimage.transform import rescale
 import os
 import sys
 from time import time
@@ -154,46 +155,8 @@ valid_structure = {}
 for contour_id, contour in polygons:
     valid_structure[contour_id] = contour
 
-grid_fn = features_fn + str(section) + '.pkl'
-# try:
-#     setup_download_from_s3(grid_fn, recursive=False)
-#     grid_features = pickle.load(open(os.environ['ROOT_DIR']+grid_fn,'rb'))
-#     NotUpload = False
-# except:
-#     grid_features = {}
-#     NotUpload = True
-
-grid_features = {}
-for i in range(len(locations)):
-    # print(i, len(locations))
-    left = locations[i][0]
-    right = int(min(left + window_size, n))
-    up = locations[i][1]
-    down = int(min(up + window_size, m))
-    tile = img[up:down, left:right]
-    grid_index = str(section)+'_'+str(left)+'_'+str(up)
-    try:
-        if grid_index in grid_features.keys():
-            extracted = grid_features[grid_index]
-        else:
-            extracted = features_extractor(tile, params, extractor, thresholds)
-            grid_features[grid_index] = extracted
-    except:
-        continue
-
-# if NotUpload:
-#     pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
-#     setup_upload_from_s3(grid_fn, recursive=False)
-
-count = 0
+models = {}
 for structure in all_structures:
-    subpath = savepath + structure + '/'
-    if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
-        os.mkdir(os.environ['ROOT_DIR'] + subpath)
-    downsubpath = downsample_fp + structure + '/'
-    if not os.path.exists(os.environ['ROOT_DIR'] + downsubpath):
-        os.mkdir(os.environ['ROOT_DIR'] + downsubpath)
-
     fp = []
     fp.append(cell_dir + structure + '/MD589_' + structure + '_positive.pkl')
     fp.append(cell_dir + structure + '/MD589_' + structure + '_negative.pkl')
@@ -215,44 +178,103 @@ for structure in all_structures:
     y_train = np.array(y_train)
     dtrain = xgb.DMatrix(X_train, label=y_train)
     bst = xgb.train(param, dtrain, num_round, verbose_eval=False)
+    models[structure] = bst
+print('Finish training')
+# grid_fn = features_fn + str(section) + '.pkl'
+# try:
+#     setup_download_from_s3(grid_fn, recursive=False)
+#     grid_features = pickle.load(open(os.environ['ROOT_DIR']+grid_fn,'rb'))
+#     NotUpload = False
+# except:
+#     grid_features = {}
+#     NotUpload = True
+
+# grid_features = {}
+scoremaps = np.zeros([m, n, 28])
+for i in range(len(locations)):
+    # print(i, len(locations))
+    left = locations[i][0]
+    right = int(min(left + window_size, n))
+    up = locations[i][1]
+    down = int(min(up + window_size, m))
+    tile = img[up:down, left:right]
+    grid_index = str(section)+'_'+str(left)+'_'+str(up)
+    try:
+        # if grid_index in grid_features.keys():
+        #     extracted = grid_features[grid_index]
+        # else:
+        extracted = features_extractor(tile, params, extractor, thresholds)
+        # grid_features[grid_index] = extracted
+    except:
+        continue
+
+# if NotUpload:
+#     pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
+#     setup_upload_from_s3(grid_fn, recursive=False)
+
+# count = 0
+    for j in range(len(all_structures)):
+        structure = all_structures[j]
+
+        # for x, y in locations:
+        #     try:
+        #         grid_index = str(section) + '_' + str(x) + '_' + str(y)
+        #         feature_vector = grid_features[grid_index]
+        feature_vector = extracted
+        xtest = xgb.DMatrix(feature_vector)
+        bst = models[structure]
+        score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
+        origin = scoremaps[up:down, left:right, j]
+        comp = np.absolute(origin) - np.absolute(score)
+        scoremaps[up:down, left:right, j] = origin * (comp > 0) + score * (comp < 0)
+            # except:
+            #     continue
+    if i%100==0:
+        print(i,len(locations))
+    #     scoremap = (scoremap - scoremap.min()) / (scoremap.max() - scoremap.min())
+
+for j in range(len(all_structures)):
+    structure = all_structures[j]
+    subpath = savepath + structure + '/'
+    if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
+        os.mkdir(os.environ['ROOT_DIR'] + subpath)
+    downsubpath = downsample_fp + structure + '/'
+    if not os.path.exists(os.environ['ROOT_DIR'] + downsubpath):
+        os.mkdir(os.environ['ROOT_DIR'] + downsubpath)
 
     if structure == '7nn':
         structure = '7n'
-
-    scoremap = np.zeros([m, n])
-    for x, y in locations:
-        try:
-            grid_index = str(section) + '_' + str(x) + '_' + str(y)
-            feature_vector = grid_features[grid_index]
-            xtest = xgb.DMatrix(feature_vector)
-            score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
-            origin = scoremap[y:y + window_size, x:x + window_size]
-            comp = np.absolute(origin) - np.absolute(score)
-            scoremap[y:y + window_size, x:x + window_size] = origin * (comp > 0) + score * (comp < 0)
-        except:
-            continue
+    scoremap = scoremaps[:,:,j]
     scoremap = 1 / (1 + np.exp(-scoremap))
-    #     scoremap = (scoremap - scoremap.min()) / (scoremap.max() - scoremap.min())
     gray = scoremap * 255
     gray = gray.astype(np.uint8)
+
+    gray32 = rescale(gray, 1. / 32, anti_aliasing=True)
+    gray32 = gray32 * 255
+    gray32 = gray32.astype(np.uint8)
+
     if structure in valid_structure.keys():
         polygon = valid_structure[structure]
         rgb = cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB)
         com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [0, 255, 0], 15, lineType=8)
+
         polygon = polygon / 32
-        com32 = cv2.polylines(rgb[::32, ::32, :].copy(), [polygon.astype(np.int32)], True, [0, 255, 0], 2, lineType=8)
+        rgb32 = cv2.cvtColor(gray32, cv2.COLOR_GRAY2RGB)
+        com32 = cv2.polylines(rgb32.copy(), [polygon.astype(np.int32)], True, [0, 255, 0], 2, lineType=8)
+        filename = subpath + structure + '_' + str(section) + '_contour.tif'
+        filename32 = downsubpath + structure + '_' + str(section) + '_contour.tif'
     else:
         com = gray
-        com32 = com[::32,::32]
-    filename = subpath + structure + '_' + str(section) + '.tif'
+        com32 = gray32
+        filename = subpath + structure + '_' + str(section) + '.tif'
+        filename32 = downsubpath + structure + '_' + str(section) + '.tif'
+
     cv2.imwrite(os.environ['ROOT_DIR'] + filename, com)
     setup_upload_from_s3(filename, recursive=False)
 
-    filename = downsubpath + structure + '_' + str(section) + '.tif'
-    cv2.imwrite(os.environ['ROOT_DIR'] + filename, com32)
-    setup_upload_from_s3(filename, recursive=False)
-    count += 1
-    print(section, structure, count, '/', len(all_structures))
+    cv2.imwrite(os.environ['ROOT_DIR'] + filename32, com32)
+    setup_upload_from_s3(filename32, recursive=False)
+    print(section, structure, j, '/', len(all_structures))
 
 os.remove(os.environ['ROOT_DIR']+img_fn)
-os.remove(os.environ['ROOT_DIR']+grid_fn)
+# os.remove(os.environ['ROOT_DIR']+grid_fn)
