@@ -83,7 +83,7 @@ class ScoreMap(dj.Computed):
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
         except:
-            run('python3 {0}/Scoremap.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
+            run('python3 {0}/Scoremap_v2.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
             shutil.rmtree(img_fp)
