@@ -165,23 +165,24 @@ except:
     NotUpload = True
 
 # grid_features = {}
-for i in range(len(locations)):
-    left = locations[i][0]
-    right = int(min(left + window_size, n))
-    up = locations[i][1]
-    down = int(min(up + window_size, m))
-    tile = img[up:down, left:right]
-    grid_index = str(section)+'_'+str(left)+'_'+str(up)
-    try:
-        if grid_index in grid_features.keys():
-            extracted = grid_features[grid_index]
-        else:
-            extracted = features_extractor(tile, params, extractor, thresholds)
-            grid_features[grid_index] = extracted
-    except:
-        continue
-    if i % 1000 == 0:
-        print(i, len(locations))
+    for i in range(len(locations)):
+        left = locations[i][0]
+        right = int(min(left + window_size, n))
+        up = locations[i][1]
+        down = int(min(up + window_size, m))
+        tile = img[up:down, left:right]
+        grid_index = str(section)+'_'+str(left)+'_'+str(up)
+        try:
+            if grid_index in grid_features.keys():
+                # extracted = grid_features[grid_index]
+                continue
+            else:
+                extracted = features_extractor(tile, params, extractor, thresholds)
+                grid_features[grid_index] = extracted
+        except:
+            continue
+        if i % 1000 == 0:
+            print(i, len(locations))
 
 if NotUpload:
     pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))

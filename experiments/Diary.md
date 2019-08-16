@@ -2,6 +2,15 @@
 
 Add sections in reverse Chronological order
 
+Thursday, Auguest 15, 2019
+Progress:
+1. Divide the dictionary storing feature vectors into tiny files to avoid memory issues.
+2. Debug the codes both locally and on EC2 instances.
+3. Test the whole process with larger stride of 50um. (Still running, 300 hours estimated for single instance)
+
+Problems:
+1. Part of EC2 instances may be terminated automatically. I will discuss this with Julaiti tomorrow.
+
 Wednesday, Auguest 14, 2019
 Progress:
 1. Correct the downsample part for score maps.
@@ -10,8 +19,7 @@ Progress:
 Problems:
 1. For the stride of 30um, it will takes about 5 hours for one section and more than 1000 hours in total.
 Wall time is much greater than cpu time.
-
-
+2. Codes stop half way without error reports. It may due to memory issues.
 
 Tuesday, Auguest 13, 2019
 Progress:
