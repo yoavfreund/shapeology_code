@@ -9,7 +9,7 @@ Progress:
 3. Test the whole process with larger stride of 50um. (Still running, 300 hours estimated for single instance)
 
 Problems:
-1. Part of EC2 instances may be terminated automatically. I will discuss this with Julaiti tomorrow.
+1. Part of EC2 instances may be terminated automatically (Server.SpotInstanceTermination: may due to price). I will discuss this with Julaiti tomorrow.
 
 Wednesday, Auguest 14, 2019
 Progress:
