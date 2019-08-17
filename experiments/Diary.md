@@ -10,7 +10,9 @@ Progress:
 Downsample Images
 Google Drive: https://drive.google.com/drive/folders/1gJaPJfPpTNimbBC0mkd1Sq7P_3_0F724?usp=sharing
 
-Note: Images with '_contour' in their names have annotation contours.
+Note: The following structures are recommended due to enough contour images: 
+5N, 7N, 7nn, DC, IC, LRt, PBG, Pn, SC, SNC, SNR, Sp5C, Sp5I, Sp5O, VCA, VCP, VLL
+Images with '_contour' in their names have annotation contours.
 
 
 Thursday, Auguest 15, 2019
