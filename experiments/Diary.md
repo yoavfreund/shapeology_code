@@ -2,6 +2,20 @@
 
 Add sections in reverse Chronological order
 
+Friday, Auguest 15, 2019
+Progress:
+1. Test the whole process with stride of 50um. (112 sections completed)
+2. Debug the codes both locally and on EC2 instances.
+
+Downsample Images
+Google Drive: https://drive.google.com/drive/folders/1gJaPJfPpTNimbBC0mkd1Sq7P_3_0F724?usp=sharing
+
+Full resolution Images
+Google Drive: https://drive.google.com/drive/folders/1YGXhe4mnfsY1RRxqGFMTR_RpKrr3NkXV?usp=sharing
+
+Note: Images with '_contour' in their names have annotation contours.
+
+
 Thursday, Auguest 15, 2019
 Progress:
 1. Divide the dictionary storing feature vectors into tiny files to avoid memory issues.

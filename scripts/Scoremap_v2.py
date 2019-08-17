@@ -157,7 +157,7 @@ for contour_id, contour in polygons:
 
 grid_fp = features_fn + str(section) + '/'
 setup_download_from_s3(grid_fp)
-if sum([len(files) for r, d, files in os.walk(os.environ['ROOT_DIR'] + grid_fp)])==0:
+if sum([len(files) for r, d, files in os.walk(os.environ['ROOT_DIR'] + grid_fp)])<10:
     if not os.path.exists(os.environ['ROOT_DIR'] + grid_fp):
         os.mkdir(os.environ['ROOT_DIR'] + grid_fp)
     NotUpload = True
@@ -178,6 +178,8 @@ if sum([len(files) for r, d, files in os.walk(os.environ['ROOT_DIR'] + grid_fp)]
             continue
         if i % 1000 == 0:
             print(i, len(locations))
+else:
+    NotUpload = False
 
 if NotUpload:
     # pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
@@ -222,6 +224,7 @@ for j in range(len(all_structures)):
         try:
             fn = str(section) + '_' + str(x) + '_' + str(y) +'.npz'
             feature_vector = np.fromfile(open(os.environ['ROOT_DIR']+grid_fp+fn, 'br'))
+            feature_vector = feature_vector.reshape(1, -1)
             xtest = xgb.DMatrix(feature_vector)
             score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
             origin = scoremap[y:y+stride, x:x+stride]
