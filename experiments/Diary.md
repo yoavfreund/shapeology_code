@@ -10,10 +10,10 @@ Progress:
 Downsample Images
 Google Drive: https://drive.google.com/drive/folders/1gJaPJfPpTNimbBC0mkd1Sq7P_3_0F724?usp=sharing
 
-Note: The following structures are recommended due to enough contour images: 
+Notes: 
+1.The following structures are recommended due to enough contour images: 
 5N, 7N, 7nn, DC, IC, LRt, PBG, Pn, SC, SNC, SNR, Sp5C, Sp5I, Sp5O, VCA, VCP, VLL.
-
-Images with '_contour' in their names have annotation contours.
+2.Images with '_contour' in their names have annotation contours.
 
 
 Thursday, Auguest 15, 2019
@@ -54,15 +54,12 @@ Progress:
 s3: https://s3.console.aws.amazon.com/s3/buckets/mousebrainatlas-data/CSHL_scoremaps_new/?region=us-west-1&tab=overview
 Google Drive: https://drive.google.com/drive/folders/1YGXhe4mnfsY1RRxqGFMTR_RpKrr3NkXV?usp=sharing
 
-Note: Here are some results for MD594. Annotations only appear in the images that this structure shows in this section.
-
-Current results of VCA are recommended to review cause they include one whole side of this structure.
-
-It takes about 50 minutes for one section (28 scoremaps) on EC2. 
-
-And the sliding window is 103.04um (224 pixels) on the edge with a stride of 51.52um (112 pixles). But the resolution of results seems low. I will ask Alex about the window size of previous results.
-
-Sigmoid is used to normalize the scoremaps in order to make scores have same gray values across sections. 
+Notes: 
+1. Here are some results for MD594. Annotations only appear in the images that this structure shows in this section.
+2. Current results of VCA are recommended to review cause they include one whole side of this structure.
+3. It takes about 50 minutes for one section (28 scoremaps) on EC2. 
+4. the sliding window is 103.04um (224 pixels) on the edge with a stride of 51.52um (112 pixles). But the resolution of results seems low. I will ask Alex about the window size of previous results.
+5. Sigmoid is used to normalize the scoremaps in order to make scores have same gray values across sections. 
 
 
 Problems:
