@@ -155,15 +155,13 @@ valid_structure = {}
 for contour_id, contour in polygons:
     valid_structure[contour_id] = contour
 
-grid_fn = features_fn + str(section) + '.pkl'
-try:
-    setup_download_from_s3(grid_fn, recursive=False)
-    grid_features = pickle.load(open(os.environ['ROOT_DIR']+grid_fn,'rb'))
-    NotUpload = False
-except:
-    grid_features = {}
+grid_fp = features_fn + str(section) + '/'
+setup_download_from_s3(grid_fp)
+if sum([len(files) for r, d, files in os.walk(os.environ['ROOT_DIR'] + grid_fp)])==0:
+    if not os.path.exists(os.environ['ROOT_DIR'] + grid_fp):
+        os.mkdir(os.environ['ROOT_DIR'] + grid_fp)
     NotUpload = True
-
+    print('Begin')
 # grid_features = {}
     for i in range(len(locations)):
         left = locations[i][0]
@@ -171,22 +169,19 @@ except:
         up = locations[i][1]
         down = int(min(up + window_size, m))
         tile = img[up:down, left:right]
-        grid_index = str(section)+'_'+str(left)+'_'+str(up)
+        fn = str(section)+'_'+str(left)+'_'+str(up)+'.npz'
         try:
-            if grid_index in grid_features.keys():
-                # extracted = grid_features[grid_index]
-                continue
-            else:
-                extracted = features_extractor(tile, params, extractor, thresholds)
-                grid_features[grid_index] = extracted
+            extracted = features_extractor(tile, params, extractor, thresholds)
+            extracted = np.array(extracted)
+            extracted.tofile(open(os.environ['ROOT_DIR']+grid_fp+fn, 'bw'))
         except:
             continue
         if i % 1000 == 0:
             print(i, len(locations))
 
 if NotUpload:
-    pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
-    setup_upload_from_s3(grid_fn, recursive=False)
+    # pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
+    setup_upload_from_s3(grid_fp)
 
 for j in range(len(all_structures)):
     structure = all_structures[j]
@@ -225,8 +220,8 @@ for j in range(len(all_structures)):
     scoremap = np.zeros([m, n], dtype=np.float16)
     for x, y in locations:
         try:
-            grid_index = str(section) + '_' + str(x) + '_' + str(y)
-            feature_vector = grid_features[grid_index]
+            fn = str(section) + '_' + str(x) + '_' + str(y) +'.npz'
+            feature_vector = np.fromfile(open(os.environ['ROOT_DIR']+grid_fp+fn, 'br'))
             xtest = xgb.DMatrix(feature_vector)
             score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
             origin = scoremap[y:y+stride, x:x+stride]
@@ -268,4 +263,4 @@ for j in range(len(all_structures)):
     print(section, structure, j, '/', len(all_structures))
 
 os.remove(os.environ['ROOT_DIR']+img_fn)
-os.remove(os.environ['ROOT_DIR']+grid_fn)
+# os.remove(os.environ['ROOT_DIR']+grid_fp)
