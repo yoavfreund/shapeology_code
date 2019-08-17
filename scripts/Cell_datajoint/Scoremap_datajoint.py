@@ -86,6 +86,8 @@ class ScoreMap(dj.Computed):
             run('python3 {0}/Scoremap_v2.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
+            setup_upload_from_s3(img_fp)
+            setup_upload_from_s3('CSHL_grid_features/'+stack+'/'+ str(section) + '/')
             shutil.rmtree(img_fp)
         self.insert1(key)
 

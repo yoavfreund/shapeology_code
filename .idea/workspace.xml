@@ -69,8 +69,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Scoremap_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="122" column="55" lean-forward="true" selection-start-line="122" selection-start-column="55" selection-end-line="122" selection-end-column="55" />
+            <state relative-caret-position="345">
+              <caret line="157" column="42" lean-forward="true" selection-start-line="157" selection-start-column="42" selection-end-line="157" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -79,7 +79,7 @@
         <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Scoremap_datajoint.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="331">
-              <caret line="92" column="50" lean-forward="true" selection-start-line="92" selection-start-column="50" selection-end-line="92" selection-end-column="50" />
+              <caret line="93" column="36" lean-forward="true" selection-start-line="93" selection-start-column="36" selection-end-line="93" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -252,12 +252,12 @@
       <workItem from="1565829042155" duration="10081000" />
       <workItem from="1565894977751" duration="3072000" />
       <workItem from="1565910525909" duration="808000" />
-      <workItem from="1565915771155" duration="6722000" />
+      <workItem from="1565915771155" duration="8155000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="278757000" />
+    <option name="totallyTimeSpent" value="280190000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -545,15 +545,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Scoremap_v2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="122" column="55" lean-forward="true" selection-start-line="122" selection-start-column="55" selection-end-line="122" selection-end-column="55" />
+        <state relative-caret-position="345">
+          <caret line="157" column="42" lean-forward="true" selection-start-line="157" selection-start-column="42" selection-end-line="157" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Scoremap_datajoint.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="331">
-          <caret line="92" column="50" lean-forward="true" selection-start-line="92" selection-start-column="50" selection-end-line="92" selection-end-column="50" />
+          <caret line="93" column="36" lean-forward="true" selection-start-line="93" selection-start-column="36" selection-end-line="93" selection-end-column="36" />
         </state>
       </provider>
     </entry>
