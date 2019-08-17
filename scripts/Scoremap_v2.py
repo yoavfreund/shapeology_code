@@ -266,4 +266,4 @@ for j in range(len(all_structures)):
     print(section, structure, j, '/', len(all_structures))
 
 os.remove(os.environ['ROOT_DIR']+img_fn)
-# os.remove(os.environ['ROOT_DIR']+grid_fp)
+os.remove(os.environ['ROOT_DIR']+grid_fp)

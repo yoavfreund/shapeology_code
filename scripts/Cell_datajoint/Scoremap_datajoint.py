@@ -90,4 +90,4 @@ class ScoreMap(dj.Computed):
         self.insert1(key)
 
 ScoreMap.populate(reserve_jobs=True)
-
+setup_upload_from_s3('CSHL_scoremaps_new/down32/')
