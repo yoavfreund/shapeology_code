@@ -10,9 +10,6 @@ Progress:
 Downsample Images
 Google Drive: https://drive.google.com/drive/folders/1gJaPJfPpTNimbBC0mkd1Sq7P_3_0F724?usp=sharing
 
-Full resolution Images
-Google Drive: https://drive.google.com/drive/folders/1YGXhe4mnfsY1RRxqGFMTR_RpKrr3NkXV?usp=sharing
-
 Note: Images with '_contour' in their names have annotation contours.
 
 
