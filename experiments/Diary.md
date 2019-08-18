@@ -3,27 +3,30 @@
 Add sections in reverse Chronological order
 
 Saturday, August 17, 2019
+
 Progress:
 1. All sections have been completed for the test. It takes about 400 hours for a single instance.
 
-Downsample Images
+Downsample Images:
 Google Drive: https://drive.google.com/drive/folders/1gJaPJfPpTNimbBC0mkd1Sq7P_3_0F724?usp=sharing
 
 Friday, August 16, 2019
+
 Progress:
 1. Test the whole process with stride of 50um. (112 sections completed)
 2. Debug the codes both locally and on EC2 instances.
 
-Downsample Images
+Downsample Images:
 Google Drive: https://drive.google.com/drive/folders/1gJaPJfPpTNimbBC0mkd1Sq7P_3_0F724?usp=sharing
 
 Notes: 
-1.The following structures are recommended due to enough contour images: 
+1. The following structures are recommended due to enough contour images: 
 5N, 7N, 7nn, DC, IC, LRt, PBG, Pn, SC, SNC, SNR, Sp5C, Sp5I, Sp5O, VCA, VCP, VLL.
-2.Images with '_contour' in their names have annotation contours.
+2. Images with '_contour' in their names have annotation contours.
 
 
 Thursday, August 15, 2019
+
 Progress:
 1. Divide the dictionary storing feature vectors into tiny files to avoid memory issues.
 2. Debug the codes both locally and on EC2 instances.
@@ -33,6 +36,7 @@ Problems:
 1. Part of EC2 instances may be terminated automatically (Server.SpotInstanceTermination: may due to price). I will discuss this with Julaiti tomorrow.
 
 Wednesday, August 14, 2019
+
 Progress:
 1. Correct the downsample part for score maps.
 2. Debug the codes on EC2 instances.
@@ -43,6 +47,7 @@ Wall time is much greater than cpu time.
 2. Codes stop half way without error reports. It may due to memory issues.
 
 Tuesday, August 13, 2019
+
 Progress:
 1. Get the codes for scoremaps run on multiple EC2 instances successfully.
 2. Change the stride of sliding windows to 30um. This may extend computation time by 3 times.
@@ -53,6 +58,7 @@ Problems:
 **Structures with good ROC: 3N, 4N, 7nn, 12N, Amb, AP, LC, PBG, Pn, RMC, Tz, VCA, VLL
 
 Monday, August 12, 2019
+
 Progress:
 1. Get the codes for generating scoremaps run locally successfully.
 2. Add the part to draw annotations and test successfully on the brain MD594.
@@ -75,6 +81,7 @@ Need to realign these annotations. I will discuss this with Alex.
 
 
 Friday, July 12, 2019
+
 1. Show hsv images classified by good/bad, structures, train/test sequentially. Put on Google drive.
 Further step: turn good/bad into both good, both bad, and train good but test bad. Divide images of paired structure into two sides.
 2. Show time each step took during the process.
