@@ -99,7 +99,7 @@ def features_extractor(tile,state,params,extractor, threshold):
     return extracted
 
 def image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, step_size,\
-                    contours_grouped, raw_images_root, section_to_filename, all_structures):
+                    contours_grouped, raw_images_root, section_to_filename, all_structures, thresholds):
     t1 = time()
     img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
     setup_download_from_s3(img_fn, recursive=False)
@@ -181,7 +181,7 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
                 if grid_index in grid_features.keys():
                     extracted = grid_features[grid_index]
                 else:
-                    extracted = features_extractor(patch,'positive',params,extractor)
+                    extracted = features_extractor(patch,'positive',params,extractor, thresholds)
                     grid_features[grid_index] = extracted
 
                 xtest = xgb.DMatrix(extracted)
@@ -199,7 +199,7 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
                 if grid_index in grid_features.keys():
                     extracted = grid_features[grid_index]
                 else:
-                    extracted = features_extractor(patch, 'positive', params, extractor)
+                    extracted = features_extractor(patch, 'positive', params, extractor, thresholds)
                     grid_features[grid_index] = extracted
 
                 xtest = xgb.DMatrix(extracted)
@@ -238,7 +238,7 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
                 if grid_index in grid_features.keys():
                     extracted = grid_features[grid_index]
                 else:
-                    extracted = features_extractor(patch, 'negative', params, extractor)
+                    extracted = features_extractor(patch, 'negative', params, extractor, thresholds)
                     grid_features[grid_index] = extracted
 
                 xtest = xgb.DMatrix(extracted)
@@ -256,7 +256,7 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
                 if grid_index in grid_features.keys():
                     extracted = grid_features[grid_index]
                 else:
-                    extracted = features_extractor(patch, 'negative', params, extractor)
+                    extracted = features_extractor(patch, 'negative', params, extractor, thresholds)
                     grid_features[grid_index] = extracted
 
                 xtest = xgb.DMatrix(extracted)
@@ -337,4 +337,4 @@ singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 all_structures = paired_structures + singular_structures
 
 image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, step_size,\
-                    contours_grouped, raw_images_root, section_to_filename, all_structures)
+                    contours_grouped, raw_images_root, section_to_filename, all_structures, thresholds)
