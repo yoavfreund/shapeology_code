@@ -65,7 +65,8 @@ def setup_upload_from_s3(rel_fp, recursive=True):
     else:
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
 
-setup_download_from_s3('CSHL_patches_features/')
+setup_download_from_s3('CSHL_patch_samples_features_V2/MD589/')
+setup_download_from_s3('CSHL_patch_samples_features_V2/MD585/')
 
 @schema
 class Shift(dj.Computed):

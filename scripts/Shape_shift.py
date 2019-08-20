@@ -98,7 +98,7 @@ def features_extractor(tile,state,params,extractor, threshold):
         extracted.extend([cells.shape[0]/object_area*224*224])
     return extracted
 
-def image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, step_size,\
+def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, params, num_round, step_size,\
                     contours_grouped, raw_images_root, section_to_filename, all_structures, thresholds):
     t1 = time()
     img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
@@ -135,16 +135,22 @@ def image_generator(section, savepath, features_fn, cell_dir, param, params, num
         fp = []
         fp.append(cell_dir + structure + '/MD589_' + structure + '_positive.pkl')
         fp.append(cell_dir + structure + '/MD589_' + structure + '_negative.pkl')
-        features = []
-        labels = []
+        X_train = []
+        y_train = []
         for state in range(2):
             clouds = pickle.load(open(fp[state], 'rb'))
-            features.extend(np.array(clouds))
-            labels.extend([1 - state] * len(clouds))
-        features = np.array(features)
-        labels = np.array(labels)
-        X_train = features
-        y_train = labels
+            X_train.extend(np.array(clouds))
+            y_train.extend([1 - state] * len(clouds))
+
+        fp = []
+        fp.append(cell2_dir + structure + '/MD585_' + structure + '_positive.pkl')
+        fp.append(cell2_dir + structure + '/MD585_' + structure + '_negative.pkl')
+        for state in range(2):
+            clouds = pickle.load(open(fp[state], 'rb'))
+            X_train.extend(np.array(clouds))
+            y_train.extend([1 - state] * len(clouds))
+        X_train = np.array(X_train)
+        y_train = np.array(y_train)
         dtrain = xgb.DMatrix(X_train, label=y_train)
         bst = xgb.train(param, dtrain, num_round, verbose_eval=False)
 
@@ -311,7 +317,8 @@ num_round = 100
 yamlfile=os.environ['REPO_DIR']+args.yaml
 params=configuration(yamlfile).getParams()
 
-cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patches_features/MD589/'
+cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD589/'
+cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD585/'
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
 features_fn = 'CSHL_region_features/'
 if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
@@ -336,5 +343,5 @@ singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
 
-image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, step_size,\
+image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, params, num_round, step_size,\
                     contours_grouped, raw_images_root, section_to_filename, all_structures, thresholds)
