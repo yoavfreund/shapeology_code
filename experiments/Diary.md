@@ -2,6 +2,12 @@
 
 Add sections in reverse Chronological order
 
+Monday, August 19, 2019
+
+Progress:
+1. Add the part enabling shift in z direction. --Shape_shift.py
+2. Test on EC2 instances.
+
 Saturday, August 17, 2019
 
 Progress:

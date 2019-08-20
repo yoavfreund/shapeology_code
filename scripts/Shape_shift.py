@@ -53,8 +53,7 @@ def setup_upload_from_s3(rel_fp, recursive=True):
     else:
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
 
-def features_extractor(patch,state,params,extractor):
-    tile=patch
+def features_extractor(tile,state,params,extractor, threshold):
     contours, _ = cv2.findContours(tile.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     if state=='positive':
         if len(contours)==1:
@@ -81,7 +80,7 @@ def features_extractor(patch,state,params,extractor):
 
     extracted = []
     if _std < min_std:
-        extracted.append([0] * 201)
+        extracted.append([0] * 1981)
     else:
         Stats = extractor.segment_cells(tile)
         cells = extractor.extract_blobs(Stats,tile)
@@ -94,9 +93,9 @@ def features_extractor(patch,state,params,extractor):
         origin = np.concatenate((np.array(list(cells[:,0])),cells[:,1:]),axis=1)
         for k in range(origin.shape[1]):
             x, y = CDF(origin[:,k])
-            ten = [x[np.argmin(np.absolute(y-0.1*(j+1)))] for j in range(10)]
+            ten = [y[np.argmin(np.absolute(x - threshold[k][j]))] for j in range(99)]
             extracted.extend(ten)
-        extracted.extend([cells.shape[0]/object_area*224*224/100])
+        extracted.extend([cells.shape[0]/object_area*224*224])
     return extracted
 
 def image_generator(section, savepath, features_fn, cell_dir, param, params, num_round, step_size,\
@@ -296,6 +295,9 @@ contours = pd.DataFrame(annotation)
 contours = contours.rename(columns={0:"name", 1:"section", 2:"vertices"})
 contours_grouped = contours.groupby('section')
 
+fn = 'CSHL_data_processed/MD589/ThresholdsV2.pkl'
+setup_download_from_s3(fn, recursive=False)
+thresholds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
 #Parameters
 param = {}
 param['max_depth']= 3   # depth of tree

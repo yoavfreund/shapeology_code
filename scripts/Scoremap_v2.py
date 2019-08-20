@@ -112,14 +112,14 @@ params=configuration(yamlfile).getParams()
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD589/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD585/'
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
-features_fn = 'CSHL_grid_features/'
+features_fn = 'CSHL_grid_features_30/'
 if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
     os.mkdir(os.environ['ROOT_DIR']+features_fn)
 features_fn = features_fn+stack+'/'
 if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
     os.mkdir(os.environ['ROOT_DIR']+features_fn)
 
-savepath = 'CSHL_scoremaps_new/'
+savepath = 'CSHL_scoremaps_new_30/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 downsample_fp = savepath+'down32/'
@@ -138,7 +138,7 @@ singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
 window_size = 224
-stride = 112 #int(30/0.46)
+stride = int(30/0.46)
 
 img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
 setup_download_from_s3(img_fn, recursive=False)
