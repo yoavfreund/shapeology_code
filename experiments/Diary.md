@@ -2,6 +2,15 @@
 
 Add sections in reverse Chronological order
 
+Tuesday, August 20, 2019
+
+Progress:
+1. Debug the codes for region shift both locally and on EC2 instances.
+2. Establish a second pipeline for region shift using the sqlite database. --Shape_shift_V2.py
+
+Problems:
+1. Unstable connection from EC2 instances to S3 resulted missing files during the upload process.
+
 Monday, August 19, 2019
 
 Progress:
