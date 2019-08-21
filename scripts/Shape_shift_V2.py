@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import pickle
 import xgboost as xgb
-#from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 import skimage
 import os
 import sys
@@ -25,10 +25,10 @@ from shapely.geometry import Polygon
 
 
 def CDF(x):
-    x=np.sort(x)
-    size=x.shape[0]
-    y=np.arange(0,size)/size
-    return x,y
+    x = np.sort(x)
+    size = x.shape[0]
+    y = np.arange(0, size) / size
+    return x, y
 
 
 def setup_download_from_s3(rel_fp, recursive=True):
@@ -44,6 +44,7 @@ def setup_download_from_s3(rel_fp, recursive=True):
     else:
         run('aws s3 cp {0} {1}'.format(s3_fp, local_fp))
 
+
 def setup_upload_from_s3(rel_fp, recursive=True):
     s3_fp = 's3://mousebrainatlas-data/' + rel_fp
     local_fp = os.environ['ROOT_DIR'] + rel_fp
@@ -53,29 +54,30 @@ def setup_upload_from_s3(rel_fp, recursive=True):
     else:
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
 
-def features_extractor(tile,state,params,extractor, threshold):
+
+def features_extractor(tile, state, params, extractor, threshold):
     contours, _ = cv2.findContours(tile.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    if state=='positive':
-        if len(contours)==1:
+    if state == 'positive':
+        if len(contours) == 1:
             object_area = cv2.contourArea(contours[0])
         else:
-            areas=[]
+            areas = []
             for j in range(len(contours)):
                 areas.extend([cv2.contourArea(contours[j])])
             object_area = max(areas)
     else:
-        if len(contours)==2:
-            object_area = cv2.contourArea(contours[0])-cv2.contourArea(contours[1])
+        if len(contours) == 2:
+            object_area = cv2.contourArea(contours[0]) - cv2.contourArea(contours[1])
         else:
-            areas=[]
+            areas = []
             for j in range(len(contours)):
                 areas.extend([cv2.contourArea(contours[j])])
-            areas=np.sort(areas)
-            object_area = areas[-1]-areas[-2]
+            areas = np.sort(areas)
+            object_area = areas[-1] - areas[-2]
 
-    if params['preprocessing']['polarity']==-1:
-        tile = 255-tile
-    min_std=params['preprocessing']['min_std']
+    if params['preprocessing']['polarity'] == -1:
+        tile = 255 - tile
+    min_std = params['preprocessing']['min_std']
     _std = np.std(tile.flatten())
 
     extracted = []
@@ -83,29 +85,30 @@ def features_extractor(tile,state,params,extractor, threshold):
         extracted.append([0] * 1981)
     else:
         Stats = extractor.segment_cells(tile)
-        cells = extractor.extract_blobs(Stats,tile)
+        cells = extractor.extract_blobs(Stats, tile)
         cells = pd.DataFrame(cells)
         cells = cells[cells['padded_patch'].notnull()]
-        cells = cells.drop(['padded_patch','left','top'],1)
+        cells = cells.drop(['padded_patch', 'left', 'top'], 1)
         cells = np.asarray(cells)
         for k in range(len(cells)):
             cells[k][0] = cells[k][0][:10]
-        origin = np.concatenate((np.array(list(cells[:,0])),cells[:,1:]),axis=1)
+        origin = np.concatenate((np.array(list(cells[:, 0])), cells[:, 1:]), axis=1)
         for k in range(origin.shape[1]):
-            x, y = CDF(origin[:,k])
+            x, y = CDF(origin[:, k])
             ten = [y[np.argmin(np.absolute(x - threshold[k][j]))] for j in range(99)]
             extracted.extend(ten)
-        extracted.extend([cells.shape[0]/object_area*224*224])
+        extracted.extend([cells.shape[0] / object_area * 224 * 224])
     return extracted
 
-def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, params, num_round, step_size,\
+
+def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, params, num_round, step_size, \
                     contours_grouped, raw_images_root, section_to_filename, all_structures, thresholds, valid_sections):
     t1 = time()
     img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
     setup_download_from_s3(img_fn, recursive=False)
-    img = cv2.imread(os.environ['ROOT_DIR']+img_fn, 2)
+    img = cv2.imread(os.environ['ROOT_DIR'] + img_fn, 2)
     m, n = img.shape
-    margin = 200/0.46
+    margin = 200 / 0.46
     extractor = patch_extractor(params)
 
     polygons = [(contour['name'], contour['vertices']) \
@@ -174,22 +177,23 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
             mask[y_raw[i], x_raw[i]] = 1
         mask = mask.astype(np.uint8)
 
-        Scores[structure][str(section)+'_positive'] = {}
+        Scores[structure][str(section) + '_positive'] = {}
         x_shift = []
         y_shift = []
         z_shift = []
-        for i in range(-10,11):
+        for i in range(-10, 11):
             try:
-                nleft = int(max(left+i*step_size, 0))
-                nright = int(min(right+i*step_size, n-1))
-                patch = img[up:down + 1, nleft:nright + 1] * mask[:,int(nleft -left-i*step_size):\
-                                                             int(nleft -left-i*step_size)+nright - nleft + 1]
+                nleft = int(max(left + i * step_size, 0))
+                nright = int(min(right + i * step_size, n - 1))
+                patch = img[up:down + 1, nleft:nright + 1] * mask[:, int(nleft - left - i * step_size): \
+                                                                     int(
+                                                                         nleft - left - i * step_size) + nright - nleft + 1]
                 # grid_index = str(section) + '_' + structure + '_' + 'postive_x_'+str(i)
                 # if grid_index in grid_features.keys():
                 #     extracted = grid_features[grid_index]
                 # else:
-                extracted = features_extractor(patch,'positive',params,extractor, thresholds)
-                    # grid_features[grid_index] = extracted
+                extracted = features_extractor(patch, 'positive', params, extractor, thresholds)
+                # grid_features[grid_index] = extracted
 
                 xtest = xgb.DMatrix(extracted)
                 score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
@@ -198,16 +202,16 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
                 x_shift.append(0)
 
             try:
-                nup = int(max(up+i*step_size, 0))
-                ndown = int(min(down+i*step_size, n-1))
-                patch = img[nup:ndown + 1, left:right + 1] * mask[int(nup -up-i*step_size):\
-                                                             int(nup -up-i*step_size)+ndown - nup + 1, :]
+                nup = int(max(up + i * step_size, 0))
+                ndown = int(min(down + i * step_size, n - 1))
+                patch = img[nup:ndown + 1, left:right + 1] * mask[int(nup - up - i * step_size): \
+                                                                  int(nup - up - i * step_size) + ndown - nup + 1, :]
                 # grid_index = str(section) + '_' + structure + '_' + 'postive_y_' + str(i)
                 # if grid_index in grid_features.keys():
                 #     extracted = grid_features[grid_index]
                 # else:
                 extracted = features_extractor(patch, 'positive', params, extractor, thresholds)
-                    # grid_features[grid_index] = extracted
+                # grid_features[grid_index] = extracted
 
                 xtest = xgb.DMatrix(extracted)
                 score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
@@ -215,7 +219,7 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
             except:
                 y_shift.append(0)
 
-            loc_z = section + i*2
+            loc_z = section + i * 2
             if loc_z in valid_sections:
                 sec_fn = raw_images_root + section_to_filename[loc_z] + '_prep2_lossless_gray.tif'
                 setup_download_from_s3(sec_fn, recursive=False)
@@ -257,13 +261,14 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
                 nleft = int(max(left + i * step_size, 0))
                 nright = int(min(right + i * step_size, n - 1))
                 patch = img[up:down + 1, nleft:nright + 1] * mask[:, int(nleft - left - i * step_size): \
-                                                                int(nleft - left - i * step_size) + nright - nleft + 1]
+                                                                     int(
+                                                                         nleft - left - i * step_size) + nright - nleft + 1]
                 # grid_index = str(section) + '_' + structure + '_' + 'negative_x_' + str(i)
                 # if grid_index in grid_features.keys():
                 #     extracted = grid_features[grid_index]
                 # else:
                 extracted = features_extractor(patch, 'negative', params, extractor, thresholds)
-                    # grid_features[grid_index] = extracted
+                # grid_features[grid_index] = extracted
 
                 xtest = xgb.DMatrix(extracted)
                 score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
@@ -309,7 +314,6 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
         Scores[structure][str(section) + '_negative']['y'] = y_shift
         Scores[structure][str(section) + '_negative']['z'] = z_shift
 
-
         count += 1
         print(section, structure, count, '/', len(polygons))
 
@@ -319,60 +323,59 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
     filename = savepath + str(section) + '.pkl'
     pickle.dump(Scores, open(os.environ['ROOT_DIR'] + filename, 'wb'))
     setup_upload_from_s3(filename, recursive=False)
-    os.remove(os.environ['ROOT_DIR']+img_fn)
+    os.remove(os.environ['ROOT_DIR'] + img_fn)
     print(str(section) + ' finished in %5.1f seconds' % (time() - t1))
 
 
 fp = os.path.join('CSHL_data_processed', stack, stack + '_sorted_filenames.txt')
 setup_download_from_s3(fp, recursive=False)
-with open(os.environ['ROOT_DIR']+fp, 'r') as f:
+with open(os.environ['ROOT_DIR'] + fp, 'r') as f:
     fn_idx_tuples = [line.strip().split() for line in f.readlines()]
     section_to_filename = {int(idx): fn for fn, idx in fn_idx_tuples}
 
-
 fname = os.path.join('CSHL_data_processed', stack, 'Annotation.npy')
 setup_download_from_s3(fname, recursive=False)
-annotation = np.load(os.environ['ROOT_DIR']+fname, allow_pickle = True, encoding='latin1')
+annotation = np.load(os.environ['ROOT_DIR'] + fname, allow_pickle=True, encoding='latin1')
 contours = pd.DataFrame(annotation)
-contours = contours.rename(columns={0:"name", 1:"section", 2:"vertices"})
+contours = contours.rename(columns={0: "name", 1: "section", 2: "vertices"})
 contours_grouped = contours.groupby('section')
 valid_sections = np.sort(contours['section'].unique())
 
 fn = 'CSHL_data_processed/MD589/ThresholdsV2.pkl'
 setup_download_from_s3(fn, recursive=False)
-thresholds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
-#Parameters
+thresholds = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
+# Parameters
 param = {}
-param['max_depth']= 3   # depth of tree
-param['eta'] = 0.2      # shrinkage parameter
-param['silent'] = 1     # not silent
-param['objective'] = 'binary:logistic' #'multi:softmax'
-param['nthread'] = 7 # Number of threads used
-param['num_class']=1
+param['max_depth'] = 3  # depth of tree
+param['eta'] = 0.2  # shrinkage parameter
+param['silent'] = 1  # not silent
+param['objective'] = 'binary:logistic'  # 'multi:softmax'
+param['nthread'] = 7  # Number of threads used
+param['num_class'] = 1
 num_round = 100
 
-yamlfile=os.environ['REPO_DIR']+args.yaml
-params=configuration(yamlfile).getParams()
+yamlfile = os.environ['REPO_DIR'] + args.yaml
+params = configuration(yamlfile).getParams()
 
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD589/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD585/'
-raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
+raw_images_root = 'CSHL_data_processed/' + stack + '/' + stack + '_prep2_lossless_gray/'
 features_fn = 'CSHL_region_features/'
-if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
-    os.mkdir(os.environ['ROOT_DIR']+features_fn)
-features_fn = features_fn+stack+'/'
-if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
-    os.mkdir(os.environ['ROOT_DIR']+features_fn)
+if not os.path.exists(os.environ['ROOT_DIR'] + features_fn):
+    os.mkdir(os.environ['ROOT_DIR'] + features_fn)
+features_fn = features_fn + stack + '/'
+if not os.path.exists(os.environ['ROOT_DIR'] + features_fn):
+    os.mkdir(os.environ['ROOT_DIR'] + features_fn)
 
 savepath = 'CSHL_shift/'
-if not os.path.exists(os.environ['ROOT_DIR']+savepath):
-    os.mkdir(os.environ['ROOT_DIR']+savepath)
-savepath = savepath+stack+'/'
-if not os.path.exists(os.environ['ROOT_DIR']+savepath):
-    os.mkdir(os.environ['ROOT_DIR']+savepath)
+if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
+    os.mkdir(os.environ['ROOT_DIR'] + savepath)
+savepath = savepath + stack + '/'
+if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
+    os.mkdir(os.environ['ROOT_DIR'] + savepath)
 
 resol = 0.46
-step_size = int(30/resol)
+step_size = int(30 / resol)
 
 paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VLL', 'RMC', \
                      'SNC', 'SNR', '3N', '4N', 'Sp5I', 'Sp5O', 'Sp5C', 'PBG', '10N', 'VCA', 'VCP', 'DC']
@@ -380,5 +383,5 @@ singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
 
-image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, params, num_round, step_size,\
-                    contours_grouped, raw_images_root, section_to_filename, all_structures, thresholds, valid_sections)
+image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, params, num_round, step_size, \
+                contours_grouped, raw_images_root, section_to_filename, all_structures, thresholds, valid_sections)
