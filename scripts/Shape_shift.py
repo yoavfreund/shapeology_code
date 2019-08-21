@@ -292,8 +292,9 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
             loc_z = section + i * 2
             if loc_z in valid_sections:
                 sec_fn = raw_images_root + section_to_filename[loc_z] + '_prep2_lossless_gray.tif'
-                setup_download_from_s3(sec_fn, recursive=False)
+                # setup_download_from_s3(sec_fn, recursive=False)
                 sec = cv2.imread(os.environ['ROOT_DIR'] + sec_fn, 2)
+                os.remove(os.environ['ROOT_DIR'] + sec_fn)
                 try:
                     patch = sec[up:down + 1, left:right + 1] * mask
                     extracted = features_extractor(patch, 'positive', params, extractor, thresholds)
