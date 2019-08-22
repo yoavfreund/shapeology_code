@@ -2,6 +2,13 @@
 
 Add sections in reverse Chronological order
 
+Wednesday, August 21, 2019
+
+Progress:
+1. Get the pipeline for region shift using the sqlite database run locally successfully. --Shape_shift_V2.py
+2. Debug the codes for region shift on EC2 instances.
+3. Look through the GUI part of MouseBrainAtlas_dev.
+
 Tuesday, August 20, 2019
 
 Progress:

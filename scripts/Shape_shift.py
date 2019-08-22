@@ -17,6 +17,7 @@ import xgboost as xgb
 import skimage
 import os
 import sys
+import shutil
 from time import time
 from extractPatches import patch_extractor
 from lib.utils import configuration, run
@@ -295,7 +296,7 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
                 sec_fn = raw_images_root + section_to_filename[loc_z] + '_prep2_lossless_gray.tif'
                 # setup_download_from_s3(sec_fn, recursive=False)
                 sec = cv2.imread(os.environ['ROOT_DIR'] + sec_fn, 2)
-                os.remove(os.environ['ROOT_DIR'] + sec_fn)
+                # os.remove(os.environ['ROOT_DIR'] + sec_fn)
                 try:
                     patch = sec[up:down + 1, left:right + 1] * mask
                     extracted = features_extractor(patch, 'positive', params, extractor, thresholds)
@@ -321,7 +322,8 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
     filename = savepath + str(section) + '.pkl'
     pickle.dump(Scores, open(os.environ['ROOT_DIR'] + filename, 'wb'))
     setup_upload_from_s3(filename, recursive=False)
-    os.remove(os.environ['ROOT_DIR']+img_fn)
+    shutil.rmtree(raw_images_root)
+    # os.remove(os.environ['ROOT_DIR']+img_fn)
     print(str(section) + ' finished in %5.1f seconds' % (time() - t1))
 
 
