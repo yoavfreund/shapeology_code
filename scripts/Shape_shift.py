@@ -252,6 +252,7 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
         Scores[structure][str(section) + '_negative'] = {}
         x_shift = []
         y_shift = []
+        z_shift = []
         for i in range(-10, 11):
             try:
                 nleft = int(max(left + i * step_size, 0))
