@@ -2,6 +2,10 @@
 
 Add sections in reverse Chronological order
 
+Thursday-Friday, August 22-23, 2019
+
+Sick leave
+
 Wednesday, August 21, 2019
 
 Progress:
