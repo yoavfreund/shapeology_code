@@ -135,14 +135,8 @@ params=configuration(yamlfile).getParams()
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD589/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD585/'
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
-features_fn = 'CSHL_region_features/'
-if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
-    os.mkdir(os.environ['ROOT_DIR']+features_fn)
-features_fn = features_fn+stack+'/'
-if not os.path.exists(os.environ['ROOT_DIR']+features_fn):
-    os.mkdir(os.environ['ROOT_DIR']+features_fn)
 
-savepath = 'CSHL_shift/'
+savepath = 'CSHL_shift_new/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
@@ -376,9 +370,9 @@ for contour_id, contour in polygons:
 # if NotUpload:
 #     pickle.dump(grid_features, open(os.environ['ROOT_DIR'] + grid_fn, 'wb'))
 #     setup_upload_from_s3(grid_fn, recursive=False)
+shutil.rmtree(os.environ['ROOT_DIR']+raw_images_root)
 filename = savepath + str(section) + '.pkl'
 pickle.dump(Scores, open(os.environ['ROOT_DIR'] + filename, 'wb'))
 setup_upload_from_s3(filename, recursive=False)
-shutil.rmtree(os.environ['ROOT_DIR']+raw_images_root)
 # os.remove(os.environ['ROOT_DIR']+img_fn)
 print(str(section) + ' finished in %5.1f seconds' % (time() - t1))

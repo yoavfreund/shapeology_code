@@ -2,6 +2,11 @@
 
 Add sections in reverse Chronological order
 
+Monday, August 26, 2019
+1. Correct the cells collection part for region shift and hsv images.
+2. Get the codes for region shift run locally successfully.
+3. Test the codes for hsv images.
+
 Thursday-Friday, August 22-23, 2019
 
 Sick leave
