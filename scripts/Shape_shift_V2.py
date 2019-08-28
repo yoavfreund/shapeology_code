@@ -122,8 +122,6 @@ polygons = [(contour['name'], contour['vertices']) \
 db_dir = 'CSHL_databases/' + stack + '/'
 db_fp = db_dir + str(section) + '.db'
 setup_download_from_s3(db_fp, recursive=False)
-conn = sqlite3.connect(os.environ['ROOT_DIR'] + db_fp)
-cur = conn.cursor()
 
 count = 0
 Scores = {}
@@ -176,7 +174,7 @@ for contour_id, contour in polygons:
     Scores[structure][str(section) + '_positive'] = {}
     Scores[structure][str(section) + '_negative'] = {}
     inside_area = Polygon(polygon).area
-    outside_area = Polygon(polygon).buffer(margin, resolution=2).area
+    outside_area = Polygon(polygon).buffer(margin, resolution=2).area - inside_area
     x_shift_positive = []
     x_shift_negative = []
     y_shift_positive = []
@@ -241,8 +239,7 @@ for contour_id, contour in polygons:
             conn = sqlite3.connect(os.environ['ROOT_DIR'] + sec_fp)
             cur = conn.cursor()
             try:
-                raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?',
-                                   (left, right, up, down))
+                raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?', (left, right, up, down))
                 info = np.array(list(raws))
                 locations = info[:, 1:3]
                 features = info[:, 3:]
