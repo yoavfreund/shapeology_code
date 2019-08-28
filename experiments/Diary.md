@@ -2,6 +2,11 @@
 
 Add sections in reverse Chronological order
 
+Tuesday, August 27, 2019
+1. Get initial results for shift ready. It takes about 40 minutes for 10 EC2 instances.
+2. Draw shift curves for each structure.
+2. Get the codes for hsv images marking cells run locally successfully.
+
 Monday, August 26, 2019
 1. Correct the cells collection part for region shift and hsv images.
 2. Get the codes for region shift run locally successfully.
