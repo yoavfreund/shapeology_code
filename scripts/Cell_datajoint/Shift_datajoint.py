@@ -38,9 +38,8 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-pkl_fp = 'CSHL_shift/'+stack+'/'
-feature_fp = 'CSHL_region_features/'+stack+'/'
-#img_fp = os.environ['ROOT_DIR']+img_file
+pkl_fp = 'CSHL_shift_new/'+stack+'/'
+# feature_fp = 'CSHL_region_features/'+stack+'/'
 scripts_dir = os.environ['REPO_DIR']
 
 def setup_download_from_s3(rel_fp, recursive=True):
@@ -92,7 +91,8 @@ class Shift(dj.Computed):
         #     # setup_upload_from_s3(s3_fp, recursive=False)
         #     # setup_upload_from_s3(feature_fp+ str(section) + '.pkl', recursive=False)
         # else:
-            run('python {0}/Shape_shift.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
+        #     run('python {0}/Shape_shift.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
+            run('python {0}/Shape_shift_V2.py {1} {2}'.format(scripts_dir, stack, section))
             setup_upload_from_s3(s3_fp, recursive=False)
             # setup_upload_from_s3(feature_fp + str(section) + '.pkl', recursive=False)
             report = self.client.stat_object(self.bucket, s3_fp)

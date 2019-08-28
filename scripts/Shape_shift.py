@@ -200,7 +200,7 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
 
             try:
                 nup = int(max(up+i*step_size, 0))
-                ndown = int(min(down+i*step_size, n-1))
+                ndown = int(min(down+i*step_size, m-1))
                 patch = img[nup:ndown + 1, left:right + 1] * mask[int(nup -up-i*step_size):\
                                                              int(nup -up-i*step_size)+ndown - nup + 1, :]
                 # grid_index = str(section) + '_' + structure + '_' + 'postive_y_' + str(i)
@@ -275,7 +275,7 @@ def image_generator(section, savepath, features_fn, cell_dir, cell2_dir, param, 
 
             try:
                 nup = int(max(up + i * step_size, 0))
-                ndown = int(min(down + i * step_size, n - 1))
+                ndown = int(min(down + i * step_size, m - 1))
                 patch = img[nup:ndown + 1, left:right + 1] * mask[int(nup - up - i * step_size): \
                                                                   int(nup - up - i * step_size) + ndown - nup + 1, :]
                 # grid_index = str(section) + '_' + structure + '_' + 'negative_y_' + str(i)
