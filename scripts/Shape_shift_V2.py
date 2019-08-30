@@ -106,6 +106,7 @@ if not os.path.exists(os.environ['ROOT_DIR']+savepath):
 
 resol = 0.46
 step_size = int(20/resol)
+half = 20
 
 paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VLL', 'RMC', \
                      'SNC', 'SNR', '3N', '4N', 'Sp5I', 'Sp5O', 'Sp5C', 'PBG', '10N', 'VCA', 'VCP', 'DC']
@@ -160,10 +161,10 @@ for contour_id, contour in polygons:
     if structure == '7nn':
         structure = '7n'
 
-    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - 10 * step_size, 0)),
-                               int(np.ceil(max(polygon[:, 0]) + margin + 10 * step_size)),
-                               int(max(min(polygon[:, 1]) - margin - 10 * step_size, 0)),
-                               int(np.ceil(max(polygon[:, 1]) + margin + 10 * step_size))]
+    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
+                               int(np.ceil(max(polygon[:, 0]) + margin + half * step_size)),
+                               int(max(min(polygon[:, 1]) - margin - half * step_size, 0)),
+                               int(np.ceil(max(polygon[:, 1]) + margin + half * step_size))]
     conn = sqlite3.connect(os.environ['ROOT_DIR'] + db_fp)
     cur = conn.cursor()
     raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?', (left, right, up, down))
@@ -181,7 +182,7 @@ for contour_id, contour in polygons:
     y_shift_negative = []
     z_shift_positive = []
     z_shift_negative = []
-    for i in range(-20, 21):
+    for i in range(-half, half+1):
         region = polygon.copy()
         region[:, 0] += i * step_size
         path = Path(region)
@@ -231,8 +232,8 @@ for contour_id, contour in polygons:
                                int(np.ceil(max(polygon[:, 0]) + margin)),
                                int(max(min(polygon[:, 1]) - margin, 0)),
                                int(np.ceil(max(polygon[:, 1]) + margin))]
-    for i in range(-20, 21):
-        loc_z = section + i * 2
+    for i in range(-half, half+1):
+        loc_z = section + i
         if loc_z in valid_sections:
             sec_fp = db_dir + str(loc_z) + '.db'
             setup_download_from_s3(sec_fp, recursive=False)
