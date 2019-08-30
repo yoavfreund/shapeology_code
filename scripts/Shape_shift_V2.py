@@ -97,7 +97,7 @@ num_round = 100
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD589/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD585/'
 
-savepath = 'CSHL_shift_new/'
+savepath = 'CSHL_shift_20um/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
@@ -105,7 +105,7 @@ if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 
 resol = 0.46
-step_size = int(30/resol)
+step_size = int(20/resol)
 
 paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VLL', 'RMC', \
                      'SNC', 'SNR', '3N', '4N', 'Sp5I', 'Sp5O', 'Sp5C', 'PBG', '10N', 'VCA', 'VCP', 'DC']
@@ -181,7 +181,7 @@ for contour_id, contour in polygons:
     y_shift_negative = []
     z_shift_positive = []
     z_shift_negative = []
-    for i in range(-10, 11):
+    for i in range(-20, 21):
         region = polygon.copy()
         region[:, 0] += i * step_size
         path = Path(region)
@@ -231,7 +231,7 @@ for contour_id, contour in polygons:
                                int(np.ceil(max(polygon[:, 0]) + margin)),
                                int(max(min(polygon[:, 1]) - margin, 0)),
                                int(np.ceil(max(polygon[:, 1]) + margin))]
-    for i in range(-10, 11):
+    for i in range(-20, 21):
         loc_z = section + i * 2
         if loc_z in valid_sections:
             sec_fp = db_dir + str(loc_z) + '.db'
