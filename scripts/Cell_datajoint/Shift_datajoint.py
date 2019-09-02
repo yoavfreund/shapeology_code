@@ -38,7 +38,7 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-pkl_fp = 'CSHL_shift_20um/'+stack+'/'
+pkl_fp = 'CSHL_shift_grids/'+stack+'/'
 # feature_fp = 'CSHL_region_features/'+stack+'/'
 scripts_dir = os.environ['REPO_DIR']
 

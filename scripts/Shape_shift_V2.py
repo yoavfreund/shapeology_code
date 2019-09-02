@@ -97,7 +97,7 @@ num_round = 100
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD589/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD585/'
 
-savepath = 'CSHL_shift_20um/'
+savepath = 'CSHL_shift_grids/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
@@ -176,56 +176,62 @@ for contour_id, contour in polygons:
     Scores[structure][str(section) + '_negative'] = {}
     inside_area = Polygon(polygon).area
     outside_area = Polygon(polygon).buffer(margin, resolution=2).area - inside_area
-    x_shift_positive = []
-    x_shift_negative = []
-    y_shift_positive = []
-    y_shift_negative = []
+    # x_shift_positive = []
+    # x_shift_negative = []
+    # y_shift_positive = []
+    # y_shift_negative = []
+    xy_shift_positive = np.zeros([2*half+1, 2*half+1])
+    xy_shift_negative = np.zeros([2*half+1, 2*half+1])
     z_shift_positive = []
     z_shift_negative = []
     for i in range(-half, half+1):
-        region = polygon.copy()
-        region[:, 0] += i * step_size
-        path = Path(region)
-        indices_inside = np.where(path.contains_points(locations))[0]
-        features_inside = features[indices_inside]
-        if features_inside.shape[0]:
-            score = features_to_score(features_inside, thresholds, bst, inside_area)
-            x_shift_positive.append(score)
-        else:
-            x_shift_positive.append(0)
+        for j in range(-half, half+1):
+            region = polygon.copy()
+            region[:, 0] += i * step_size
+            region[:, 1] += j * step_size
+            path = Path(region)
+            indices_inside = np.where(path.contains_points(locations))[0]
+            features_inside = features[indices_inside]
+            if features_inside.shape[0]:
+                score = features_to_score(features_inside, thresholds, bst, inside_area)
+                # x_shift_positive.append(score)
+                xy_shift_positive[j+half, i+half] = score
+            # else:
+                # x_shift_positive.append(0)
 
-        surround = Polygon(region).buffer(margin, resolution=2)
-        path = Path(list(surround.exterior.coords))
-        indices_sur = np.where(path.contains_points(locations))[0]
-        indices_outside = np.setdiff1d(indices_sur, indices_inside)
-        features_outside = features[indices_outside]
-        if features_outside.shape[0]:
-            score = features_to_score(features_outside, thresholds, bst, outside_area)
-            x_shift_negative.append(score)
-        else:
-            x_shift_negative.append(0)
+            surround = Polygon(region).buffer(margin, resolution=2)
+            path = Path(list(surround.exterior.coords))
+            indices_sur = np.where(path.contains_points(locations))[0]
+            indices_outside = np.setdiff1d(indices_sur, indices_inside)
+            features_outside = features[indices_outside]
+            if features_outside.shape[0]:
+                score = features_to_score(features_outside, thresholds, bst, outside_area)
+                # x_shift_negative.append(score)
+                xy_shift_negative[j + half, i + half] = score
+            # else:
+                # x_shift_negative.append(0)
 
-        region = polygon.copy()
-        region[:, 1] += i * step_size
-        path = Path(region)
-        indices_inside = np.where(path.contains_points(locations))[0]
-        features_inside = features[indices_inside]
-        if features_inside.shape[0]:
-            score = features_to_score(features_inside, thresholds, bst, inside_area)
-            y_shift_positive.append(score)
-        else:
-            y_shift_positive.append(0)
-
-        surround = Polygon(region).buffer(margin, resolution=2)
-        path = Path(list(surround.exterior.coords))
-        indices_sur = np.where(path.contains_points(locations))[0]
-        indices_outside = np.setdiff1d(indices_sur, indices_inside)
-        features_outside = features[indices_outside]
-        if features_outside.shape[0]:
-            score = features_to_score(features_outside, thresholds, bst, outside_area)
-            y_shift_negative.append(score)
-        else:
-            y_shift_negative.append(0)
+            # region = polygon.copy()
+            # region[:, 1] += i * step_size
+            # path = Path(region)
+            # indices_inside = np.where(path.contains_points(locations))[0]
+            # features_inside = features[indices_inside]
+            # if features_inside.shape[0]:
+            #     score = features_to_score(features_inside, thresholds, bst, inside_area)
+            #     y_shift_positive.append(score)
+            # else:
+            #     y_shift_positive.append(0)
+            #
+            # surround = Polygon(region).buffer(margin, resolution=2)
+            # path = Path(list(surround.exterior.coords))
+            # indices_sur = np.where(path.contains_points(locations))[0]
+            # indices_outside = np.setdiff1d(indices_sur, indices_inside)
+            # features_outside = features[indices_outside]
+            # if features_outside.shape[0]:
+            #     score = features_to_score(features_outside, thresholds, bst, outside_area)
+            #     y_shift_negative.append(score)
+            # else:
+            #     y_shift_negative.append(0)
 
     conn.close()
     [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin, 0)),
@@ -268,12 +274,14 @@ for contour_id, contour in polygons:
             z_shift_negative.append(0)
         conn.close()
 
-    Scores[structure][str(section) + '_positive']['x'] = x_shift_positive
-    Scores[structure][str(section) + '_positive']['y'] = y_shift_positive
+    # Scores[structure][str(section) + '_positive']['x'] = x_shift_positive
+    # Scores[structure][str(section) + '_positive']['y'] = y_shift_positive
+    Scores[structure][str(section) + '_positive']['xy'] = xy_shift_positive
     Scores[structure][str(section) + '_positive']['z'] = z_shift_positive
 
-    Scores[structure][str(section) + '_negative']['x'] = x_shift_negative
-    Scores[structure][str(section) + '_negative']['y'] = y_shift_negative
+    # Scores[structure][str(section) + '_negative']['x'] = x_shift_negative
+    # Scores[structure][str(section) + '_negative']['y'] = y_shift_negative
+    Scores[structure][str(section) + '_negative']['xy'] = xy_shift_negative
     Scores[structure][str(section) + '_negative']['z'] = z_shift_negative
 
     count += 1
