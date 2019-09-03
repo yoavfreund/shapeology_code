@@ -2,6 +2,22 @@
 
 Add sections in reverse Chronological order
 
+Monday, September 2, 2019
+1. Get the region shift move by grids across x-y plane. It takes about 3.5 hours for 10 EC2 instances.
+
+Friday, August 30, 2019
+1. Use the 'get_score' function to get feature importance of each feature. Sort features by 'total gain' values.
+2. Mark the cells whose feature values are chosen for tree boosters. Warm colors are features with great importance.
+
+Thursday, August 29, 2019
+1. Change the step size of region shift from 30 microns to 20 microns and the range of shift from 600 microns to 800 microns.
+2. Draw shift curves for new shift results. Mark the maximum and half-way value of curves.
+
+
+Wednesday, August 28, 2019
+1. Mark the cells whose feature values show big difference in positive and negative CDF curves for each feature. Each color represents one feature.
+2. Look through the GUI part of MouseBrainAtlas_dev.
+
 Tuesday, August 27, 2019
 1. Get initial results for shift ready. It takes about 40 minutes for 10 EC2 instances.
 2. Draw shift curves for each structure.
