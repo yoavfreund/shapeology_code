@@ -64,7 +64,7 @@ class patch_extractor:
         height = props[:,3]
         area = props[:,4]
 
-        #marked_tile=np.copy(tile)
+        # marked_tile=np.copy(tile)
         size_step=20
         extracted=[]
         H,W=seg.shape
