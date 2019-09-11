@@ -123,7 +123,7 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
             if _std < min_std:
                 print('image',patches[i],'std=',_std, 'too blank')
                 # features.append([0] * 201)
-                features.append([0] * 1981)
+                features.append([0] * 1982)
                 # features.append([0] * 1581)
             else:
                 try:
@@ -143,6 +143,7 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
                         # ten = [y[np.argmin(np.absolute(x-threshold[10*k+j]))] for j in range(10)]
                         extracted.extend(ten)
                     extracted.extend([cells.shape[0]])
+                    extracted.extend([origin[:,10].sum()/(224*224)])
                     features.append(extracted)
                 except:
                     continue
@@ -182,13 +183,13 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
 yamlfile=os.environ['REPO_DIR']+args.yaml
 params=configuration(yamlfile).getParams()
 
-fn = 'CSHL_data_processed/MD589/ThresholdsV6.pkl'
+fn = 'CSHL_data_processed/MD589/ThresholdsV2.pkl'
 setup_download_from_s3(fn, recursive=False)
 thresholds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
-threshold = thresholds[struc]
+# threshold = thresholds[struc]
 
 patch_dir = args.filename+'/'+stack+'/'
-cell_dir = os.environ['ROOT_DIR']+args.filename+'_features_V6/'
+cell_dir = os.environ['ROOT_DIR']+args.filename+'_features/'
 if not os.path.exists(cell_dir):
     os.mkdir(cell_dir)
 cell_dir = cell_dir+stack+'/'
@@ -197,12 +198,12 @@ if not os.path.exists(cell_dir):
     #os.mkdir(cell_dir+'Images/')
     #os.mkdir(cell_dir+'Properties/')
 
-cell_dir = args.filename+'_features_V6/'+stack+'/'
+cell_dir = args.filename+'_features/'+stack+'/'
 #t0=time()
 
 #assert structure
 
-ray.get(generator.remote(struc, state, threshold, cell_dir, patch_dir, stack, params))
+ray.get(generator.remote(struc, state, thresholds, cell_dir, patch_dir, stack, params))
 
 
 #print('Finished in %5.1f seconds'%(time()-t0))
