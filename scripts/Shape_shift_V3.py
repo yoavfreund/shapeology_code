@@ -174,37 +174,40 @@ for contour_id, contour in polygons:
     for k in range(-half, half+1):
         loc_z = section + k
         if loc_z in valid_sections:
-            sec_fp = db_dir + str(loc_z) + '.db'
-            setup_download_from_s3(sec_fp, recursive=False)
-            conn = sqlite3.connect(os.environ['ROOT_DIR'] + sec_fp)
-            cur = conn.cursor()
-            raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?', (left, right, up, down))
-            info = np.array(list(raws))
-            locations = info[:, 1:3]
-            features = info[:, 3:]
+            try:
+                sec_fp = db_dir + str(loc_z) + '.db'
+                setup_download_from_s3(sec_fp, recursive=False)
+                conn = sqlite3.connect(os.environ['ROOT_DIR'] + sec_fp)
+                cur = conn.cursor()
+                raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?', (left, right, up, down))
+                info = np.array(list(raws))
+                locations = info[:, 1:3]
+                features = info[:, 3:]
 
-            for i in range(-half, half + 1):
-                for j in range(-half, half + 1):
-                    region = polygon.copy()
-                    region[:, 0] += i * step_size
-                    region[:, 1] += j * step_size
-                    path = Path(region)
-                    indices_inside = np.where(path.contains_points(locations))[0]
-                    features_inside = features[indices_inside]
-                    if features_inside.shape[0]:
-                        score = features_to_score(features_inside, thresholds, bst, inside_area)
-                        xyz_shift_positive[j + half, i + half, k + half] = score
+                for i in range(-half, half + 1):
+                    for j in range(-half, half + 1):
+                        region = polygon.copy()
+                        region[:, 0] += i * step_size
+                        region[:, 1] += j * step_size
+                        path = Path(region)
+                        indices_inside = np.where(path.contains_points(locations))[0]
+                        features_inside = features[indices_inside]
+                        if features_inside.shape[0]:
+                            score = features_to_score(features_inside, thresholds, bst, inside_area)
+                            xyz_shift_positive[j + half, i + half, k + half] = score
 
-                    surround = Polygon(region).buffer(margin, resolution=2)
-                    path = Path(list(surround.exterior.coords))
-                    indices_sur = np.where(path.contains_points(locations))[0]
-                    indices_outside = np.setdiff1d(indices_sur, indices_inside)
-                    features_outside = features[indices_outside]
-                    if features_outside.shape[0]:
-                        score = features_to_score(features_outside, thresholds, bst, outside_area)
-                        xyz_shift_negative[j + half, i + half, k + half] = score
+                        surround = Polygon(region).buffer(margin, resolution=2)
+                        path = Path(list(surround.exterior.coords))
+                        indices_sur = np.where(path.contains_points(locations))[0]
+                        indices_outside = np.setdiff1d(indices_sur, indices_inside)
+                        features_outside = features[indices_outside]
+                        if features_outside.shape[0]:
+                            score = features_to_score(features_outside, thresholds, bst, outside_area)
+                            xyz_shift_negative[j + half, i + half, k + half] = score
 
-            conn.close()
+                conn.close()
+            except:
+                continue
 
     Scores[structure][str(section) + '_positive'] = xyz_shift_positive
     Scores[structure][str(section) + '_negative'] = xyz_shift_negative

@@ -2,6 +2,32 @@
 
 Add sections in reverse Chronological order
 
+1. Mask
+2. Multi-layer
+3. heat map
+
+Tuesday, September 10, 2019
+1. Add a new feature 'area_ratio' into features. Regenerate feature vectors for prior experiments. Repeat the random patch experiment.
+2. Color windows to reflect detection scores. Mark cells meanwhile.
+
+Monday, September 9, 2019
+1. Finish the process for 3D region shift. It takes more than 1000 hours for one instance.
+2. Able to mark cells selected by different feature value ranges with multi-colors. Test on structures both far apart and close together. 
+
+Thursday, September 5, 2019
+1. Get the region shift move by grids across the x-y-z space.
+2. Export the heat maps for shift to pdf. Change the style of half-way value contours.
+3. Test the cells marking codes on sections with multiple structures. Just mark the most important feature.
+
+Wednesday, September 4, 2019
+1. Use the adaptive thresholds to generate masks.
+2. Manually select value ranges for important features after sorting features according to feature importance. Change the max depth of boost trees to be 1.
+3. Mark cells whose feature values are within the selected ranges.
+
+Tuesday, September 3, 2019
+1. Draw heat maps to show dependence of detection scores on translation. Mark the maximum and half-way contours.
+2. Test the codes to mark cells whose feature values are within a small range of selected thresholds for important features.
+
 Monday, September 2, 2019
 1. Get the region shift move by grids across x-y plane. It takes about 3.5 hours for 10 EC2 instances.
 

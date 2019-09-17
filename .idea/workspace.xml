@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/Diary.md" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/Diary.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/CellsMark_hsv.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/CellsMark_hsv.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/PointCloud.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/PointCloud.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/SQLite_test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/SQLite_test.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/Shift_test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Shift_test.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/PointCloudFeature.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/PointCloudFeature.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/extractPatches.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/extractPatches.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,7 +25,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Shape_shift.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="855">
+            <state relative-caret-position="209">
               <caret line="57" column="86" selection-start-line="57" selection-start-column="86" selection-end-line="57" selection-end-column="86" />
             </state>
           </provider>
@@ -33,7 +34,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Sqlite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-113">
+            <state relative-caret-position="-86">
               <caret line="88" column="28" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
             </state>
           </provider>
@@ -42,8 +43,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_V2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="150" column="78" lean-forward="true" selection-start-line="150" selection-start-column="78" selection-end-line="150" selection-end-column="78" />
+            <state relative-caret-position="214">
+              <caret line="260" column="31" selection-start-line="260" selection-start-column="31" selection-end-line="260" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -51,35 +52,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/HSV_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-236">
-              <caret line="187" column="60" selection-start-line="187" selection-start-column="60" selection-end-line="187" selection-end-column="60" />
+            <state relative-caret-position="702">
+              <caret line="191" column="102" selection-start-line="191" selection-start-column="102" selection-end-line="191" selection-end-column="102" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-488">
-              <caret line="40" column="34" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-487">
-              <caret line="145" column="68" lean-forward="true" selection-start-line="145" selection-start-column="68" selection-end-line="145" selection-end-column="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_V3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="208" column="23" selection-start-line="208" selection-start-column="23" selection-end-line="208" selection-end-column="23" />
+            <state relative-caret-position="-1448">
+              <caret line="81" column="54" selection-start-line="81" selection-start-column="54" selection-end-line="81" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -87,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="44" column="54" lean-forward="true" selection-start-line="44" selection-start-column="54" selection-end-line="44" selection-end-column="54" />
+            <state relative-caret-position="1209">
+              <caret line="106" column="40" selection-start-line="106" selection-start-column="40" selection-end-line="106" selection-end-column="40" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -97,18 +80,9 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2655">
-              <caret line="181" column="22" selection-start-line="181" selection-start-column="8" selection-end-line="181" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Scoremap_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3240">
+            <state relative-caret-position="878">
               <caret line="216" column="65" selection-start-line="216" selection-start-column="65" selection-end-line="216" selection-end-column="65" />
             </state>
           </provider>
@@ -157,12 +131,12 @@
         <option value="$PROJECT_DIR$/scripts/Scoremap_v2.py" />
         <option value="$PROJECT_DIR$/scripts/Shape_shift.py" />
         <option value="$PROJECT_DIR$/scripts/Shape_shift_V2.py" />
-        <option value="$PROJECT_DIR$/scripts/extractPatches.py" />
         <option value="$PROJECT_DIR$/notebooks/Shape_shift_V3.py" />
         <option value="$PROJECT_DIR$/scripts/Shape_shift_V3.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_generator.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py" />
+        <option value="$PROJECT_DIR$/scripts/extractPatches.py" />
       </list>
     </option>
   </component>
@@ -279,12 +253,12 @@
       <workItem from="1565915771155" duration="45631000" />
       <workItem from="1567310058005" duration="9584000" />
       <workItem from="1567717268275" duration="4845000" />
-      <workItem from="1568157665455" duration="3436000" />
+      <workItem from="1568157665455" duration="14691000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="335531000" />
+    <option name="totallyTimeSpent" value="346786000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -516,41 +490,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Shape_shift.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="86" selection-start-line="57" selection-start-column="86" selection-end-line="57" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2655">
-          <caret line="181" column="22" selection-start-line="181" selection-start-column="8" selection-end-line="181" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Scoremap_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3240">
-          <caret line="216" column="65" selection-start-line="216" selection-start-column="65" selection-end-line="216" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_V3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="208" column="23" selection-start-line="208" selection-start-column="23" selection-end-line="208" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Sqlite.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-113">
-          <caret line="88" column="28" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/PointCloudFeature.ipynb">
       <provider selected="true" editor-type-id="jupyter-editor" />
     </entry>
@@ -561,41 +500,76 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="125" column="43" selection-start-line="125" selection-start-column="43" selection-end-line="125" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="614">
+          <caret line="200" selection-start-line="200" selection-end-line="200" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="44" column="54" lean-forward="true" selection-start-line="44" selection-start-column="54" selection-end-line="44" selection-end-column="54" />
+        <state relative-caret-position="1209">
+          <caret line="106" column="40" selection-start-line="106" selection-start-column="40" selection-end-line="106" selection-end-column="40" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/HSV_v2.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-236">
-          <caret line="187" column="60" selection-start-line="187" selection-start-column="60" selection-end-line="187" selection-end-column="60" />
+        <state relative-caret-position="-479">
+          <caret line="40" column="34" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Shape_shift.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-487">
-          <caret line="145" column="68" lean-forward="true" selection-start-line="145" selection-start-column="68" selection-end-line="145" selection-end-column="68" />
+        <state relative-caret-position="209">
+          <caret line="57" column="86" selection-start-line="57" selection-start-column="86" selection-end-line="57" selection-end-column="86" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Sqlite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-86">
+          <caret line="88" column="28" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/HSV_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="191" column="102" selection-start-line="191" selection-start-column="102" selection-end-line="191" selection-end-column="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Scoremap_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="878">
+          <caret line="216" column="65" selection-start-line="216" selection-start-column="65" selection-end-line="216" selection-end-column="65" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_V2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="150" column="78" lean-forward="true" selection-start-line="150" selection-start-column="78" selection-end-line="150" selection-end-column="78" />
+        <state relative-caret-position="214">
+          <caret line="260" column="31" selection-start-line="260" selection-start-column="31" selection-end-line="260" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_V3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-488">
-          <caret line="40" column="34" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
+        <state relative-caret-position="-1448">
+          <caret line="81" column="54" selection-start-line="81" selection-start-column="54" selection-end-line="81" selection-end-column="54" />
         </state>
       </provider>
     </entry>

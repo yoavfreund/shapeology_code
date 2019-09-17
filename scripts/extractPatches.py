@@ -114,7 +114,7 @@ class patch_extractor:
 
             #print(properties.keys())
             #break
-            #cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
+            # cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
         # self.timestamps = []
