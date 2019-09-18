@@ -68,7 +68,7 @@ setup_download_from_s3('CSHL_patch_samples_features/MD585/')
 @schema
 class CellMark(dj.Computed):
     definition="""
-    -> Section
+    -> SectionV2
     -----
     structure_number : int   #number of structures
     """
