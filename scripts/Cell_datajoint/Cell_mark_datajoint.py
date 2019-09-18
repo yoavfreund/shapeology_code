@@ -76,7 +76,7 @@ class CellMark(dj.Computed):
     bucket = "mousebrainatlas-data"
     #client = get_s3_client(credFiles)
     def make(self, key):
-        section = (Section & key).fetch1('section_id')
+        section = (SectionV2 & key).fetch1('section_id')
         print('populating for ', section, end='\n')
         key_item = 'structure_number'
         try:
