@@ -249,10 +249,6 @@ for contour_id, contour in polygons:
     if structure == '7n':
         structure = '7nn'
 
-    subpath = savepath + structure + '/'
-    if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
-        os.mkdir(os.environ['ROOT_DIR'] + subpath)
-
     fp = []
     fp.append(cell_dir + structure + '/MD589_' + structure + '_positive.pkl')
     fp.append(cell_dir + structure + '/MD589_' + structure + '_negative.pkl')
@@ -315,6 +311,10 @@ for contour_id, contour in polygons:
 
     if structure == '7n':
         structure = '7nn'
+
+    subpath = savepath + structure + '/'
+    if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
+        os.mkdir(os.environ['ROOT_DIR'] + subpath)
 
     fp = []
     fp.append(cell_dir + structure + '/MD589_' + structure + '_positive.pkl')
