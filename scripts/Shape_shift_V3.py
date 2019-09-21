@@ -60,7 +60,7 @@ def features_to_score(features, thresholds, bst, object_area):
         ten = [y[np.argmin(np.absolute(x - thresholds[k][j]))] for j in range(99)]
         extracted.extend(ten)
     extracted.extend([features.shape[0]/object_area*224*224])
-
+    extracted.extend([features[:, 10].sum()/object_area])
     xtest = xgb.DMatrix(extracted)
     score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
     return score
@@ -94,10 +94,10 @@ param['nthread'] = 7 # Number of threads used
 param['num_class']=1
 num_round = 100
 
-cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD589/'
-cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_V2/MD585/'
+cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD589/'
+cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD585/'
 
-savepath = 'CSHL_shift_3d/'
+savepath = 'CSHL_shift_3d_new/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
