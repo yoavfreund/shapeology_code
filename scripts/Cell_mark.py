@@ -276,8 +276,8 @@ for contour_id, contour in polygons:
             extracted.append([0] * 1982)
         xtest = xgb.DMatrix(extracted)
         score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
-        satua_img = np.zeros([window_size, window_size]) + score
         origin = hsv[wy: wy + window_size, wx: wx + window_size, 1]
+        satua_img = np.zeros_like(origin) + score
         comp = np.absolute(origin) - np.absolute(satua_img)
         hsv[wy: wy + window_size, wx: wx + window_size, 1] = origin * (comp > 0) + satua_img * (comp < 0)
     hsv[up:down, left:right, 0] = (hsv[up:down, left:right, 1] < 0) * 0.66 + (hsv[up:down, left:right, 1] > 0) * 1.0
@@ -348,7 +348,7 @@ for contour_id, contour in polygons:
     com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [255, 0, 0], 3, lineType=50)
     whole[up:down, left:right, :3] = com
     whole[up:down, left:right, 3] = 100
-    filename = subpath + str(section) + '.png'
+    filename = subpath + str(section) + '_valid.png'
     whole = cv2.cvtColor(whole, cv2.COLOR_BGRA2RGBA)
 
     color = colorsys.hsv_to_rgb(0.2, 0.8, 1)
