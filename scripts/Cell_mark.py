@@ -17,6 +17,7 @@ import skimage
 import os
 import sys
 import sqlite3
+import colorsys
 import shutil
 from time import time
 from lib.utils import configuration, run
@@ -71,6 +72,10 @@ valid_sections = np.sort(contours['section'].unique())
 fn = 'CSHL_data_processed/MD589/ThresholdsV2.pkl'
 setup_download_from_s3(fn, recursive=False)
 thresholds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
+
+fn = 'CSHL_data_processed/MD594/holds.pkl'
+setup_download_from_s3(fn, recursive=False)
+holds = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
 
 #Parameters
 param = {}
@@ -130,107 +135,6 @@ for i in range(10):
         columns.append(name+'*'+str(j))
 columns.extend(origin[-2:])
 columns = np.array(columns)
-
-holds = {}
-holds['5N'] = {}
-holds['5N']['mean'] = [[2,11]]
-holds['5N']['area'] = [[120,1500]]
-holds['5N']['std'] = [[3,22]]
-holds['6N'] = {}
-holds['6N']['area'] = [[130, 1000]]
-holds['6N']['width'] = [[16, 40]]
-holds['6N']['horiz_std'] = [[2, 7]]
-holds['7N'] = {}
-holds['7N']['DMVec7'] = [[-25, -1]]
-holds['7N']['area'] = [[120, 1800]]
-holds['7N']['rotation'] = [[-70, -10], [30, 70]]
-holds['7n'] = {}
-holds['7n']['DMVec2'] = [[-3,-1]]
-holds['7n']['rotation'] = [[-75, 50]]
-holds['Amb'] = {}
-holds['Amb']['width'] = [[16, 110]]
-holds['Amb']['horiz_std'] = [[2, 9]]
-holds['Amb']['area'] = [[100, 2000]]
-holds['LC'] = {}
-holds['LC']['DMVec2'] = [[-13, -2]]
-holds['LC']['width'] = [[16, 100]]
-holds['LC']['rotation'] = [[-75, 75]]
-holds['LRt'] = {}
-holds['LRt']['area'] = [[270, 1900]]
-holds['LRt']['rotation'] = [[-75, 75]]
-holds['LRt']['DMVec7'] = [[-25, 1]]
-holds['Pn'] = {}
-holds['Pn']['DMVec0'] = [[-950, 0]]
-holds['Pn']['horiz_std'] = [[2, 10]]
-holds['Tz'] = {}
-holds['Tz']['area'] = [[100, 1300]]
-holds['Tz']['width'] = [[16, 60]]
-holds['Tz']['rotation'] = [[-50, 75]]
-holds['VLL'] = {}
-holds['VLL']['rotation'] = [[-62, 70]]
-holds['VLL']['DMVec2'] = [[-7, -1.5], [0, 3.5]]
-holds['RMC'] = {}
-holds['RMC']['area'] = [[230, 1300]]
-holds['RMC']['DMVec7'] = [[-30, 1]]
-holds['RMC']['DMVec3'] = [[1, 17]]
-holds['SNC'] = {}
-holds['SNC']['rotation'] = [[-75,75]]
-holds['SNC']['area'] = [[90, 1100]]
-holds['SNC']['DMVec0'] = [[-950, 0]]
-holds['SNR'] = {}
-holds['SNR']['rotation'] = [[-50, 75]]
-holds['SNR']['DMVec1'] = [[-3,2]]
-holds['SNR']['std'] = [[18, 34]]
-holds['3N'] = {}
-holds['3N']['horiz_std'] = [[3, 9]]
-holds['3N']['vert_std'] = [[6, 17]]
-holds['3N']['rotation'] = [[-50, 75]]
-holds['4N'] = {}
-holds['4N']['DMVec7'] = [[-28, -1]]
-holds['4N']['area'] = [[100, 2000]]
-holds['4N']['width'] = [[2, 50]]
-holds['Sp5I'] = {}
-holds['Sp5I']['rotation'] = [[-60, 30]]
-holds['Sp5I']['vert_std'] = [[5,14]]
-holds['Sp5O'] = {}
-holds['Sp5O']['rotation'] = [[-75, 50]]
-holds['Sp5O']['vert_std'] = [[1,6]]
-holds['Sp5C'] = {}
-holds['Sp5C']['std'] = [[1, 28]]
-holds['Sp5C']['DMVec4'] = [[-2, 2]]
-holds['PBG'] = {}
-holds['PBG']['rotation'] = [[-75, -40], [-25, 20]]
-holds['PBG']['DMVec9'] = [[0.8, 2.3]]
-holds['10N'] = {}
-holds['10N']['rotation'] = [[-50, 75]]
-holds['10N']['width'] = [[10, 100]]
-holds['10N']['area'] = [[110, 2500]]
-holds['VCA'] = {}
-holds['VCA']['area'] = [[200,700]]
-holds['VCA']['rotation'] = [[-75, -5],[50 ,75]]
-holds['VCA']['DMVec8'] = [[1, 4]]
-holds['VCP'] = {}
-holds['VCP']['std'] = [[2, 30]]
-holds['VCP']['rotation'] = [[-65, -25]]
-holds['VCP']['DMVec1'] = [[-2.5, 2]]
-holds['DC'] = {}
-holds['DC']['rotation'] = [[-25, 75]]
-holds['DC']['height'] = [[30, 80]]
-holds['AP'] = {}
-holds['AP']['std'] = [[13, 27]]
-holds['AP']['rotation'] = [[-75, 70]]
-holds['AP']['horiz_std'] = [[1.5, 10]]
-holds['12N'] = {}
-holds['12N']['area'] = [[230, 1500]]
-holds['12N']['DMVec7'] = [[-20, -1]]
-holds['RtTg'] = {}
-holds['RtTg']['rotation'] = [[-60, 80]]
-holds['RtTg']['area'] = [[120, 1500]]
-holds['SC'] = {}
-holds['SC']['rotation'] = [[-75, 70]]
-holds['IC'] = {}
-holds['IC']['area'] = [[400, 2000]]
-holds['IC']['std'] = [[2, 25]]
 
 thresh = cv2.adaptiveThreshold(255 - img, 1, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 101, -20)
 Stats = cv2.connectedComponentsWithStats(thresh)
@@ -390,6 +294,7 @@ for contour_id, contour in polygons:
     # cv2.imwrite(os.environ['ROOT_DIR'] + filename, whole)
 
     k = 0
+    pop = []
     features_sorted = sort_by_imp[structure]
     for feature in features_sorted[:3]:
         if feature != 'density' and feature != 'area_ratio':
@@ -431,18 +336,49 @@ for contour_id, contour in polygons:
                         hsv[cy:cy + height, cx:cx + width, 1] = 0.8 * (mask[cy:cy + height, cx:cx + width] > 0) + \
                                                                 hsv[cy:cy + height, cx:cx + width, 1] * (
                                                                             mask[cy:cy + height, cx:cx + width] < 1)
+                color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
+                reach = feature + ' (%.1f, %.1f)' % (min_value, max_value)
+                pop.append([color, reach])
                 k += 1
     rgb = skimage.color.hsv2rgb(hsv[up:down, left:right, :])
     rgb = rgb * 255
     rgb = rgb.astype(np.uint8)
-    whole[up:down, left:right, :3] = rgb
+    polygon[:, 0] = polygon[:, 0] - left
+    polygon[:, 1] = polygon[:, 1] - up
+    com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [255, 0, 0], 3, lineType=50)
+    whole[up:down, left:right, :3] = com
     whole[up:down, left:right, 3] = 100
-    filename = subpath + str(section) + '_' + structure + '_mark.png'
+    filename = subpath + str(section) + '.png'
     whole = cv2.cvtColor(whole, cv2.COLOR_BGRA2RGBA)
+
+    color = colorsys.hsv_to_rgb(0.2, 0.8, 1)
+    reach = 'mix'
+    pop.append([color, reach])
+    for text in range(len(pop)):
+        color = (int(pop[text][0][2] * 255), int(pop[text][0][1] * 255), int(pop[text][0][0] * 255), 100)
+        whole = cv2.putText(whole, pop[text][1], (left, up + (text + 1) * 100), cv2.FONT_HERSHEY_SIMPLEX, 3, color, 7)
+
     cv2.imwrite(os.environ['ROOT_DIR'] + filename, whole)
     setup_upload_from_s3(filename, recursive=False)
     count += 1
     print(section, structure, count, '/', len(polygons))
 
+for structure in all_structures:
+    if structure in sort_by_imp.keys():
+        continue
+
+    if structure == '7n':
+        structure = '7nn'
+    subpath = savepath + structure + '/'
+    if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
+        os.mkdir(os.environ['ROOT_DIR'] + subpath)
+    filename = subpath + str(section) + '.png'
+    whole = np.ones([m, n, 3], dtype=np.uint8) * 255
+    whole = cv2.cvtColor(whole, cv2.COLOR_RGB2RGBA)
+    whole[:, :, 3] = int(0)
+    cv2.imwrite(os.environ['ROOT_DIR'] + filename, whole)
+    setup_upload_from_s3(filename, recursive=False)
+    count += 1
+    print(section, structure, count)
 # os.remove(os.environ['ROOT_DIR']+img_fn)
 
