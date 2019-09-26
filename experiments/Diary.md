@@ -2,9 +2,68 @@
 
 Add sections in reverse Chronological order
 
-1. Mask
-2. Multi-layer
-3. heat map
+Wednesday, September 25, 2019
+1. Attach section images to heat maps for 3D region shift results. Since the resolution is 0.46, 0.46 and 20 um/pixel, images for XZ and YZ planes are blurry, which can be viewed in webKnossos. Currently only images for XY plane are presented.
+
+Google Drive: https://drive.google.com/file/d/1fi1Cj2iPc7ylEQqveOWF5zOfWzoKRAtf/view?usp=sharing
+2. Get the segmentation layer for each structure ready. Since only one segmentation layer is applicable at present, focus on one structure once. Texts on the upper left corner act as legends for ranges of feature values. At present at most 3 ranges are shown. The ranges are selected inspired by the idea of greedy set cover, instead of manually.
+
+Google Drive: https://drive.google.com/open?id=1wnC2BSlubYwdf7d82PzLoj-ckmrEieny
+3. Set up webKnossos with Docker. Enable to view the color layer of a subset made up of the first 66 sections. Still need to check the function of webknossos-cuber to convert multi-channel images. It seems that the convert process counts on the 3D space size, since the color layer with a much larger file size can be converted while the segmentation layer with more channels can run out of memory half way. 
+
+Next:
+1. Finish the whole convert process on servers. Can I configure a compute environment in neurophysics.dk.ucsd.edu? 
+2. Set up webknossos with a cluster proxy. Check the speed to run remotely.
+
+
+Tuesday, September 24, 2019
+1. As mentioned in the response email that only one segmentation layer is applicable, continue to try to load the segmentation images of one structure once.
+2. For those sections that do not have the structure, output a transparent image named with section id to get the same layer size as the color layer.
+3. Get segmentation layers for all structures ready. It takes about 3 hours for 10 instances.
+4. Fail to convert single segmentation layer due to out of memory.
+
+Monday, September 23, 2019
+1. Inspired by the idea of greedy set cover, select ranges of feature values with codes instead of manually. 
+2. Add texts on the upper left corner as legends for ranges of feature values. At present at most 3 ranges are shown.
+3. Get segmentation images for all structures ready. It takes less than an hour for 10 instances.
+4. Fail to convert the segmentation images of one structure into WKW formats with webknossos-cuber. It may due to the inconsistent number of images in the color and segmentation layers.
+
+Friday, September 20, 2019
+1. Extract part of sections (first 66 sections) to test the function of webknossos-cuber. It takes about 2 and a half hours to convert the subset into WKW formats.
+2. Manage to view the color layer of the subset in webKnossos locally. Temporarily use the Docker installation to start webKnossos.
+
+Thursday, September 19, 2019
+1. Read user documentation of webKnossos to learn about essential preprocessing.
+2. Attach section images to heat maps for 3D region shift results. Temporarily select 6 section images for each structure.
+3. Fail to convert the color layer into WKW formats with webknossos-cuber. Run out of memory.
+
+Wednesday, September 18, 2019
+1. Rearrange layers to show images. Just set lossless gray images to be the color layer. 
+2. Get the color layer ready. Name images with section ids.
+3. Fail to use knossos_cuber to convert all sections. Run out of memory.
+
+
+Tuesday, September 17, 2019
+1. Get Cell_mark_datajoint.py work successfully. It takes less than an hour for 10 instances to get all segmentation images for all structures ready.
+2. Draw heat maps for 3D region shift results. Choose XY, XZ and YZ sections to show.
+3. Fail to use knossos_cuber to convert the color layer into knossos formats. It seems that only one-channel images can be converted according to source codes.
+
+Monday, September 16, 2019
+1. Rearrange layers to show images. Set lossless gray images with annotations to be the color layer. Set one segmentation layer for one structure once. The segmentation layer contains detection score maps and cell marks.
+2. Get the color layer ready. Draw annotations on lossless gray images and name images with section ids. 
+3. Try to use datajoint and multiple AWS instances to speed up the process for segmentation layers.
+
+Friday, September 13, 2019
+1. Start to use a desktop application Knossos. Load sample datasets successfully and test operations.
+2. Read user documentation of Knossos to learn about essential preprocessing.
+
+Thursday, September 12, 2019
+1. Divide images into several layers. First one is the background layer with lossless gray images containing annotations and cell marks. The other layers correspond to structures with detection score images of RGBA format.
+2. Manage to display layers in PPT but too slow.
+
+Wednesday, September 11, 2019
+1. Modify the part for generating cell masks. Specifically, use the cv2 function 'connectedComponentsWithStats' and reverse polarity.
+2. Attach section images to heat maps for shift. Choose the section that has the largest annotation area.
 
 Tuesday, September 10, 2019
 1. Add a new feature 'area_ratio' into features. Regenerate feature vectors for prior experiments. Repeat the random patch experiment.
