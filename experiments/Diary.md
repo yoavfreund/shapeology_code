@@ -7,9 +7,9 @@ Wednesday, September 25, 2019
 
 Google Drive: https://drive.google.com/file/d/1fi1Cj2iPc7ylEQqveOWF5zOfWzoKRAtf/view?usp=sharing
 
-2. Get the segmentation layer for each structure ready. Since only one segmentation layer is applicable at present, focus on one structure once. Texts on the upper left corner act as legends for ranges of feature values. At present at most 3 ranges are shown. The ranges are selected inspired by the idea of greedy set cover, instead of manually.
+2. Get the segmentation layer for each structure ready. Files whose names include 'valid' are informative. Others are transparent images. Since only one segmentation layer is applicable at present, focus on one structure once. Texts on the upper left corner act as legends for ranges of feature values. At present at most 3 ranges are shown. The ranges are selected inspired by the idea of greedy set cover, instead of manually.
 
-Google Drive: https://drive.google.com/open?id=1wnC2BSlubYwdf7d82PzLoj-ckmrEieny
+Google Drive: https://drive.google.com/drive/folders/1wnC2BSlubYwdf7d82PzLoj-ckmrEieny?usp=sharing
 
 3. Set up webKnossos with Docker. Enable to view the color layer of a subset made up of the first 66 sections. Still need to check the function of webknossos-cuber to convert multi-channel images. It seems that the convert process counts on the 3D space size, since the color layer with a much larger file size can be converted while the segmentation layer with more channels can run out of memory half way. 
 
