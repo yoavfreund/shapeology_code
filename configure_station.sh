@@ -11,7 +11,7 @@ NC='\033[0m' # No Color
 export REPO_DIR=$PROJECT_DIR/scripts/
 
 # FOR UCSD BRAIN
-export ROOT_DIR=/nfs/birdstore/U19/Freund_Group
+export ROOT_DIR=/nfs/birdstore/Active_Atlas_Data/data_root/
 
 venv_dir=~/data/venv/$virtualenv
 
