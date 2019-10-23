@@ -294,7 +294,7 @@ for group_id in range(len(sets)):
             comp = np.absolute(origin) - np.absolute(satua_img)
             hsv[wy: wy + window_size, wx: wx + window_size, 1] = origin * (comp > 0) + satua_img * (comp < 0)
         hsv[up:down, left:right, 0] = (hsv[up:down, left:right, 1] < 0) * 0.66 + (hsv[up:down, left:right, 1] > 0) * 1.0
-        hsv[up:down, left:right, 1] = 0.6
+        hsv[up:down, left:right, 1] = 0.3
 
 
         # rgb = skimage.color.hsv2rgb(hsv[up:down, left:right, :])
