@@ -149,6 +149,7 @@ Stats = cv2.connectedComponentsWithStats(thresh)
 mask = np.array((Stats[1] > 0), dtype=np.uint8)
 window_size = 224
 color_mark = [0.02, 0.33, 0.68, 0.85]
+color_posi = [0.1, 0.2, 0.4, 0.5, 0.6, 0.8, 0.9]
 count = 0
 importances = {}
 sort_by_imp = {}
@@ -218,6 +219,10 @@ for group_id in range(len(sets)):
     hsv[:, :, 2] = 1
     bboxs = []
     cs = []
+    color_group = {}
+    for structure_id in range(len(sets[group_id])):
+        structure = sets[group_id][structure_id]
+        color_group[structure] = color_posi[structure_id]
 
     subpath = savepath + 'Group' + str(group_id) + '/'
     if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
@@ -293,7 +298,7 @@ for group_id in range(len(sets)):
             satua_img = np.zeros_like(origin) + score
             comp = np.absolute(origin) - np.absolute(satua_img)
             hsv[wy: wy + window_size, wx: wx + window_size, 1] = origin * (comp > 0) + satua_img * (comp < 0)
-        hsv[up:down, left:right, 0] = (hsv[up:down, left:right, 1] < 0) * 0.66 + (hsv[up:down, left:right, 1] > 0) * 1.0
+        hsv[up:down, left:right, 0] = (hsv[up:down, left:right, 1] < 0) * 0.66 + (hsv[up:down, left:right, 1] > 0) * color_group[structure]
         hsv[up:down, left:right, 1] = 0.3
 
 
@@ -359,7 +364,7 @@ for group_id in range(len(sets)):
         polygon = cs[i]
         polygon[:, 0] = polygon[:, 0] - left
         polygon[:, 1] = polygon[:, 1] - up
-        com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [255, 0, 0], 3, lineType=50)
+        com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [0, 255, 0], 3, lineType=50)
         whole[up:down, left:right, :3] = com
         whole[up:down, left:right, 3] = 100
 
