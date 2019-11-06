@@ -92,7 +92,7 @@ num_round = 100
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD589/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD585/'
 
-savepath = 'CSHL_cells_mark_v2/'
+savepath = 'CSHL_cells_mark_v3/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
@@ -224,9 +224,10 @@ for group_id in range(len(sets)):
         structure = sets[group_id][structure_id]
         color_group[structure] = color_posi[structure_id]
 
-    subpath = savepath + 'Group' + str(group_id) + '/'
+    batch = np.where(valid_sections == section)[0][0] // 32
+    subpath = savepath + 'Group' + str(group_id) + '/' + str(batch) + '/'
     if not os.path.exists(os.environ['ROOT_DIR'] + subpath):
-        os.mkdir(os.environ['ROOT_DIR'] + subpath)
+        os.makedirs(os.environ['ROOT_DIR'] + subpath)
 
     for contour_id, contour in polygons:
         structure = contour_id
