@@ -93,7 +93,7 @@ num_round = 100
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD589/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD585/'
 
-savepath = 'CSHL_cells_mark_v4/'
+savepath = 'CSHL_cells_mark_v5/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
@@ -372,13 +372,13 @@ for group_id in range(len(sets)):
         rgb = skimage.color.hsv2rgb(hsv[up:down, left:right, :])
         rgb = rgb * 255
         rgb = rgb.astype(np.uint8)
-        polygon = cs[i]
-        polygon[:, 0] = polygon[:, 0] - left
-        polygon[:, 1] = polygon[:, 1] - up
-        com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [255, 255, 0], 3, lineType=250)
+        # polygon = cs[i]
+        # polygon[:, 0] = polygon[:, 0] - left
+        # polygon[:, 1] = polygon[:, 1] - up
+        # com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [255, 255, 0], 3, lineType=250)
         # com = cv2.GaussianBlur(rgb, (5,5), 0)
-        whole[up:down, left:right, :3] = com
-        whole[up:down, left:right, 3] = 100 #hsv[up:down, left:right, 2].astype(np.uint8)*100
+        whole[up:down, left:right, :3] = rgb
+        whole[up:down, left:right, 3] = hsv[up:down, left:right, 2].astype(np.uint8)*100
 
 
     filename = subpath + str(section) + '.png'
