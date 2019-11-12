@@ -36,7 +36,7 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-img_file = 'CSHL_cells_mark_score/'+stack+'/'
+img_file = 'CSHL_cells_mark_v4/'+stack+'/'
 img_fp = os.environ['ROOT_DIR']+img_file
 scripts_dir = os.environ['REPO_DIR']
 
