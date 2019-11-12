@@ -84,7 +84,7 @@ class CellMark(dj.Computed):
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
         except:
-            run('python3 {0}/Cell_mark_v2.py {1} {2}'.format(scripts_dir, stack, section))
+            run('python3 {0}/Cell_mark_v3.py {1} {2}'.format(scripts_dir, stack, section))
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
             shutil.rmtree(img_fp)
