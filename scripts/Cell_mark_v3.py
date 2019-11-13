@@ -150,7 +150,7 @@ Stats = cv2.connectedComponentsWithStats(thresh)
 mask = Stats[1]
 window_size = 224
 stride = 56
-color_mark = [0.02, 0.33, 0.68, 0.85]
+color_mark = [0.02, 0.33, 0.68, 270/360, 0.85]
 color_posi = [20/360, 40/360, 60/360, 80/360, 140/360, 164/360, 200/360]
 count = 0
 importances = {}
@@ -221,6 +221,7 @@ for group_id in range(len(sets)):
     hsv = np.zeros([m, n, 3])
     # hsv[:, :, 2] = 1
     bboxs = []
+    pops = []
     cs = []
     color_group = {}
     for structure_id in range(len(sets[group_id])):
@@ -311,6 +312,10 @@ for group_id in range(len(sets)):
 
         k = 0
         pop = []
+        color = colorsys.hsv_to_rgb(0.66, 0.8, 1)
+        reach = structure
+        pop.append([color, reach])
+        mix_state = 0
         features_sorted = sort_by_imp[structure]
         for feature in features_sorted[:3]:
             if feature != 'density' and feature != 'area_ratio':
@@ -355,6 +360,7 @@ for group_id in range(len(sets)):
                                 pattern = np.ones([height, width]) * pattern
                             else:
                                 pattern = color_mark[-1]
+                                mix_state = 1
                             pattern = pattern * (mask[cy:cy + height, cx:cx + width] == object_id) + \
                                       hsv[cy:cy + height, cx:cx + width, 0] * (mask[cy:cy + height, cx:cx + width] != object_id)
                             hsv[cy:cy + height, cx:cx + width, 0] = pattern
@@ -364,8 +370,20 @@ for group_id in range(len(sets)):
                             hsv[cy:cy + height, cx:cx + width, 2] = (mask[cy:cy + height, cx:cx + width]== object_id) + \
                                                                     hsv[cy:cy + height, cx:cx + width, 2] * (
                                                                                 mask[cy:cy + height, cx:cx + width] != object_id)
-
-            k += 1
+                    reach = feature + ' (%.1f, %.1f)' % (min_value, max_value)
+                    color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
+                    pop.append([color, reach])
+                    k += 1
+            else:
+                reach = feature
+                color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
+                pop.append([color, reach])
+                k += 1
+        if mix_state:
+            color = colorsys.hsv_to_rgb(color_mark[-1], 0.8, 1)
+            reach = 'mix'
+            pop.append([color, reach])
+        pops.append(pop)
 
     for i in range(len(bboxs)):
         left, right, up, down = bboxs[i]
@@ -379,6 +397,11 @@ for group_id in range(len(sets)):
         # com = cv2.GaussianBlur(rgb, (5,5), 0)
         whole[up:down, left:right, :3] = rgb
         whole[up:down, left:right, 3] = hsv[up:down, left:right, 2].astype(np.uint8)*100
+        pop = pops[i]
+        for text in range(len(pop)):
+            color = (int(pop[text][0][0] * 255), int(pop[text][0][1] * 255), int(pop[text][0][2] * 255), 100)
+            whole = cv2.putText(whole, pop[text][1], (left, up + (text + 1) * 100), cv2.FONT_HERSHEY_SIMPLEX, 3, color,
+                                7)
 
 
     filename = subpath + str(section) + '.png'
