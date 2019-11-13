@@ -93,7 +93,7 @@ num_round = 100
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD589/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features/MD585/'
 
-savepath = 'CSHL_cells_mark_v5/'
+savepath = 'CSHL_cells_mark_score/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
@@ -214,14 +214,11 @@ for contour_id, contour in polygons:
 
 for group_id in range(len(sets)):
 
-    # whole = np.ones([m, n, 3], dtype=np.uint8) * 255
     whole = np.zeros([m, n, 3], dtype=np.uint8)
-    whole = cv2.cvtColor(whole, cv2.COLOR_RGB2RGBA)
-    whole[:, :, 3] = int(0)
+    # whole = cv2.cvtColor(whole, cv2.COLOR_RGB2RGBA)
+    # whole[:, :, 3] = int(0)
     hsv = np.zeros([m, n, 3])
-    # hsv[:, :, 2] = 1
     bboxs = []
-    pops = []
     cs = []
     color_group = {}
     for structure_id in range(len(sets[group_id])):
@@ -278,134 +275,56 @@ for group_id in range(len(sets)):
         locations = info[:, 1:3]
         features = info[:, 3:]
 
-        # xs, ys = np.meshgrid(np.arange(left, right, stride), np.arange(up, down, stride), indexing='xy')
-        # windows = np.c_[xs.flat, ys.flat]
-        #
-        # for index in range(len(windows)):
-        #     extracted = []
-        #     wx = int(windows[index][0])
-        #     wy = int(windows[index][1])
-        #     indices_window = np.where((locations[:, 0] > wx) & (locations[:, 0] < wx + window_size) \
-        #                               & (locations[:, 1] > wy) & (locations[:, 1] < wy + window_size))[0]
-        #     if len(indices_window):
-        #         cells = features[indices_window]
-        #         for k in range(cells.shape[1]):
-        #             x, y = CDF(cells[:, k])
-        #             ten = [y[np.argmin(np.absolute(x - thresholds[k][j]))] for j in range(99)]
-        #             extracted.extend(ten)
-        #         extracted.extend([cells.shape[0]])
-        #         extracted.extend([cells[:, 10].sum() / (224 * 224)])
-        #     else:
-        #         extracted.append([0] * 1982)
-        #     xtest = xgb.DMatrix(extracted)
-        #     score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
-        #     origin = hsv[wy: wy + window_size, wx: wx + window_size, 1]
-        #     satua_img = np.zeros_like(origin) + score
-        #     comp = np.absolute(origin) - np.absolute(satua_img)
-        #     hsv[wy: wy + window_size, wx: wx + window_size, 1] = origin * (comp > 0) + satua_img * (comp < 0)
-        # # hsv[up:down, left:right, 0] = (hsv[up:down, left:right, 1] < 0) * 0.66 + (hsv[up:down, left:right, 1] > 0) * color_group[structure]
-        # # hsv[up:down, left:right, 1] = 0.3
-        # hsv[up:down, left:right, 0] = color_group[structure]
-        # hsv[up:down, left:right, 1] = (hsv[up:down, left:right, 1] - hsv[up:down, left:right, 1].min()) \
-        #                           / (hsv[up:down, left:right, 1].max() - hsv[up:down, left:right, 1].min()) * 0.6
-        # hsv[up:down, left:right, 2] = 1
+        xs, ys = np.meshgrid(np.arange(left, right, stride), np.arange(up, down, stride), indexing='xy')
+        windows = np.c_[xs.flat, ys.flat]
 
-        k = 0
-        pop = []
-        color = colorsys.hsv_to_rgb(0.66, 0.8, 1)
-        reach = structure
-        pop.append([color, reach])
-        mix_state = 0
-        features_sorted = sort_by_imp[structure]
-        for feature in features_sorted[:3]:
-            if feature != 'density' and feature != 'area_ratio':
-                name = list(importances[structure][feature].keys())[0]
-                index = np.where(columns == name)[0][0]
-                raw = index // 99
-                for i in range(len(holds[structure][feature])):
-                    min_value = holds[structure][feature][i][0]
-                    max_value = holds[structure][feature][i][1]
-                    posi = np.where((features[:, raw] > min_value) & (features[:, raw] < max_value))[0]
-                    for cell in posi:
-                        height = int(features[cell, 11])
-                        width = int(features[cell, 19])
-                        cx = int(locations[cell, 0] - width / 2.0)
-                        cy = int(locations[cell, 1] - height / 2.0)
-                        try:
-                            objects = np.unique(mask[cy:cy + height, cx:cx + width])[1:]
-                            counts = [(mask[cy:cy + height, cx:cx + width]==object_id).sum() for object_id in objects]
-                            object_id = objects[np.argmax(np.array(counts))]
-                        except:
-                            continue
-
-                        colors = np.unique(hsv[cy:cy + height, cx:cx + width, 0]*(mask[cy:cy + height, cx:cx + width] == object_id))
-                        if len(colors) == 1:
-                            hsv[cy:cy + height, cx:cx + width, 0] = color_mark[k] * (
-                                        mask[cy:cy + height, cx:cx + width] == object_id) + \
-                                                                    hsv[cy:cy + height, cx:cx + width, 0] * (
-                                                                                mask[cy:cy + height, cx:cx + width] != object_id)
-                            hsv[cy:cy + height, cx:cx + width, 1] = 0.8 * (mask[cy:cy + height, cx:cx + width] == object_id) + \
-                                                                    hsv[cy:cy + height, cx:cx + width, 1] * (
-                                                                                mask[cy:cy + height, cx:cx + width] != object_id)
-                            hsv[cy:cy + height, cx:cx + width, 2] = (mask[cy:cy + height, cx:cx + width]== object_id) + \
-                                                                    hsv[cy:cy + height, cx:cx + width, 2] * (
-                                                                                mask[cy:cy + height, cx:cx + width] != object_id)
-                        else:
-                            label = np.array([0.0, 0.66, 1.0])
-                            colors = np.setdiff1d(colors, label)
-                            if len(colors)<2:
-                                cols = int(width / (len(colors) + 1))
-                                pattern = np.ones([1, width]) * color_mark[k]
-                                pattern[0, :cols * len(colors)] = np.repeat(colors, cols)
-                                pattern = np.ones([height, width]) * pattern
-                            else:
-                                pattern = color_mark[-1]
-                                mix_state = 1
-                            pattern = pattern * (mask[cy:cy + height, cx:cx + width] == object_id) + \
-                                      hsv[cy:cy + height, cx:cx + width, 0] * (mask[cy:cy + height, cx:cx + width] != object_id)
-                            hsv[cy:cy + height, cx:cx + width, 0] = pattern
-                            hsv[cy:cy + height, cx:cx + width, 1] = 0.8 * (mask[cy:cy + height, cx:cx + width] == object_id) + \
-                                                                    hsv[cy:cy + height, cx:cx + width, 1] * (
-                                                                                mask[cy:cy + height, cx:cx + width] != object_id)
-                            hsv[cy:cy + height, cx:cx + width, 2] = (mask[cy:cy + height, cx:cx + width]== object_id) + \
-                                                                    hsv[cy:cy + height, cx:cx + width, 2] * (
-                                                                                mask[cy:cy + height, cx:cx + width] != object_id)
-                    reach = feature + ' (%.1f, %.1f)' % (min_value, max_value)
-                    color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
-                    pop.append([color, reach])
-                    k += 1
+        for index in range(len(windows)):
+            extracted = []
+            wx = int(windows[index][0])
+            wy = int(windows[index][1])
+            indices_window = np.where((locations[:, 0] > wx) & (locations[:, 0] < wx + window_size) \
+                                      & (locations[:, 1] > wy) & (locations[:, 1] < wy + window_size))[0]
+            if len(indices_window):
+                cells = features[indices_window]
+                for k in range(cells.shape[1]):
+                    x, y = CDF(cells[:, k])
+                    ten = [y[np.argmin(np.absolute(x - thresholds[k][j]))] for j in range(99)]
+                    extracted.extend(ten)
+                extracted.extend([cells.shape[0]])
+                extracted.extend([cells[:, 10].sum() / (224 * 224)])
             else:
-                reach = feature
-                color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
-                pop.append([color, reach])
-                k += 1
-        if mix_state:
-            color = colorsys.hsv_to_rgb(color_mark[-1], 0.8, 1)
-            reach = 'mix'
-            pop.append([color, reach])
-        pops.append(pop)
+                extracted.append([0] * 1982)
+            xtest = xgb.DMatrix(extracted)
+            score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
+            origin = hsv[wy: wy + window_size, wx: wx + window_size, 1]
+            satua_img = np.zeros_like(origin) + score
+            comp = np.absolute(origin) - np.absolute(satua_img)
+            hsv[wy: wy + window_size, wx: wx + window_size, 1] = origin * (comp > 0) + satua_img * (comp < 0)
+        hsv[up:down, left:right, 0] = (hsv[up:down, left:right, 1] < 0) * 0.66 + (hsv[up:down, left:right, 1] > 0) * 1 #color_group[structure]
+        # hsv[up:down, left:right, 1] = 0.3
+        # hsv[up:down, left:right, 0] = color_group[structure]
+        hsv[up:down, left:right, 1] = np.absolute(hsv[up:down, left:right, 1])
+        hsv[up:down, left:right, 1] = (hsv[up:down, left:right, 1] - hsv[up:down, left:right, 1].min()) \
+                                  / (hsv[up:down, left:right, 1].max() - hsv[up:down, left:right, 1].min()) * 0.3
+        hsv[up:down, left:right, 2] = 1
+
 
     for i in range(len(bboxs)):
         left, right, up, down = bboxs[i]
         rgb = skimage.color.hsv2rgb(hsv[up:down, left:right, :])
         rgb = rgb * 255
         rgb = rgb.astype(np.uint8)
-        # polygon = cs[i]
-        # polygon[:, 0] = polygon[:, 0] - left
-        # polygon[:, 1] = polygon[:, 1] - up
-        # com = cv2.polylines(rgb.copy(), [polygon.astype(np.int32)], True, [255, 255, 0], 3, lineType=250)
-        # com = cv2.GaussianBlur(rgb, (5,5), 0)
-        whole[up:down, left:right, :3] = rgb.copy()
-        whole[up:down, left:right, 3] = hsv[up:down, left:right, 2].astype(np.uint8)*100
-        pop = pops[i]
-        for text in range(len(pop)):
-            color = (int(pop[text][0][0] * 255), int(pop[text][0][1] * 255), int(pop[text][0][2] * 255), 100)
-            whole = cv2.putText(whole, pop[text][1], (left, up + (text + 1) * 100), cv2.FONT_HERSHEY_SIMPLEX, 3, color,
-                                7)
+        polygon = cs[i]
+        polygon[:, 0] = polygon[:, 0] - left
+        polygon[:, 1] = polygon[:, 1] - up
+        com = cv2.GaussianBlur(rgb.copy(), (5, 5), 0)
+        com = cv2.polylines(com, [polygon.astype(np.int32)], True, [0, 255, 0], 15, lineType=8)
+        whole[up:down, left:right, :] = com
+
 
 
     filename = subpath + str(section) + '.png'
-    whole = cv2.cvtColor(whole, cv2.COLOR_BGRA2RGBA)
+    whole = cv2.cvtColor(whole, cv2.COLOR_BGR2RGB)
 
     cv2.imwrite(os.environ['ROOT_DIR'] + filename, whole)
     setup_upload_from_s3(filename, recursive=False)

@@ -36,7 +36,7 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-img_file = 'CSHL_cells_mark_v5/'+stack+'/'
+img_file = 'CSHL_cells_mark_score/'+stack+'/'
 img_fp = os.environ['ROOT_DIR']+img_file
 scripts_dir = os.environ['REPO_DIR']
 
@@ -84,7 +84,7 @@ class CellMark(dj.Computed):
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
         except:
-            run('python3 {0}/Cell_mark_v3.py {1} {2}'.format(scripts_dir, stack, section))
+            run('python3 {0}/Cell_mark_score.py {1} {2}'.format(scripts_dir, stack, section))
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
             shutil.rmtree(img_fp)
