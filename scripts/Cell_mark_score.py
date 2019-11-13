@@ -318,7 +318,7 @@ for group_id in range(len(sets)):
         polygon[:, 0] = polygon[:, 0] - left
         polygon[:, 1] = polygon[:, 1] - up
         com = cv2.GaussianBlur(rgb.copy(), (5, 5), 0)
-        com = cv2.polylines(com, [polygon.astype(np.int32)], True, [0, 255, 0], 15, lineType=8)
+        com = cv2.polylines(com, [polygon.astype(np.int32)], True, [0, 255, 0], 20, lineType=8)
         whole[up:down, left:right, :] = com
 
 
