@@ -150,7 +150,7 @@ Stats = cv2.connectedComponentsWithStats(thresh)
 mask = Stats[1]
 window_size = 224
 stride = 56
-color_mark = [0.02, 0.33, 0.68, 270/360, 0.85]
+color_mark = [0.02, 0.33, 0.68, 270/360, 0.22]
 color_posi = [20/360, 40/360, 60/360, 80/360, 140/360, 164/360, 200/360]
 count = 0
 importances = {}
@@ -374,11 +374,15 @@ for group_id in range(len(sets)):
                     color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
                     pop.append([color, reach])
                     k += 1
+                    if k==4:
+                        break
             else:
                 reach = feature
                 color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
                 pop.append([color, reach])
                 k += 1
+            if k==4:
+                break
         if mix_state:
             color = colorsys.hsv_to_rgb(color_mark[-1], 0.8, 1)
             reach = 'mix'
