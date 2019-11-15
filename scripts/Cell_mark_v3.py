@@ -374,15 +374,15 @@ for group_id in range(len(sets)):
                     color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
                     pop.append([color, reach])
                     k += 1
-                    if k==4:
-                        break
+                    # if k==4:
+                    #     break
             else:
                 reach = feature
                 color = colorsys.hsv_to_rgb(color_mark[k], 0.8, 1)
                 pop.append([color, reach])
                 k += 1
-            if k==4:
-                break
+            # if k==4:
+            #     break
         if mix_state:
             color = colorsys.hsv_to_rgb(color_mark[-1], 0.8, 1)
             reach = 'mix'
