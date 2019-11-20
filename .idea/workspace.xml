@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/notebooks/CellsMark_hsv.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/CellsMark_hsv.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_mark_v3.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_mark_v3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Cell_mark_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_mark_score.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_mark.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="283" column="74" selection-start-line="283" selection-start-column="74" selection-end-line="283" selection-end-column="74" />
+            <state relative-caret-position="400">
+              <caret line="347" column="26" selection-start-line="347" selection-start-column="26" selection-end-line="347" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -29,17 +30,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-826">
+            <state relative-caret-position="848">
               <caret line="305" column="22" selection-start-line="305" selection-start-column="22" selection-end-line="305" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
-              <caret line="156" column="16" lean-forward="true" selection-start-line="156" selection-start-column="16" selection-end-line="156" selection-end-column="16" />
+            <state relative-caret-position="189">
+              <caret line="400" column="25" selection-start-line="400" selection-start-column="25" selection-end-line="400" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -47,17 +48,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_score.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1026">
-              <caret line="306" column="49" selection-start-line="306" selection-start-column="49" selection-end-line="306" selection-end-column="49" />
+            <state relative-caret-position="2098">
+              <caret line="325" lean-forward="true" selection-start-line="325" selection-end-line="325" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-496">
-              <caret line="38" column="30" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
+            <state relative-caret-position="361">
+              <caret line="92" column="36" lean-forward="true" selection-start-line="92" selection-start-column="36" selection-end-line="92" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -141,9 +142,9 @@
         <option value="$PROJECT_DIR$/configure_station.sh" />
         <option value="$PROJECT_DIR$/scripts/Cell_mark.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_mark_v2.py" />
+        <option value="$PROJECT_DIR$/scripts/Cell_mark_v3.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_mark_score.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py" />
-        <option value="$PROJECT_DIR$/scripts/Cell_mark_v3.py" />
       </list>
     </option>
   </component>
@@ -297,12 +298,12 @@
       <workItem from="1571520698766" duration="365000" />
       <workItem from="1571767889551" duration="6865000" />
       <workItem from="1571872085252" duration="1152000" />
-      <workItem from="1572475629450" duration="48858000" />
+      <workItem from="1572475629450" duration="53780000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="427949000" />
+    <option name="totallyTimeSpent" value="432871000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -317,11 +318,11 @@
     <frame x="0" y="23" width="1440" height="814" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.31616595" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.31616595" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5010941" side_tool="true" weight="0.29086894" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.4985694" visible="true" weight="0.32963988" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4985694" visible="true" weight="0.32963988" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" weight="0.32963988" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4985694" weight="0.39889196" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -543,13 +544,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1365">
-          <caret line="91" column="86" selection-start-line="91" selection-start-column="86" selection-end-line="91" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Thresholds_datajoint.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1935">
@@ -599,20 +593,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-826">
-          <caret line="305" column="22" selection-start-line="305" selection-start-column="22" selection-end-line="305" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_mark.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="283" column="74" selection-start-line="283" selection-start-column="74" selection-end-line="283" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -630,24 +610,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_score.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1026">
-          <caret line="306" column="49" selection-start-line="306" selection-start-column="49" selection-end-line="306" selection-end-column="49" />
+        <state relative-caret-position="-546">
+          <caret line="91" column="86" selection-start-line="91" selection-start-column="86" selection-end-line="91" selection-end-column="86" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-496">
-          <caret line="38" column="30" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
+        <state relative-caret-position="848">
+          <caret line="305" column="22" selection-start-line="305" selection-start-column="22" selection-end-line="305" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_mark.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="347" column="26" selection-start-line="347" selection-start-column="26" selection-end-line="347" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="156" column="16" lean-forward="true" selection-start-line="156" selection-start-column="16" selection-end-line="156" selection-end-column="16" />
+        <state relative-caret-position="189">
+          <caret line="400" column="25" selection-start-line="400" selection-start-column="25" selection-end-line="400" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_score.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2098">
+          <caret line="325" lean-forward="true" selection-start-line="325" selection-end-line="325" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="92" column="36" lean-forward="true" selection-start-line="92" selection-start-column="36" selection-end-line="92" selection-end-column="36" />
         </state>
       </provider>
     </entry>
