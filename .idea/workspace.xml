@@ -5,7 +5,7 @@
       <change beforePath="$PROJECT_DIR$/notebooks/CellsMark_hsv.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/CellsMark_hsv.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_mark_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_mark_score.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Cell_mark_v3.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_mark_v3.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="400" column="25" selection-start-line="400" selection-start-column="25" selection-end-line="400" selection-end-column="25" />
+            <state relative-caret-position="4879">
+              <caret line="410" column="16" selection-start-line="410" selection-start-column="16" selection-end-line="410" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -48,17 +48,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_score.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2098">
-              <caret line="325" lean-forward="true" selection-start-line="325" selection-end-line="325" />
+            <state relative-caret-position="397">
+              <caret line="325" selection-start-line="325" selection-end-line="325" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="92" column="36" lean-forward="true" selection-start-line="92" selection-start-column="36" selection-end-line="92" selection-end-column="36" />
+            <state relative-caret-position="339">
+              <caret line="86" column="52" lean-forward="true" selection-start-line="86" selection-start-column="52" selection-end-line="86" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -142,8 +142,8 @@
         <option value="$PROJECT_DIR$/configure_station.sh" />
         <option value="$PROJECT_DIR$/scripts/Cell_mark.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_mark_v2.py" />
-        <option value="$PROJECT_DIR$/scripts/Cell_mark_v3.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_mark_score.py" />
+        <option value="$PROJECT_DIR$/scripts/Cell_mark_v3.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py" />
       </list>
     </option>
@@ -298,12 +298,12 @@
       <workItem from="1571520698766" duration="365000" />
       <workItem from="1571767889551" duration="6865000" />
       <workItem from="1571872085252" duration="1152000" />
-      <workItem from="1572475629450" duration="53780000" />
+      <workItem from="1572475629450" duration="59119000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="432871000" />
+    <option name="totallyTimeSpent" value="438210000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -318,11 +318,11 @@
     <frame x="0" y="23" width="1440" height="814" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.31616595" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.31616595" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5010941" side_tool="true" weight="0.29086894" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4985694" visible="true" weight="0.32963988" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.4985694" visible="true" weight="0.32963988" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" weight="0.32963988" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4985694" weight="0.39889196" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -586,13 +586,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2019.1/python_stubs/-969502705/cv2/cv2/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="9043" column="4" selection-start-line="9043" selection-start-column="4" selection-end-line="9043" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -631,24 +624,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v3.py">
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2019.1/python_stubs/-969502705/cv2/cv2/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="400" column="25" selection-start-line="400" selection-start-column="25" selection-end-line="400" selection-end-column="25" />
+        <state relative-caret-position="144">
+          <caret line="9310" column="4" selection-start-line="9310" selection-start-column="4" selection-end-line="9310" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_score.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2098">
-          <caret line="325" lean-forward="true" selection-start-line="325" selection-end-line="325" />
+        <state relative-caret-position="397">
+          <caret line="325" selection-start-line="325" selection-end-line="325" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cell_mark_datajoint.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="92" column="36" lean-forward="true" selection-start-line="92" selection-start-column="36" selection-end-line="92" selection-end-column="36" />
+        <state relative-caret-position="339">
+          <caret line="86" column="52" lean-forward="true" selection-start-line="86" selection-start-column="52" selection-end-line="86" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4879">
+          <caret line="410" column="16" selection-start-line="410" selection-start-column="16" selection-end-line="410" selection-end-column="16" />
         </state>
       </provider>
     </entry>

@@ -404,7 +404,12 @@ for group_id in range(len(sets)):
         pop = pops[i]
         for text in range(len(pop)):
             color = (int(pop[text][0][0] * 255), int(pop[text][0][1] * 255), int(pop[text][0][2] * 255), 100)
-            whole = cv2.putText(whole, pop[text][1], (left, up + (text + 1) * 100), cv2.FONT_HERSHEY_SIMPLEX, 3, color,
+            ((text_width, text_height), baseline) = cv2.getTextSize(pop[text][1], cv2.FONT_HERSHEY_SIMPLEX, 3, 7)
+            offset_x = left
+            offset_y = up + (text + 1) * 100
+            box_coords = ((offset_x, offset_y-text_height), (offset_x+text_width, offset_y+baseline))
+            cv2.rectangle(whole, box_coords[0], box_coords[1], (255,255,255,100), cv2.FILLED)
+            whole = cv2.putText(whole, pop[text][1], (left, offset_y), cv2.FONT_HERSHEY_SIMPLEX, 3, color,
                                 7)
 
 
