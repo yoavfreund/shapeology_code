@@ -408,7 +408,7 @@ for group_id in range(len(sets)):
             offset_x = left
             offset_y = up + (text + 1) * 100
             box_coords = ((offset_x, offset_y-text_height), (offset_x+text_width, offset_y+baseline))
-            cv2.rectangle(whole, box_coords[0], box_coords[1], (255,255,255,100), cv2.FILLED)
+            cv2.rectangle(whole, box_coords[0], box_coords[1], (155,155,155,100), cv2.FILLED)
             whole = cv2.putText(whole, pop[text][1], (left, offset_y), cv2.FONT_HERSHEY_SIMPLEX, 3, color,
                                 7)
 
