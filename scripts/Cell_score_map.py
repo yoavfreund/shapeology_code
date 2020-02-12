@@ -160,6 +160,7 @@ hsv = np.zeros([m, n, 3])
 hsv[:,:,2] = img.copy()/255
 bboxs = []
 cs = []
+name_struc = []
 center = []
 
 for contour_id, contour in polygons:
@@ -203,6 +204,7 @@ for contour_id, contour in polygons:
                                int(min(np.ceil(max(polygon[:, 1]) + margin), m))]
     bboxs.append([left, right, up, down])
     cs.append(polygon.astype(np.int32))
+    name_struc.append(structure)
     raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?', (left, right, up, down))
     info = np.array(list(raws))
     locations = info[:, 1:3]
@@ -277,6 +279,8 @@ for i in range(len(bboxs)):
     thickness = int(min(right - left, down - up)/80)
     # com = cv2.GaussianBlur(rgb.copy(), (5, 5), 0)
     cv2.polylines(whole, [polygon.astype(np.int32)], True, [0, 255, 0], thickness, lineType=8)
+    cv2.putText(whole, name_struc[i], (left, up + 300), cv2.FONT_HERSHEY_SIMPLEX, 15, [0, 0, 255],
+                thickness=20)
 
 
 
