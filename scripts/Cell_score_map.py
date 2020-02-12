@@ -287,7 +287,7 @@ whole8 = rescale(whole, 1.0/4, multichannel=True, anti_aliasing=True)
 whole8 = whole8 * 255
 whole8 = whole8.astype(np.uint8)
 cv2.imwrite(os.environ['ROOT_DIR'] + filename, whole8)
-# setup_upload_from_s3(filename, recursive=False)
+setup_upload_from_s3(filename, recursive=False)
 
 
 
