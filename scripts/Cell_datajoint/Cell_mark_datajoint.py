@@ -36,7 +36,7 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-img_file = 'CSHL_cells_mark_v5/'+stack+'/'
+img_file = 'CSHL_cells_score/'+stack+'/'
 img_fp = os.environ['ROOT_DIR']+img_file
 scripts_dir = os.environ['REPO_DIR']
 
@@ -68,7 +68,7 @@ setup_download_from_s3('CSHL_patch_samples_features/MD585/')
 @schema
 class CellMark(dj.Computed):
     definition="""
-    -> SectionV2
+    -> SectionV3
     -----
     structure_number : int   #number of structures
     """
@@ -76,7 +76,7 @@ class CellMark(dj.Computed):
     bucket = "mousebrainatlas-data"
     #client = get_s3_client(credFiles)
     def make(self, key):
-        section = (SectionV2 & key).fetch1('section_id')
+        section = (SectionV3 & key).fetch1('section_id')
         print('populating for ', section, end='\n')
         key_item = 'structure_number'
         try:
@@ -84,7 +84,7 @@ class CellMark(dj.Computed):
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
         except:
-            run('python3 {0}/Cell_mark_v3.py {1} {2}'.format(scripts_dir, stack, section))
+            run('python3 {0}/Cell_score_map.py {1} {2}'.format(scripts_dir, stack, section))
             cpt = sum([len(files) for r, d, files in os.walk(img_fp)])
             key[key_item] = cpt
             shutil.rmtree(img_fp)
