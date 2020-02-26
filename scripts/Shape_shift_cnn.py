@@ -119,7 +119,10 @@ for contour_id, contour in polygons:
     Scores[structure] = {}
     setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
     setup_download_from_s3(model_prefix + '_' + structure + '-0045.params', recursive=False)
-    model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
+    try:
+        model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
+    except:
+        continue
 
     [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
                                int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1)),
