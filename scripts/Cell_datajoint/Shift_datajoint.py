@@ -38,7 +38,7 @@ schema.spawn_missing_classes()
 
 stack = args.stack
 
-pkl_fp = 'CSHL_shift_3d_new/'+stack+'/'
+pkl_fp = 'CSHL_shift_cnn/'+stack+'/'
 # feature_fp = 'CSHL_region_features/'+stack+'/'
 scripts_dir = os.environ['REPO_DIR']
 
@@ -64,8 +64,8 @@ def setup_upload_from_s3(rel_fp, recursive=True):
     else:
         run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
 
-setup_download_from_s3('CSHL_patch_samples_features/MD589/')
-setup_download_from_s3('CSHL_patch_samples_features/MD585/')
+# setup_download_from_s3('CSHL_patch_samples_features/MD589/')
+# setup_download_from_s3('CSHL_patch_samples_features/MD585/')
 
 @schema
 class Shift(dj.Computed):
@@ -92,7 +92,7 @@ class Shift(dj.Computed):
         #     # setup_upload_from_s3(feature_fp+ str(section) + '.pkl', recursive=False)
         # else:
         #     run('python {0}/Shape_shift.py {1} {2} {3}'.format(scripts_dir, stack, section, yaml_file))
-            run('python {0}/Shape_shift_V3.py {1} {2}'.format(scripts_dir, stack, section))
+            run('python {0}/Shape_shift_cnn.py {1} {2}'.format(scripts_dir, stack, section))
             setup_upload_from_s3(s3_fp, recursive=False)
             # setup_upload_from_s3(feature_fp + str(section) + '.pkl', recursive=False)
             report = self.client.stat_object(self.bucket, s3_fp)
