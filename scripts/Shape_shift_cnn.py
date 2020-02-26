@@ -239,7 +239,7 @@ for contour_id, contour in polygons:
 filename = savepath + str(section) + '.pkl'
 pickle.dump(Scores, open(os.environ['ROOT_DIR'] + filename, 'wb'))
 setup_upload_from_s3(filename, recursive=False)
-# shutil.rmtree(os.environ['ROOT_DIR']+raw_images_root)
+shutil.rmtree(os.environ['ROOT_DIR']+raw_images_root)
 # os.remove(os.environ['ROOT_DIR']+img_fn)
 print(str(section) + ' finished in %5.1f seconds' % (time() - t1))
 
