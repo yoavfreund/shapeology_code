@@ -117,12 +117,12 @@ for contour_id, contour in polygons:
         continue
     polygon = contour.copy()
     Scores[structure] = {}
-    setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
-    setup_download_from_s3(model_prefix + '_' + structure + '-0045.params', recursive=False)
-    try:
-        model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
-    except:
-        continue
+    while os.path.exists(model_prefix + '_' + structure + '-symbol.json')==0 :
+        setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
+        setup_download_from_s3(model_prefix + '_' + structure + '-0045.params', recursive=False)
+
+    model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
+
 
     [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
                                int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1)),
@@ -148,8 +148,7 @@ for contour_id, contour in polygons:
     x_shift_negative = []
     y_shift_positive = []
     y_shift_negative = []
-    # z_shift_positive = []
-    # z_shift_negative = []
+
 
     for i in range(-half, half+1):
         region = polygon.copy()
@@ -185,52 +184,53 @@ for contour_id, contour in polygons:
     Scores[structure][str(section) + '_negative']['x'] = x_shift_negative
     Scores[structure][str(section) + '_negative']['y'] = y_shift_negative
 
+    z_shift_positive = []
+    z_shift_negative = []
+    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin, 0)),
+                               int(min(np.ceil(max(polygon[:, 0]) + margin), n - 1)),
+                               int(max(min(polygon[:, 1]) - margin, 0)),
+                               int(min(np.ceil(max(polygon[:, 1]) + margin), m - 1))]
+    xs, ys = np.meshgrid(np.arange(left, right - window_size, window_size//2), np.arange(up, down - window_size, window_size//2),
+                         indexing='xy')
+    windows = np.c_[xs.flat, ys.flat] + window_size // 2
 
-    # [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin, 0)),
-    #                            int(min(np.ceil(max(polygon[:, 0]) + margin), n - 1)),
-    #                            int(max(min(polygon[:, 1]) - margin, 0)),
-    #                            int(min(np.ceil(max(polygon[:, 1]) + margin), m - 1))]
-    # xs, ys = np.meshgrid(np.arange(left, right - window_size, step_size), np.arange(up, down - window_size, step_size),
-    #                      indexing='xy')
-    # windows = np.c_[xs.flat, ys.flat] + window_size // 2
-    #
-    # for i in range(-half, half + 1):
-    #     loc_z = section + i
-    #     if loc_z in valid_sections:
-    #         sec_fn = raw_images_root + section_to_filename[loc_z] + '_prep2_lossless_gray.tif'
-    #         setup_download_from_s3(sec_fn, recursive=False)
-    #         sec = cv2.imread(os.environ['ROOT_DIR'] + sec_fn, 2)
-    #         patches = np.array([sec[wy - window_size // 2:wy + window_size // 2, wx - window_size // 2:wx + window_size // 2] for
-    #              wx, wy in windows])
-    #         batch_size = patches.shape[0]
-    #         mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
-    #         mod.bind(for_training=False,
-    #                  data_shapes=[('data', (batch_size, 1, 224, 224))])
-    #         mod.set_params(arg_params, aux_params, allow_missing=True)
-    #         test = (patches - mean_img)[:, None, :, :]
-    #         mod.forward(Batch([mx.nd.array(test)]))
-    #         scores = mod.get_outputs()[0].asnumpy()[:, 1]
-    #
-    #         region = polygon.copy()
-    #         path = Path(region)
-    #         indices_inside = np.where(path.contains_points(windows))[0]
-    #         score = scores[indices_inside].mean()
-    #         z_shift_positive.append(score)
-    #
-    #         surround = Polygon(region).buffer(margin, resolution=2)
-    #         path = Path(list(surround.exterior.coords))
-    #         indices_sur = np.where(path.contains_points(windows))[0]
-    #         indices_outside = np.setdiff1d(indices_sur, indices_inside)
-    #         score = scores[indices_outside].mean()
-    #         z_shift_negative.append(score)
-    #
-    #     else:
-    #         z_shift_positive.append(0)
-    #         z_shift_negative.append(0)
-    #
-    #
-    # Scores[structure][str(section) + '_positive']['z'] = z_shift_positive
-    # Scores[structure][str(section) + '_negative']['z'] = z_shift_negative
+    for i in range(-half, half + 1):
+        loc_z = section + i
+        if loc_z in valid_sections:
+            sec_fn = raw_images_root + section_to_filename[loc_z] + '_prep2_lossless_gray.tif'
+            setup_download_from_s3(sec_fn, recursive=False)
+            sec = cv2.imread(os.environ['ROOT_DIR'] + sec_fn, 2)
+            patches = np.array([sec[wy - window_size // 2:wy + window_size // 2, wx - window_size // 2:wx + window_size // 2] for
+                 wx, wy in windows])
+            batch_size = patches.shape[0]
+            mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
+            mod.bind(for_training=False,
+                     data_shapes=[('data', (batch_size, 1, 224, 224))])
+            mod.set_params(arg_params, aux_params, allow_missing=True)
+            test = (patches - mean_img)[:, None, :, :]
+            mod.forward(Batch([mx.nd.array(test)]))
+            scores = mod.get_outputs()[0].asnumpy()[:, 1]
+
+            region = polygon.copy()
+            path = Path(region)
+            indices_inside = np.where(path.contains_points(windows))[0]
+            score = scores[indices_inside].mean()
+            z_shift_positive.append(score)
+
+            surround = Polygon(region).buffer(margin, resolution=2)
+            path = Path(list(surround.exterior.coords))
+            indices_sur = np.where(path.contains_points(windows))[0]
+            indices_outside = np.setdiff1d(indices_sur, indices_inside)
+            score = scores[indices_outside].mean()
+            z_shift_negative.append(score)
+
+        else:
+            z_shift_positive.append(0)
+            z_shift_negative.append(0)
+
+
+    Scores[structure][str(section) + '_positive']['z'] = z_shift_positive
+    Scores[structure][str(section) + '_negative']['z'] = z_shift_negative
 
 
     count += 1
