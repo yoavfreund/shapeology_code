@@ -117,7 +117,7 @@ for contour_id, contour in polygons:
         continue
     polygon = contour.copy()
     Scores[structure] = {}
-    while os.path.exists(model_prefix + '_' + structure + '-symbol.json')==0 :
+    while os.path.exists(os.environ['ROOT_DIR'] + model_prefix + '_' + structure + '-symbol.json')==0:
         setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
         setup_download_from_s3(model_prefix + '_' + structure + '-0045.params', recursive=False)
 

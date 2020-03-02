@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/CNN.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/CNN.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Shape_shift_cnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Shape_shift_cnn.py" afterDir="false" />
     </list>
@@ -48,8 +46,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_cnn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
+            <state relative-caret-position="573">
+              <caret line="121" column="40" selection-start-line="121" selection-start-column="40" selection-end-line="121" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -361,12 +359,12 @@
       <workItem from="1582091362081" duration="1772000" />
       <workItem from="1582616074195" duration="356000" />
       <workItem from="1582673332532" duration="2342000" />
-      <workItem from="1582691467461" duration="24952000" />
+      <workItem from="1582691467461" duration="25416000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="519562000" />
+    <option name="totallyTimeSpent" value="520026000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -743,8 +741,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_cnn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
+        <state relative-caret-position="573">
+          <caret line="121" column="40" selection-start-line="121" selection-start-column="40" selection-end-line="121" selection-end-column="40" />
         </state>
       </provider>
     </entry>
