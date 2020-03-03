@@ -66,8 +66,12 @@ contours_grouped = contours.groupby('section')
 contours_struc = contours.groupby('name')
 valid_sections = np.sort(contours['section'].unique())
 
+fn = os.path.join('CSHL_shift_cnn_scoremap', stack, str(section) + '.pkl')
+setup_download_from_s3(fn, recursive=False)
+scoremaps = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
 
-savepath = 'CSHL_shift_cnn_scoremap/'
+
+savepath = 'CSHL_shift_cnn/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'
@@ -85,16 +89,6 @@ singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
 
 all_structures = paired_structures + singular_structures
 
-MXNET_ROOTDIR = 'mxnet_models'
-model_dir_name = 'inception-bn-blue-softmax'
-model_name = 'inception-bn-blue-softmax'
-setup_download_from_s3(os.path.join(MXNET_ROOTDIR, model_dir_name, 'mean_224.npy'), recursive=False)
-mean_img = np.load(os.path.join(os.environ['ROOT_DIR'], MXNET_ROOTDIR, model_dir_name, 'mean_224.npy'))
-model_prefix = os.path.join(MXNET_ROOTDIR, model_dir_name, model_name)
-
-for structure in all_structures:
-    setup_download_from_s3(model_prefix+'_'+structure+'-symbol.json', recursive=False)
-    setup_download_from_s3(model_prefix+'_'+structure+'-0045.params', recursive=False)
 
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
 img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
@@ -114,16 +108,8 @@ for contour_id, contour in polygons:
     if structure not in all_structures:
         continue
     polygon = contour.copy()
-
-    while os.path.exists(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure + '-symbol.json'))==0:
-        setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
-        setup_download_from_s3(model_prefix + '_' + structure + '-0045.params', recursive=False)
-    try:
-        model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
-    except:
-        print(structure)
-        continue
-
+    Scores[structure] = {}
+    scores = scoremaps[structure]
     [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
                                int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1)),
                                int(max(min(polygon[:, 1]) - margin - half * step_size, 0)),
@@ -133,14 +119,81 @@ for contour_id, contour in polygons:
 
     patches = np.array([img[wy-window_size//2:wy+window_size//2, wx-window_size//2:wx+window_size//2] for wx,wy in windows])
     batch_size = patches.shape[0]
-    mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
-    mod.bind(for_training=False,
-             data_shapes=[('data', (batch_size, 1, 224, 224))])
-    mod.set_params(arg_params, aux_params, allow_missing=True)
-    test = (patches - mean_img)[:, None, :, :]
-    mod.forward(Batch([mx.nd.array(test)]))
-    scores = mod.get_outputs()[0].asnumpy()[:,1]
-    Scores[structure] = scores
+
+    Scores[structure][str(section)+'_positive'] = {}
+    Scores[structure][str(section) + '_negative'] = {}
+    x_shift_positive = []
+    x_shift_negative = []
+    y_shift_positive = []
+    y_shift_negative = []
+
+
+    for i in range(-half, half+1):
+        region = polygon.copy()
+        region[:, 0] += i * step_size
+        path = Path(region)
+        indices_inside = np.where(path.contains_points(windows))[0]
+        score = scores[indices_inside].mean()
+        x_shift_positive.append(score)
+
+        surround = Polygon(region).buffer(margin, resolution=2)
+        path = Path(list(surround.exterior.coords))
+        indices_sur = np.where(path.contains_points(windows))[0]
+        indices_outside = np.setdiff1d(indices_sur, indices_inside)
+        score = scores[indices_outside].mean()
+        x_shift_negative.append(score)
+
+        region = polygon.copy()
+        region[:, 1] += i * step_size
+        path = Path(region)
+        indices_inside = np.where(path.contains_points(windows))[0]
+        score = scores[indices_inside].mean()
+        y_shift_positive.append(score)
+
+        surround = Polygon(region).buffer(margin, resolution=2)
+        path = Path(list(surround.exterior.coords))
+        indices_sur = np.where(path.contains_points(windows))[0]
+        indices_outside = np.setdiff1d(indices_sur, indices_inside)
+        score = scores[indices_outside].mean()
+        y_shift_negative.append(score)
+
+    Scores[structure][str(section) + '_positive']['x'] = x_shift_positive
+    Scores[structure][str(section) + '_positive']['y'] = y_shift_positive
+    Scores[structure][str(section) + '_negative']['x'] = x_shift_negative
+    Scores[structure][str(section) + '_negative']['y'] = y_shift_negative
+
+    z_shift_positive = []
+    z_shift_negative = []
+
+    for i in range(-half, half + 1):
+        loc_z = section + i
+        if loc_z in valid_sections:
+            fn = os.path.join('CSHL_shift_cnn_scoremap', stack, str(loc_z) + '.pkl')
+            setup_download_from_s3(fn, recursive=False)
+            maps = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
+            scores = maps[structure]
+
+            region = polygon.copy()
+            path = Path(region)
+            indices_inside = np.where(path.contains_points(windows))[0]
+            score = scores[indices_inside].mean()
+            z_shift_positive.append(score)
+
+            surround = Polygon(region).buffer(margin, resolution=2)
+            path = Path(list(surround.exterior.coords))
+            indices_sur = np.where(path.contains_points(windows))[0]
+            indices_outside = np.setdiff1d(indices_sur, indices_inside)
+            score = scores[indices_outside].mean()
+            z_shift_negative.append(score)
+
+        else:
+            z_shift_positive.append(0)
+            z_shift_negative.append(0)
+
+
+    Scores[structure][str(section) + '_positive']['z'] = z_shift_positive
+    Scores[structure][str(section) + '_negative']['z'] = z_shift_negative
+
 
     count += 1
     print(section, structure, count, '/', len(polygons))
