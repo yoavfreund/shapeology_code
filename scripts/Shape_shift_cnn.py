@@ -98,6 +98,10 @@ setup_download_from_s3(os.path.join(MXNET_ROOTDIR, model_dir_name, 'mean_224.npy
 mean_img = np.load(os.path.join(os.environ['ROOT_DIR'], MXNET_ROOTDIR, model_dir_name, 'mean_224.npy'))
 model_prefix = os.path.join(MXNET_ROOTDIR, model_dir_name, model_name)
 
+for structure in all_structures:
+    setup_download_from_s3(model_prefix+'_'+structure+'-symbol.json', recursive=False)
+    setup_download_from_s3(model_prefix+'_'+structure+'-0045.params', recursive=False)
+
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
 img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
 setup_download_from_s3(img_fn, recursive=False)
