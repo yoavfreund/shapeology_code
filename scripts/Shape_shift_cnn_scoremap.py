@@ -131,6 +131,7 @@ for contour_id, contour in polygons:
 
     patches = np.array([img[wy-window_size//2:wy+window_size//2, wx-window_size//2:wx+window_size//2] for wx,wy in windows])
     batch_size = patches.shape[0]
+    print(structure,patches.shape)
     try:
         mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
         mod.bind(for_training=False,
