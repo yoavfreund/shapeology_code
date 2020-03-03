@@ -114,37 +114,39 @@ for contour_id, contour in polygons:
     if structure not in all_structures:
         continue
     polygon = contour.copy()
+
+    while os.path.exists(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure + '-symbol.json'))==0:
+        setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
+        setup_download_from_s3(model_prefix + '_' + structure + '-0045.params', recursive=False)
+
+    model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
+
+
+    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
+                               int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1)),
+                               int(max(min(polygon[:, 1]) - margin - half * step_size, 0)),
+                               int(min(np.ceil(max(polygon[:, 1]) + margin + half * step_size),m-1))]
+    xs, ys = np.meshgrid(np.arange(left, right-window_size, window_size//2), np.arange(up, down-window_size, window_size//2), indexing='xy')
+    windows = np.c_[xs.flat, ys.flat] + window_size//2
+
+    patches = np.array([img[wy-window_size//2:wy+window_size//2, wx-window_size//2:wx+window_size//2] for wx,wy in windows])
+    batch_size = patches.shape[0]
+    print(structure,patches.shape)
+
     try:
-        while os.path.exists(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure + '-symbol.json'))==0:
-            setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
-            setup_download_from_s3(model_prefix + '_' + structure + '-0045.params', recursive=False)
-
-        model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
-
-
-        [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
-                                   int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1)),
-                                   int(max(min(polygon[:, 1]) - margin - half * step_size, 0)),
-                                   int(min(np.ceil(max(polygon[:, 1]) + margin + half * step_size),m-1))]
-        xs, ys = np.meshgrid(np.arange(left, right-window_size, window_size//2), np.arange(up, down-window_size, window_size//2), indexing='xy')
-        windows = np.c_[xs.flat, ys.flat] + window_size//2
-
-        patches = np.array([img[wy-window_size//2:wy+window_size//2, wx-window_size//2:wx+window_size//2] for wx,wy in windows])
-        batch_size = patches.shape[0]
-        print(structure,patches.shape)
-        try:
-            mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
-            mod.bind(for_training=False,
-                     data_shapes=[('data', (batch_size, 1, 224, 224))])
-            mod.set_params(arg_params, aux_params, allow_missing=True)
-            test = (patches - mean_img)[:, None, :, :]
-            mod.forward(Batch([mx.nd.array(test)]))
-            scores = mod.get_outputs()[0].asnumpy()[:,1]
-        except:
-            print(structure)
-            continue
-    except:
+        mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
+        mod.bind(for_training=False,
+                 data_shapes=[('data', (batch_size, 1, 224, 224))])
+        mod.set_params(arg_params, aux_params, allow_missing=True)
+        test = (patches - mean_img)[:, None, :, :]
+        mod.forward(Batch([mx.nd.array(test)]))
+        scores = mod.get_outputs()[0].asnumpy()[:,1]
+        Scores[structure] = scores
         continue
+    except:
+        print(structure)
+        continue
+
     Scores[structure] = scores
 
     count += 1
