@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Shape_shift_cnn_scoremap.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Shape_shift_cnn_scoremap.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,15 +16,6 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_v3.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="97" column="45" selection-start-line="97" selection-start-column="45" selection-end-line="97" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_mark_score.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="333">
@@ -35,9 +25,18 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-193">
+              <caret line="40" column="34" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1579">
+            <state relative-caret-position="-967">
               <caret line="65" column="62" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
             </state>
           </provider>
@@ -67,8 +66,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_cnn_scoremap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="134" column="8" lean-forward="true" selection-start-line="134" selection-start-column="8" selection-end-line="134" selection-end-column="8" />
+            <state relative-caret-position="504">
+              <caret line="142" column="11" lean-forward="true" selection-start-line="142" selection-start-column="11" selection-end-line="142" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -76,8 +75,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="536">
-              <caret line="99" column="25" lean-forward="true" selection-start-line="99" selection-start-column="25" selection-end-line="99" selection-end-column="25" />
+            <state relative-caret-position="361">
+              <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
             </state>
           </provider>
         </entry>
@@ -192,6 +191,12 @@
               <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
               <item name="shapeology_code" type="462c0819:PsiDirectoryNode" />
               <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="shapeology_code" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="Cell_datajoint" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -387,12 +392,12 @@
       <workItem from="1582091362081" duration="1772000" />
       <workItem from="1582616074195" duration="356000" />
       <workItem from="1582673332532" duration="2342000" />
-      <workItem from="1582691467461" duration="34858000" />
+      <workItem from="1582691467461" duration="36793000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="529468000" />
+    <option name="totallyTimeSpent" value="531403000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -449,13 +454,6 @@
     <entry file="file://$PROJECT_DIR$/notebooks/Shape_shift_V3.py" />
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/PointCloudFeature.ipynb">
       <provider selected="true" editor-type-id="jupyter-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Patch_extractor_datajoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="682">
-          <caret line="106" column="52" selection-start-line="106" selection-start-column="52" selection-end-line="106" selection-end-column="52" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/HSV_datajoint_v2.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -600,13 +598,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="40" column="34" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Shape_shift.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2928">
@@ -735,24 +726,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1579">
-          <caret line="65" column="62" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_cnn.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="234" column="5" lean-forward="true" selection-start-line="234" selection-start-column="5" selection-end-line="234" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="99" column="25" lean-forward="true" selection-start-line="99" selection-start-column="25" selection-end-line="99" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -773,10 +750,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Patch_extractor_datajoint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="106" column="52" selection-start-line="106" selection-start-column="52" selection-end-line="106" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Sample_features_datajoint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-193">
+          <caret line="40" column="34" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_generator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-967">
+          <caret line="65" column="62" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_cnn_scoremap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="134" column="8" lean-forward="true" selection-start-line="134" selection-start-column="8" selection-end-line="134" selection-end-column="8" />
+        <state relative-caret-position="504">
+          <caret line="142" column="11" lean-forward="true" selection-start-line="142" selection-start-column="11" selection-end-line="142" selection-end-column="11" />
         </state>
       </provider>
     </entry>
