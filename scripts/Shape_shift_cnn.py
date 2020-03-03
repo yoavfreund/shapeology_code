@@ -197,10 +197,10 @@ for contour_id, contour in polygons:
     for i in range(-half, half + 1):
         loc_z = section + i
         if loc_z in valid_sections:
+            shutil.rmtree(os.environ['ROOT_DIR'] + raw_images_root)
             sec_fn = raw_images_root + section_to_filename[loc_z] + '_prep2_lossless_gray.tif'
             setup_download_from_s3(sec_fn, recursive=False)
             sec = cv2.imread(os.environ['ROOT_DIR'] + sec_fn, 2)
-            shutil.rmtree(os.environ['ROOT_DIR'] + raw_images_root)
             patches = np.array([sec[wy - window_size // 2:wy + window_size // 2, wx - window_size // 2:wx + window_size // 2] for
                  wx, wy in windows])
             batch_size = patches.shape[0]
