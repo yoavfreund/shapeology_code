@@ -68,7 +68,7 @@ def setup_upload_from_s3(rel_fp, recursive=True):
 # setup_download_from_s3('CSHL_patch_samples_features/MD585/')
 
 @schema
-class Shift(dj.Computed):
+class Shift2(dj.Computed):
     definition="""
     -> SectionV2
     -----
@@ -99,5 +99,5 @@ class Shift(dj.Computed):
         key[key_item] = int(report.size / 1000)
         self.insert1(key)
 
-Shift.populate(suppress_errors=True,reserve_jobs=True)
+Shift2.populate(suppress_errors=True,reserve_jobs=True)
 
