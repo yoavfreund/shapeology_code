@@ -165,42 +165,42 @@ for contour_id, contour in polygons:
     Scores[structure][str(section) + '_negative']['x'] = x_shift_negative
     Scores[structure][str(section) + '_negative']['y'] = y_shift_negative
 
-    z_shift_positive = []
-    z_shift_negative = []
-
-    for i in range(-half, half + 1):
-        loc_z = section + i
-        if loc_z in valid_sections:
-            fn = os.path.join('CSHL_shift_cnn_scoremap', stack, str(loc_z) + '.pkl')
-            setup_download_from_s3(fn, recursive=False)
-            maps = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
-            try:
-                scores = maps[structure]
-            except:
-                z_shift_positive.append(0)
-                z_shift_negative.append(0)
-                continue
-
-            region = polygon.copy()
-            path = Path(region)
-            indices_inside = np.where(path.contains_points(windows))[0]
-            score = scores[indices_inside].mean()
-            z_shift_positive.append(score)
-
-            surround = Polygon(region).buffer(margin, resolution=2)
-            path = Path(list(surround.exterior.coords))
-            indices_sur = np.where(path.contains_points(windows))[0]
-            indices_outside = np.setdiff1d(indices_sur, indices_inside)
-            score = scores[indices_outside].mean()
-            z_shift_negative.append(score)
-
-        else:
-            z_shift_positive.append(0)
-            z_shift_negative.append(0)
-
-
-    Scores[structure][str(section) + '_positive']['z'] = z_shift_positive
-    Scores[structure][str(section) + '_negative']['z'] = z_shift_negative
+    # z_shift_positive = []
+    # z_shift_negative = []
+    #
+    # for i in range(-half, half + 1):
+    #     loc_z = section + i
+    #     if loc_z in valid_sections:
+    #         fn = os.path.join('CSHL_shift_cnn_scoremap', stack, str(loc_z) + '.pkl')
+    #         setup_download_from_s3(fn, recursive=False)
+    #         maps = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
+    #         try:
+    #             scores = maps[structure]
+    #         except:
+    #             z_shift_positive.append(0)
+    #             z_shift_negative.append(0)
+    #             continue
+    #
+    #         region = polygon.copy()
+    #         path = Path(region)
+    #         indices_inside = np.where(path.contains_points(windows))[0]
+    #         score = scores[indices_inside].mean()
+    #         z_shift_positive.append(score)
+    #
+    #         surround = Polygon(region).buffer(margin, resolution=2)
+    #         path = Path(list(surround.exterior.coords))
+    #         indices_sur = np.where(path.contains_points(windows))[0]
+    #         indices_outside = np.setdiff1d(indices_sur, indices_inside)
+    #         score = scores[indices_outside].mean()
+    #         z_shift_negative.append(score)
+    #
+    #     else:
+    #         z_shift_positive.append(0)
+    #         z_shift_negative.append(0)
+    #
+    #
+    # Scores[structure][str(section) + '_positive']['z'] = z_shift_positive
+    # Scores[structure][str(section) + '_negative']['z'] = z_shift_negative
 
 
     count += 1
