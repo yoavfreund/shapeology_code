@@ -141,9 +141,9 @@ for contour_id, contour in polygons:
         test = (patches - mean_img)[:, None, :, :]
         mod.forward(Batch([mx.nd.array(test)]))
         scores = mod.get_outputs()[0].asnumpy()[:,1]
-        Scores[structure] = scores
-        continue
-    except:
+        # Scores[structure] = scores
+        # continue
+    except Exception as e:
         print(structure)
         continue
 

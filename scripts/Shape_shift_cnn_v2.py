@@ -108,8 +108,11 @@ for contour_id, contour in polygons:
     if structure not in all_structures:
         continue
     polygon = contour.copy()
-    Scores[structure] = {}
-    scores = scoremaps[structure]
+    try:
+        Scores[structure] = {}
+        scores = scoremaps[structure]
+    except:
+        continue
     [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
                                int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1)),
                                int(max(min(polygon[:, 1]) - margin - half * step_size, 0)),
@@ -171,7 +174,12 @@ for contour_id, contour in polygons:
             fn = os.path.join('CSHL_shift_cnn_scoremap', stack, str(loc_z) + '.pkl')
             setup_download_from_s3(fn, recursive=False)
             maps = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
-            scores = maps[structure]
+            try:
+                scores = maps[structure]
+            except:
+                z_shift_positive.append(0)
+                z_shift_negative.append(0)
+                continue
 
             region = polygon.copy()
             path = Path(region)
