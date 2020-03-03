@@ -92,9 +92,9 @@ setup_download_from_s3(os.path.join(MXNET_ROOTDIR, model_dir_name, 'mean_224.npy
 mean_img = np.load(os.path.join(os.environ['ROOT_DIR'], MXNET_ROOTDIR, model_dir_name, 'mean_224.npy'))
 model_prefix = os.path.join(MXNET_ROOTDIR, model_dir_name, model_name)
 
-# for structure in all_structures:
-#     setup_download_from_s3(model_prefix+'_'+structure+'-symbol.json', recursive=False)
-#     setup_download_from_s3(model_prefix+'_'+structure+'-0045.params', recursive=False)
+for structure in all_structures:
+    setup_download_from_s3(model_prefix+'_'+structure+'-symbol.json', recursive=False)
+    setup_download_from_s3(model_prefix+'_'+structure+'-0045.params', recursive=False)
 
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
 img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
@@ -118,11 +118,9 @@ for contour_id, contour in polygons:
     while os.path.exists(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure + '-symbol.json'))==0:
         setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
         setup_download_from_s3(model_prefix + '_' + structure + '-0045.params', recursive=False)
-    try:
-        model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
-    except:
-        print(structure)
-        continue
+
+    model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 45)
+
 
     [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
                                int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1)),
@@ -133,13 +131,17 @@ for contour_id, contour in polygons:
 
     patches = np.array([img[wy-window_size//2:wy+window_size//2, wx-window_size//2:wx+window_size//2] for wx,wy in windows])
     batch_size = patches.shape[0]
-    mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
-    mod.bind(for_training=False,
-             data_shapes=[('data', (batch_size, 1, 224, 224))])
-    mod.set_params(arg_params, aux_params, allow_missing=True)
-    test = (patches - mean_img)[:, None, :, :]
-    mod.forward(Batch([mx.nd.array(test)]))
-    scores = mod.get_outputs()[0].asnumpy()[:,1]
+    try:
+        mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
+        mod.bind(for_training=False,
+                 data_shapes=[('data', (batch_size, 1, 224, 224))])
+        mod.set_params(arg_params, aux_params, allow_missing=True)
+        test = (patches - mean_img)[:, None, :, :]
+        mod.forward(Batch([mx.nd.array(test)]))
+        scores = mod.get_outputs()[0].asnumpy()[:,1]
+    except:
+        print(structure)
+        continue
     Scores[structure] = scores
 
     count += 1
