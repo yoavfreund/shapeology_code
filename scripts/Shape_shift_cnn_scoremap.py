@@ -81,7 +81,7 @@ half = 20
 
 paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VLL', 'RMC', \
                      'SNC', 'SNR', '3N', '4N', 'Sp5I', 'Sp5O', 'Sp5C', 'PBG', '10N', 'VCA', 'VCP', 'DC']
-singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC']
+singular_structures = ['AP', '12N', 'RtTg', 'IC'] #'SC'
 
 all_structures = paired_structures + singular_structures
 
@@ -143,7 +143,7 @@ for contour_id, contour in polygons:
         scores = mod.get_outputs()[0].asnumpy()[:,1]
         # Scores[structure] = scores
         # continue
-    except Exception as e:
+    except:
         print(structure)
         continue
 
