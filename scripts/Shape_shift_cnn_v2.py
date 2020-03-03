@@ -71,7 +71,7 @@ setup_download_from_s3(fn, recursive=False)
 scoremaps = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
 
 
-savepath = 'CSHL_shift_cnn/'
+savepath = 'CSHL_shift_cnn_v2/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
     os.mkdir(os.environ['ROOT_DIR']+savepath)
 savepath = savepath+stack+'/'

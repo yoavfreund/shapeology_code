@@ -100,65 +100,7 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack, params):
         patches = np.array(patches)
         patches = patches[indices_choose]
 
-        for i in range(len(patches)):
-            tile = cv2.imread(patches[i], 0)
 
-
-            if params['preprocessing']['polarity'] == -1:
-                tile = 255 - tile
-            min_std = params['preprocessing']['min_std']
-            _std = np.std(tile.flatten())
-
-            extracted = []
-            if _std < min_std:
-                print('image', patches[i], 'std=', _std, 'too blank')
-                # features.append([0] * 201)
-                features.append([0] * 1982)
-                # features.append([0] * 1581)
-            else:
-                try:
-                    Stats = extractor.segment_cells(tile)
-                    cells = extractor.extract_blobs(Stats, tile)
-                    cells = pd.DataFrame(cells)
-                    cells = cells[cells['padded_patch'].notnull()]
-                    cells = cells.drop(['padded_patch', 'left', 'top'], 1)
-                    cells = np.asarray(cells)
-                    for k in range(len(cells)):
-                        cells[k][0] = cells[k][0][:10]
-                    origin = np.concatenate((np.array(list(cells[:, 0])), cells[:, 1:]), axis=1)
-                    for k in range(origin.shape[1]):
-                        x, y = CDF(origin[:, k])
-                        # ten = [x[np.argmin(np.absolute(y - 0.1*(1+j)))] for j in range(10)]
-                        ten = [y[np.argmin(np.absolute(x - threshold[k][j]))] for j in range(99)]
-                        # ten = [y[np.argmin(np.absolute(x-threshold[10*k+j]))] for j in range(10)]
-                        extracted.extend(ten)
-                    extracted.extend([cells.shape[0]])
-                    extracted.extend([origin[:, 10].sum() / (224 * 224)])
-                    features.append(extracted)
-                except:
-                    continue
-            if i % 10 == 0:
-                count = len(features)
-                print(structure + '_' + state, count, i, '/', len(patches))
-
-        #                 Stats=extractor.segment_cells(tile)
-        #                 extracted= extractor.extract_blobs(Stats,tile)
-        #                 cells.extend(extracted)
-        # for j in range(len(extracted)):
-        #     try:
-        #         filename=savepath+str(extracted[j]['padded_size'])+'/'+str(count)+'.tif'
-        #         count+=1
-        #         img=extracted[j]['padded_patch']
-        #         img=img/img.max()*255
-        #         img=img.astype(np.uint8)
-        #         cv2.imwrite(filename, img)
-        #     except:
-        #         continue
-
-        #         cells = pd.DataFrame(cells)
-        #         cells = cells[cells['padded_patch'].notnull()]
-        #         images = cells[['padded_size','padded_patch']]
-        #         cells = cells.drop('padded_patch',1)
         count = len(features)
         print(structure + '_' + state, count)
         #         cells.to_pickle(pkl_out_file)
