@@ -51,6 +51,8 @@ class CnnTraining(dj.Computed):
     client = get_s3_client(credFiles)
     def make(self, key):
         structure = (Structure & key).fetch1('structure')
+        if structure == '7nn':
+            structure = '7n'
         print('populating for ', structure, end='\n')
         prefix = os.path.join(MXNET_ROOTDIR, model_dir_name + '_Kui', model_name + '_' + structure)
         s3_fp = prefix + '_evalMetricHistory.pkl'
