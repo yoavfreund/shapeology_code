@@ -24,6 +24,7 @@ if args.Environment == 'AWS':
 else:
     credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'
     yaml_file = 'shape_params.yaml'
+
 dj.config['database.host'] = get_dj_creds(credFiles)['database.host']
 dj.config['database.user'] = get_dj_creds(credFiles)['database.user']
 dj.config['database.port'] = get_dj_creds(credFiles)['database.port']
@@ -32,6 +33,7 @@ dj.conn()
 
 schema = dj.schema('kui_diffusionmap')
 schema.spawn_missing_classes()
+
 
 MXNET_ROOTDIR = 'mxnet_models'
 model_dir_name = 'inception-bn-blue-softmax'
@@ -44,7 +46,7 @@ class CnnTraining(dj.Computed):
     definition="""
     -> Structure
     -----
-    size_of_evalMetricHistory : int   #size of eval Metric History file
+    size_of_file : int   #size of eval Metric History file
     """
 
     bucket = "mousebrainatlas-data"
@@ -59,15 +61,11 @@ class CnnTraining(dj.Computed):
         print(s3_fp)
         try:
             report = self.client.stat_object(self.bucket, s3_fp)
-            key['size_of_evalMetricHistory'] = int(report.size)
         except:
             run('python3 {0}/Inception-bn_training.py {1}'.format(scripts_dir, structure))
             report = self.client.stat_object(self.bucket, s3_fp)
-            key['size_of_evalMetricHistory'] = int(report.size)
-        try:
-            self.insert1(key)
-        except:
-            print('could not insert key=', key)
+        key['size_of_file'] = int(report.size)
+        self.insert1(key)
 
-CnnTraining.populate(reserve_jobs=True)
+CnnTraining.populate(suppress_errors=True, reserve_jobs=True)
 
