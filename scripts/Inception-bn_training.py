@@ -178,8 +178,10 @@ patches_nega = patches[indices_choose]
 n_neg = len(patches_nega)
 
 patches_test = np.concatenate((patches_posi, patches_nega))
-test_data = (np.array([cv2.imread(dir, 0) for dir in patches_test]) - mean_img)[:,None,:,:]
-test_labels = np.r_[np.ones((n_pos, )), np.zeros((n_neg, ))]
+test_data = (np.array([cv2.imread(dir, 0) for dir in patches_test if cv2.imread(dir, 0).shape==(224,224)]) - mean_img)[:,None,:,:]
+del_pos = len([cv2.imread(dir, 0) for dir in patches_posi if cv2.imread(dir, 0).shape!=(224,224)])
+del_neg = len([cv2.imread(dir, 0) for dir in patches_nega if cv2.imread(dir, 0).shape!=(224,224)])
+test_labels = np.r_[np.ones((n_pos-del_pos, )), np.zeros((n_neg-del_neg, ))]
 test_data_iter = mx.io.NDArrayIter(
     data=test_data,
     batch_size=batch_size,
