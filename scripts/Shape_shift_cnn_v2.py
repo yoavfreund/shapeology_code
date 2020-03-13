@@ -70,6 +70,13 @@ fn = os.path.join('CSHL_shift_cnn_scoremap', stack, str(section) + '.pkl')
 setup_download_from_s3(fn, recursive=False)
 scoremaps = pickle.load(open(os.environ['ROOT_DIR']+fn,'rb'))
 
+MXNET_ROOTDIR = 'mxnet_models'
+model_dir_name = 'inception-bn-blue-softmax'
+model_name = 'inception-bn-blue-softmax'
+setup_download_from_s3(os.path.join(MXNET_ROOTDIR, model_dir_name, 'mean_224.npy'), recursive=False)
+mean_img = np.load(os.path.join(os.environ['ROOT_DIR'], MXNET_ROOTDIR, model_dir_name, 'mean_224.npy'))
+model_prefix = os.path.join(MXNET_ROOTDIR, model_dir_name + '_Kui', model_name)
+
 
 savepath = 'CSHL_shift_cnn_v2/'
 if not os.path.exists(os.environ['ROOT_DIR']+savepath):
@@ -93,8 +100,8 @@ all_structures = paired_structures + singular_structures
 raw_images_root = 'CSHL_data_processed/'+stack+'/'+stack+'_prep2_lossless_gray/'
 img_fn = raw_images_root + section_to_filename[section] + '_prep2_lossless_gray.tif'
 setup_download_from_s3(img_fn, recursive=False)
-img = cv2.imread(os.environ['ROOT_DIR']+img_fn, 2)
-m, n = img.shape
+# img = cv2.imread(os.environ['ROOT_DIR']+img_fn, 2)
+# m, n = img.shape
 margin = 200/0.46
 
 polygons = [(contour['name'], contour['vertices']) \
@@ -108,7 +115,7 @@ for contour_id, contour in polygons:
     if structure not in all_structures:
         continue
     polygon = contour.copy()
-    vertices = np.concatenate(contours_struc.get_group(structure)['vertices'].to_list())
+    # vertices = np.concatenate(contours_struc.get_group(structure)['vertices'].to_list())
     # try:
     Scores[structure] = {}
     scores = scoremaps[structure]['scores']
@@ -123,8 +130,8 @@ for contour_id, contour in polygons:
     # xs, ys = np.meshgrid(np.arange(left, right-window_size, window_size//2), np.arange(up, down-window_size, window_size//2), indexing='xy')
     # windows = np.c_[xs.flat, ys.flat] + window_size//2
 
-    patches = np.array([img[wy-window_size//2:wy+window_size//2, wx-window_size//2:wx+window_size//2] for wx,wy in windows])
-    batch_size = patches.shape[0]
+    # patches = np.array([img[wy-window_size//2:wy+window_size//2, wx-window_size//2:wx+window_size//2] for wx,wy in windows])
+    # batch_size = patches.shape[0]
 
     Scores[structure][str(section)+'_positive'] = {}
     Scores[structure][str(section) + '_negative'] = {}
@@ -177,13 +184,42 @@ for contour_id, contour in polygons:
             fn = os.path.join('CSHL_shift_cnn_scoremap', stack, str(loc_z) + '.pkl')
             setup_download_from_s3(fn, recursive=False)
             maps = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
-            # try:
-            scores = maps[structure]['scores']
-            windows = maps[structure]['locations']
-            # except:
-            #     z_shift_positive.append(0)
-            #     z_shift_negative.append(0)
-            #     continue
+            try:
+                scores = maps[structure]['scores']
+                windows = maps[structure]['locations']
+            except:
+                shutil.rmtree(os.environ['ROOT_DIR'] + raw_images_root)
+                sec_fn = raw_images_root + section_to_filename[loc_z] + '_prep2_lossless_gray.tif'
+                setup_download_from_s3(sec_fn, recursive=False)
+                sec = cv2.imread(os.environ['ROOT_DIR'] + sec_fn, 2)
+                m, n = sec.shape
+                [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin, 0)),
+                                           int(min(np.ceil(max(polygon[:, 0]) + margin), n - 1)),
+                                           int(max(min(polygon[:, 1]) - margin, 0)),
+                                           int(min(np.ceil(max(polygon[:, 1]) + margin), m - 1))]
+                xs, ys = np.meshgrid(np.arange(left, right - window_size, window_size//2), np.arange(up, down - window_size, window_size//2),
+                                     indexing='xy')
+                windows = np.c_[xs.flat, ys.flat] + window_size // 2
+                patches = np.array([sec[wy - window_size // 2:wy + window_size // 2, wx - window_size // 2:wx + window_size // 2] for
+                                    wx, wy in windows])
+                while os.path.exists(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure + '-symbol.json')) == 0:
+                    setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
+                    setup_download_from_s3(model_prefix + '_' + structure + '-0049.params', recursive=False)
+
+                model, arg_params, aux_params = mx.model.load_checkpoint(
+                    os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 49)
+                batch_size = 32
+                mod = mx.mod.Module(symbol=model, label_names=None, context=mx.cpu())
+                mod.bind(for_training=False,
+                         data_shapes=[('data', (batch_size, 1, 224, 224))])
+                mod.set_params(arg_params, aux_params, allow_missing=True)
+                test = (patches - mean_img)[:, None, :, :]
+                data_iter = mx.io.NDArrayIter(
+                    data=test,
+                    batch_size=batch_size,
+                    shuffle=False)
+                outputs = mod.predict(data_iter, always_output_list=True)
+                scores = outputs[0].asnumpy()[:, 1]
 
             region = polygon.copy()
             path = Path(region)
