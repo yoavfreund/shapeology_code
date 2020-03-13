@@ -111,16 +111,17 @@ for contour_id, contour in polygons:
     vertices = np.concatenate(contours_struc.get_group(structure)['vertices'].to_list())
     # try:
     Scores[structure] = {}
-    scores = scoremaps[structure]
+    scores = scoremaps[structure]['scores']
+    windows = scoremaps[structure]['locations']
     # except:
     #     continue
-    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0, min(vertices[:, 0]) - margin)),
-                               int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size), n - 1, max(vertices[:, 0]) + margin)),
-                               int(max(min(polygon[:, 1]) - margin - half * step_size, 0, min(vertices[:, 1]) - margin)),
-                               int(min(np.ceil(max(polygon[:, 1]) + margin + half * step_size), m - 1, max(vertices[:, 1]) + margin))]
-
-    xs, ys = np.meshgrid(np.arange(left, right-window_size, window_size//2), np.arange(up, down-window_size, window_size//2), indexing='xy')
-    windows = np.c_[xs.flat, ys.flat] + window_size//2
+    # [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0, min(vertices[:, 0]) - margin)),
+    #                            int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size), n - 1, max(vertices[:, 0]) + margin)),
+    #                            int(max(min(polygon[:, 1]) - margin - half * step_size, 0, min(vertices[:, 1]) - margin)),
+    #                            int(min(np.ceil(max(polygon[:, 1]) + margin + half * step_size), m - 1, max(vertices[:, 1]) + margin))]
+    #
+    # xs, ys = np.meshgrid(np.arange(left, right-window_size, window_size//2), np.arange(up, down-window_size, window_size//2), indexing='xy')
+    # windows = np.c_[xs.flat, ys.flat] + window_size//2
 
     patches = np.array([img[wy-window_size//2:wy+window_size//2, wx-window_size//2:wx+window_size//2] for wx,wy in windows])
     batch_size = patches.shape[0]
@@ -177,7 +178,8 @@ for contour_id, contour in polygons:
             setup_download_from_s3(fn, recursive=False)
             maps = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
             # try:
-            scores = maps[structure]
+            scores = maps[structure]['scores']
+            windows = maps[structure]['locations']
             # except:
             #     z_shift_positive.append(0)
             #     z_shift_negative.append(0)
