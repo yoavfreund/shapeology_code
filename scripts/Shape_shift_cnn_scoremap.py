@@ -115,7 +115,7 @@ for contour_id, contour in polygons:
         continue
     polygon = contour.copy()
     vertices = np.concatenate(contours_struc.get_group(structure)['vertices'].to_list())
-
+    Scores[structure] = {}
 
     while os.path.exists(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure + '-symbol.json'))==0:
         setup_download_from_s3(model_prefix + '_' + structure + '-symbol.json', recursive=False)
@@ -149,7 +149,8 @@ for contour_id, contour in polygons:
     scores = outputs[0].asnumpy()[:,1]
 
 
-    Scores[structure] = scores
+    Scores[structure]['scores'] = scores
+    Scores[structure]['locations'] = windows
 
     count += 1
     print(section, structure, count, '/', len(polygons))
