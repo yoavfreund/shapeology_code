@@ -81,7 +81,7 @@ half = 20
 
 paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VLL', 'RMC', \
                      'SNC', 'SNR', '3N', '4N', 'Sp5I', 'Sp5O', 'Sp5C', 'PBG', '10N', 'VCA', 'VCP', 'DC']
-singular_structures = ['AP', '12N', 'RtTg', 'IC'] #'SC'
+singular_structures = ['AP', '12N', 'RtTg', 'SC', 'IC'] #
 
 all_structures = paired_structures + singular_structures
 
@@ -124,10 +124,10 @@ for contour_id, contour in polygons:
     model, arg_params, aux_params = mx.model.load_checkpoint(os.path.join(os.environ['ROOT_DIR'], model_prefix + '_' + structure), 49)
 
 
-    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0, min(vertices[:, 0]))),
-                               int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1, max(vertices[:, 0]))),
-                               int(max(min(polygon[:, 1]) - margin - half * step_size, 0, min(vertices[:, 1]))),
-                               int(min(np.ceil(max(polygon[:, 1]) + margin + half * step_size),m-1, max(vertices[:, 1])))]
+    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0, min(vertices[:, 0]) - margin)),
+                               int(min(np.ceil(max(polygon[:, 0]) + margin + half * step_size),n-1, max(vertices[:, 0]) + margin)),
+                               int(max(min(polygon[:, 1]) - margin - half * step_size, 0, min(vertices[:, 1]) - margin)),
+                               int(min(np.ceil(max(polygon[:, 1]) + margin + half * step_size),m-1, max(vertices[:, 1]) + margin))]
     xs, ys = np.meshgrid(np.arange(left, right-window_size, window_size//2), np.arange(up, down-window_size, window_size//2), indexing='xy')
     windows = np.c_[xs.flat, ys.flat] + window_size//2
 
