@@ -1,6 +1,6 @@
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("Environment", type=str, help="Local or AWS")
+parser.add_argument("Environment", type=str, help="Local or AWS or Muralis")
 parser.add_argument("stack", type=str, help="The name of the stack")
 args = parser.parse_args()
 
@@ -21,6 +21,9 @@ from utils import run
 
 if args.Environment == 'AWS':
     credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
+    yaml_file = 'shape_params-aws.yaml'
+elif args.Environment == 'Muralis':
+    credFiles = '/home/k1qian/data/Github/VaultBrain/credFiles_aws.yaml'
     yaml_file = 'shape_params-aws.yaml'
 else:
     credFiles= '/Users/kuiqian/Github/VaultBrain/credFiles.yaml'

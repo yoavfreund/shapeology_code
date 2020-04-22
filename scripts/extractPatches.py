@@ -168,8 +168,8 @@ if __name__=="__main__":
     import argparse
     from time import time
     parser = argparse.ArgumentParser()
-    parser.add_argument("filestem", type=str,
-                    help="Process <filestem>.tif into <filestem>_extracted.pkl")
+    parser.add_argument("section", type=int,
+                    help="Id of section")
     parser.add_argument("yaml", type=str,
                     help="Path to Yaml file with parameters")
     
