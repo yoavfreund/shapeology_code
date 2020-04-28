@@ -1,4 +1,4 @@
-cd data/Github/
+cd ~/data/Github/
 sleep $(shuf -i 1-100 -n 1)
 rm -rf shapeology_code
 git clone -b kui_dev --single-branch https://github.com/yoavfreund/shapeology_code.git

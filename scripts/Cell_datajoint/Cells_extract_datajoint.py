@@ -45,7 +45,7 @@ size_thresholds = params['normalization']['size_thresholds']
 @schema
 class Cells(dj.Computed):
     definition="""
-    -> Section_DK39
+    -> SectionDK39
     -----
     size_of_15 : int   #size of pkl file whose padded size is 15
     size_of_51 : int   #size of pkl file whose padded size is 51
