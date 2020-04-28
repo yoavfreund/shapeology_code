@@ -55,7 +55,7 @@ class Cells(dj.Computed):
     bucket = "mousebrainatlas-data"
     client = get_s3_client(credFiles)
     def make(self, key):
-        section = (Section_DK39 & key).fetch1('section_id')
+        section = (SectionDK39 & key).fetch1('section_id')
         print('populating for ', section, end='\n')
         run('python {0}/Cells_extractor.py {1} {2}'.format(scripts_dir, stack, section))
         for size in size_thresholds:
