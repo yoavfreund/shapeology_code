@@ -45,7 +45,7 @@ class patch_extractor:
         Stats=cv2.connectedComponentsWithStats(thresh)
         return Stats
 
-    def extract_blobs(self,Stats,gray):
+    def extract_blobs(self,Stats,gray,dm=True):
         """given a set of connected components extract convexified components from gray image and annotate on color image(tile)
 
         :param Stats: Output from cv2.connectedComponentsWithStats
@@ -119,7 +119,8 @@ class patch_extractor:
         ## compute diffusion vectors
         # self.timestamps = []
         # self.timestamps.append(('before DM',time()))
-        self.computeDMs(extracted)
+        if dm:
+            self.computeDMs(extracted)
         # self.timestamps.append(('after DM',time()))
             
         return extracted #,marked_tile
