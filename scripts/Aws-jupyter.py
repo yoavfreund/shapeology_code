@@ -1,11 +1,17 @@
-# from aws_jupyter.credentials import check_access
-# check_access({})
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("name", type=str, default='test', help="The name of a cluster")
+parser.add_argument("number", type=int, default=10, help="The number of instances to create")
+args = parser.parse_args()
+name = args.name
+number = args.number
+
 
 from aws_jupyter.create_cluster import create_cluster
 
-name = "t2"
 create_cluster({
-    "count": 1,
+    "count": number,
     "name": name,
     "type": "r5.xlarge",
     "ami": "ami-052aabb224c68baf8",
@@ -38,7 +44,7 @@ def check_status(args):
 
 while not check_status({"name": name,
                         "script": "/Users/kuiqian/Github/shapeology_code/install-project.sh",
-                        "output": True,
+                        "output": False,
                         }):
     sleep(30)
 

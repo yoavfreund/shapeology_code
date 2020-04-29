@@ -3,11 +3,6 @@ sleep $(shuf -i 1-100 -n 1)
 rm -rf shapeology_code
 git clone -b kui_dev --single-branch https://github.com/yoavfreund/shapeology_code.git
 source shapeology_code/configure.sh
-# aws s3 cp --recursive $ROOT_DIR/CSHL_shift/MD594/ 's3://mousebrainatlas-data/CSHL_shift/MD594/'
-# aws s3 cp --recursive $ROOT_DIR/CSHL_region_features/MD594/ 's3://mousebrainatlas-data/CSHL_region_features/MD594/'
-# aws s3 cp $ROOT_DIR/CSHL_shift/MD594/ 's3://mousebrainatlas-data/CSHL_shift/MD594/'
-# aws s3 cp $ROOT_DIR/CSHL_region_features/MD594/ 's3://mousebrainatlas-data/CSHL_region_features/MD594/'
-#python -m ipykernel install --user --name shapeology --display-name "shapeology"
 pip install awscli
 pip install shapely
 pip install mxnet
