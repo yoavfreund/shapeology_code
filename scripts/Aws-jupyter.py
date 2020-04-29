@@ -38,7 +38,7 @@ def check_status(args):
 
 while not check_status({"name": name,
                         "script": "/Users/kuiqian/Github/shapeology_code/install-project.sh",
-                        "output": False,
+                        "output": True,
                         }):
     sleep(30)
 
