@@ -17,6 +17,16 @@ from utilities import *
 sys.path.append('../lib')
 from utils import run, configuration
 
+
+def setup_upload_from_s3(rel_fp, recursive=True):
+    s3_fp = 's3://mousebrainatlas-data/' + rel_fp
+    local_fp = os.environ['ROOT_DIR'] + rel_fp
+
+    if recursive:
+        run('aws s3 cp --recursive {0} {1}'.format(local_fp, s3_fp))
+    else:
+        run('aws s3 cp {0} {1}'.format(local_fp, s3_fp))
+
 if args.Environment == 'AWS':
     credFiles= '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
     yaml_file = 'shape_params-aws.yaml'
@@ -61,9 +71,17 @@ class Cells(dj.Computed):
         for size in size_thresholds:
             key_item = 'size_of_' + str(size)
             s3_fp = stack + '/cells/' + 'cells-' + str(size) + '/' + str(section) + '.bin'
-            os.remove(os.environ['ROOT_DIR'] + s3_fp)
+            def s3_exist(s3_fp):
+                try:
+                    report = self.client.stat_object(self.bucket, s3_fp)
+                    return True
+                except:
+                    return False
+            while not s3_exist(s3_fp):
+                setup_upload_from_s3(s3_fp, recursive=False)
             report = self.client.stat_object(self.bucket, s3_fp)
             key[key_item] = int(report.size / 1000)
+            os.remove(os.environ['ROOT_DIR'] + s3_fp)
         self.insert1(key)
 
 Cells.populate(suppress_errors=True,reserve_jobs=True)
