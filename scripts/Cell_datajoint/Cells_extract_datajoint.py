@@ -61,6 +61,7 @@ class Cells(dj.Computed):
         for size in size_thresholds:
             key_item = 'size_of_' + str(size)
             s3_fp = stack + '/cells/' + 'cells-' + str(size) + '/' + str(section) + '.bin'
+            os.remove(os.environ['ROOT_DIR'] + s3_fp)
             report = self.client.stat_object(self.bucket, s3_fp)
             key[key_item] = int(report.size / 1000)
         self.insert1(key)

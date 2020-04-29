@@ -86,11 +86,11 @@ else:
         fn += str(section)+'.bin'
         pics.tofile(os.environ['ROOT_DIR']+fn)
         print(os.path.getsize(os.environ['ROOT_DIR']+fn))
-        # setup_upload_from_s3(fn, recursive=False)
+        setup_upload_from_s3(fn, recursive=False)
         # os.remove(os.environ['ROOT_DIR'] + fn)
-    save_fp = os.environ['ROOT_DIR'] + stack+'/cells/'
-    setup_upload_from_s3(save_fp)
-    shutil.rmtree(save_fp)
+    # save_fp = os.environ['ROOT_DIR'] + stack+'/cells/'
+    # setup_upload_from_s3(save_fp)
+    # shutil.rmtree(save_fp)
 
     del patchesBySize
     print(section, 'finished in', time()-t0, 'seconds')
