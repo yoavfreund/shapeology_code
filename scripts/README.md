@@ -3,13 +3,16 @@
 This step is to extract cells from each brain section's image.
 ### How to run
 #### 1. Extracting cells from single section
+This script extracts all of cells from a given file. Get filename and yaml path as input and generate directory based on filename.
 ```
-python Cells_extractor.py stack section
+python Cells_extractor.py <filename>.tif
 ```
 ```
-positional arguments:
-  stack       The name of the brain, type=str, default='MD594'
-  section     Id of the brain section, type=int, default=256
+optional arguments:
+  yaml  
+
+generate:
+  directory called <filename>_cells
 ```
 #### 2. Extracting cells from all images of one brain
 
