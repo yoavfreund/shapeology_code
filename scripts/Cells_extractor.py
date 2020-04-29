@@ -16,6 +16,7 @@ import sys
 import shutil
 from scipy import stats
 from time import time
+from time import sleep
 sys.path.append(os.environ['REPO_DIR'])
 from extractPatches import patch_extractor
 from lib.utils import configuration, run
@@ -87,6 +88,8 @@ else:
         pics.tofile(os.environ['ROOT_DIR']+fn)
         print(os.path.getsize(os.environ['ROOT_DIR']+fn))
         setup_upload_from_s3(fn, recursive=False)
+        if size == 201:
+            sleep(20)
         # os.remove(os.environ['ROOT_DIR'] + fn)
     # save_fp = os.environ['ROOT_DIR'] + stack+'/cells/'
     # setup_upload_from_s3(save_fp)
