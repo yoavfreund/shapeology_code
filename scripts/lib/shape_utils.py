@@ -37,7 +37,7 @@ def plot_patches(fig,data,h=15,w=15,_titles=[]):
 def pack_pics(Reps):
     size=Reps[0].shape[0]
     _len=len(Reps)
-    Reps_mat=np.zeros([_len,size,size])
+    Reps_mat=np.zeros([_len,size,size], np.float16)
     for i in range(_len):
         Reps_mat[i,:,:]=Reps[i]
     return Reps_mat
