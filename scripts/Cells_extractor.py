@@ -85,6 +85,7 @@ else:
             os.makedirs(os.environ['ROOT_DIR']+fn)
         fn += str(section)+'.bin'
         pics.tofile(os.environ['ROOT_DIR']+fn)
+        print(os.path.getsize(os.environ['ROOT_DIR']+fn))
         setup_upload_from_s3(fn, recursive=False)
         os.remove(os.environ['ROOT_DIR'] + fn)
     del patchesBySize

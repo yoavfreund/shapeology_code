@@ -56,7 +56,9 @@ class permutator:
         for i in range(self.K):
             self.fp[i].close()
             self.fp[i]=self.tmpDir+'/bucket-'+str(i)+'.bin'
-
+        order = permutation(len(self.fp))
+        self.fp = np.array(self.fp)
+        self.fp = self.fp[order[:20]]
         if not os.path.exists(outfilename):
             os.makedirs(outfilename)
 
