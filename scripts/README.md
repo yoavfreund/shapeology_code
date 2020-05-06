@@ -25,7 +25,8 @@ optional arguments:
   configure.yaml   Path to Yaml file with parameters and passwords
   stack            The name of the brain, type=str, default='MD594'
 ```
-[More information](Aws-jupyter.md)
+To speed up the process, this script can be run on multiple AWS instances 
+([More information](Aws-jupyter.md)).
 
 ## Second step: Training for diffusion map
 ### Process
