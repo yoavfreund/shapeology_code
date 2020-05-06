@@ -198,7 +198,7 @@ if __name__=="__main__":
     size_thresholds = params['normalization']['size_thresholds']
 
     t0 = time()
-    img = io.imread(os.environ['ROOT_DIR'] + infile)
+    img = io.imread(infile)
     tile = 255 - img.copy()
     _std = np.std(tile.flatten())
     if _std < min_std:
