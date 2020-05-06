@@ -13,7 +13,7 @@ optional arguments:
   yaml              Path to Yaml file with parameters
 
 generate:
-  directory called <filename>_cells  files per padding size randomly permuted
+  directory called <filename>_cells. Directory contains one file per padding size. The patches in each file are randomly permuted.
 ```
 #### 2. Running extractPatches.py on all sections of one brain
 This script uses datajoint.populate and Cells_extractor.py to excute extractPatches.py on all sections of a given brain.
