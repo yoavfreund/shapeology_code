@@ -77,7 +77,22 @@ class FileInfo(dj.Computed):
 
 FileInfo.populate()
 
-
+@schema
+class RawfilesDK39(dj.Computed):
+    definition="""
+    -> SectionDK39
+    -----
+    path_to_raw_img: char(200)    # path to the corresponding raw image file
+    """
+    stack = 'DK39'
+    raw_images_root = os.path.join('CSHL_data_processed/', stack, 'neuroglancer_input/')
+    bucket = "mousebrainatlas-data"
+    client = get_s3_client(credFiles)
+    def make(self, key):
+        section = (SectionDK39 & key).fetch1('section_id')
+        print('populating for ', section, end='\n')
+        key['path_to_raw_img'] = self.raw_images_root + str(section) + '.tif'
+        self.insert1(key)
 
 
 

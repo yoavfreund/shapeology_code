@@ -3,9 +3,12 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("name", type=str, default='test', help="The name of a cluster")
 parser.add_argument("number", type=int, default=50, help="The number of instances to create")
+parser.add_argument("script", type=str, default="/Users/kuiqian/Github/shapeology_code/install-project.sh",
+                    help='Path to bash file to run on cloud')
 args = parser.parse_args()
 name = args.name
 number = args.number
+script_fp = args.script
 
 
 from aws_jupyter.create_cluster import create_cluster
@@ -43,8 +46,8 @@ def check_status(args):
 
 
 while not check_status({"name": name,
-                        "script": "/Users/kuiqian/Github/shapeology_code/install-project.sh",
-                        "output": True,
+                        "script": script_fp,
+                        "output": False,
                         }):
     sleep(30)
 

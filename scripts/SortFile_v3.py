@@ -27,7 +27,7 @@ class Sorter:
         assert os.path.exists(self.src_root)
         self.K = K
 
-    def sort_file(self, size, M=100000, stem='permuted'):
+    def sort_file(self, size, stem='permuted'):
         '''
         Create K files to collect cells from each section based on the proportion of the number of cells in each section to the total.
         One file contains 100000 cells.
@@ -41,57 +41,25 @@ class Sorter:
         self.saveDir = stem + '-' + str(size) + '/'
         if not os.path.exists(self.saveDir):
             os.makedirs(self.saveDir)
-        self.fp = []
-        for i in range(self.K):
-            self.fp.append(open(self.saveDir + '/permuted-' + str(i) + '.bin', 'bw'))
         total = sum([os.path.getsize(os.path.join(r, file)) for r, d, files in os.walk(self.dir) for file in files])
-        for fn in glob(self.dir+'*.bin'):
-            number = int(os.path.getsize(fn)/total*M)
-            V = np.fromfile(fn, np.float16)
-            V = V.reshape([-1,self.size,self.size])
-            for i in range(self.K):
-                self.fp[i].write(V[i*number:(i+1)*number, :, :])
-        clock('Sort files of size ' + str(size))
-
-    def close(self):
-        '''
-        Read and permute each file randomly collecting patches to achieve a random permutation of patches.
-        :return:
-        '''
+        files = [fn for fn in glob(self.dir + '*.bin')]
+        prob = [os.path.getsize(fn)/total for fn in glob(self.dir + '*.bin')]
+        self.count = []
+        for i in range(len(files)):
+            self.count.append(0)
         for i in range(self.K):
-            self.fp[i].close()
-            self.fp[i]=self.saveDir + '/permuted-' + str(i) + '.bin'
+            self.fp = open(self.saveDir + '/permuted-' + str(i) + '.bin', 'bw')
+            for choice in np.random.choice(len(files),100000,p=prob):
+                fn = files[choice]
+                V = np.fromfile(fn, np.float16)
+                V = V.reshape([-1,self.size**2])
+                self.fp.write(V[self.count[choice], :])
+                self.count[choice] += 1
+            clock(str(i) + ' files finished')
 
-        for filename in self.fp:
-            id = filename[filename.rfind('-') + 1:filename.rfind('.bin')]
-            # file = open(filename, 'br')
-            # D = file.read()
-            # print('buffer length',len(D))
-            # D = np.frombuffer(D, dtype=np.byte)
-            # print(D.shape,type(D[0]))
-            D = np.fromfile(filename, np.float16)
-            elements = D.reshape([-1, self.size**2])
-            # print(elements.shape)
-
-            L = elements.shape[0]
-            _order = np.random.permutation(L)
-            permuted_elements = elements[_order, :]
-            permuted_elements.tofile(filename)
-            clock(id + ' files finished')
-        clock('Permute files of size ' + str(self.size))
 
 
 if __name__=='__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("file_num", type=int, default=20,
-                        help="Number of permuted files to generate")
-    parser.add_argument("cell_num", type=int, default=100000,
-                        help="Number of cells in one permuted file")
-    args = parser.parse_args()
-    K = args.file_num
-    M = args.cell_num
 
     yamlfile = os.environ['REPO_DIR'] + 'shape_params-aws.yaml'
     params = configuration(yamlfile).getParams()
@@ -106,10 +74,9 @@ if __name__=='__main__':
     size_thresholds = params['normalization']['size_thresholds']
     for size in size_thresholds:
         sorter.sort_file(size, stem=root_dir + 'permute/permuted')
-        sorter.close()
         clock('Complete files of size '+str(size))
         print('Complete files of size '+str(size), time() - t0, 'seconds')
     log_fp = 'TimeLog/'
     if not os.path.exists(log_fp):
         os.mkdir(log_fp)
-    pk.dump(time_log,open(log_fp+'Time_log_permute_new.pkl','wb'))
+    pk.dump(time_log,open(log_fp+'Time_log_permute_v3.pkl','wb'))
