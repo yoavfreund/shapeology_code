@@ -4,13 +4,14 @@ paths:
   scripts_dir: '/home/ubuntu/data/Github/shapeology_code/scripts'
   exec_dir: '/Datajoint_Interface/project_schemas/atlas_schema_python_v3/Cell_Extractor/'
   data_dir: '/home/ubuntu/data/BstemAtlasDataBackup/ucsd_brain/'
+  credFiles: '/home/ubuntu/data/Github/VaultBrain/credFiles_aws.yaml'
   DiffusionMap: "/home/ubuntu/data/Github/shapeology_code/notebooks/diffusionMap"
   
 preprocessing:
   polarity: -1  # invert polarity of image (cells are dark)
   min_std:  10  # if tile has std smaller than min_std then it is
                 # ignored as "too smooth"
-  offset:   -20 # offset used in cv2.adaptiveThreshold
+  offset:   -12 # offset used in cv2.adaptiveThreshold
   min_area: 10  # Patches with area smaller than min_area are ignored
 
 normalization:

@@ -2,11 +2,15 @@ import cv2
 from cv2 import moments,HuMoments
 import pickle
 import numpy as np
+import os
+from skimage import io
+from time import time
+
 
 from label_patch import diffusionMap
 from patch_normalizer import normalizer
 from lib.utils import mark_contours, configuration
-from time import time
+from lib.shape_utils import *
 
 class patch_extractor:
     def __init__(self,params):
@@ -169,8 +173,8 @@ if __name__=="__main__":
     import argparse
     from time import time
     parser = argparse.ArgumentParser()
-    parser.add_argument("section", type=int,
-                    help="Id of section")
+    parser.add_argument("file", type=str,
+                        help="Process <filename>.tif into <filename>_cells")
     parser.add_argument("yaml", type=str,
                     help="Path to Yaml file with parameters")
     
@@ -180,42 +184,49 @@ if __name__=="__main__":
     
     args = parser.parse_args()
     config = configuration(args.yaml)
-    params=config.getParams()
+    params = config.getParams()
 
-    _dir=params['paths']['data_dir']+'/tiles/'
-    stem=args.filestem
-    infile = _dir+stem+'.tif'
-    out_stem= stem+'.'+params['name']
-    #pkl_dir=params['paths']['pickle_subdir']
-    pkl_out_file= _dir+'pickles/'+out_stem+'.pkl'
-    annotated_infile=_dir+out_stem+'_contours.jpg'
+    _dir=params['paths']['data_dir']
+    filename=args.file
+    infile = _dir+filename
+    out_dir = _dir+filename[:-4]+'_cells/'
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
 
-    extractor=patch_extractor(infile,params)
+    extractor = patch_extractor(params)
+    min_std = params['preprocessing']['min_std']
+    size_thresholds = params['normalization']['size_thresholds']
 
-    tile=cv2.imread(infile)
-    gray = cv2.cvtColor(tile,cv2.COLOR_BGR2GRAY)
-
-    if params['preprocessing']['polarity']==-1:
-        gray = 255-gray
-
-    #n_window=extractor.check_and_normalize(gray)
-
-    min_std=params['preprocessing']['min_std']
-    _std = np.std(gray.flatten())
-    
+    t0 = time()
+    img = io.imread(os.environ['ROOT_DIR'] + infile)
+    tile = 255 - img.copy()
+    _std = np.std(tile.flatten())
     if _std < min_std:
-        print('image',infile,'std=',_std, 'too blank, skipping')
+        print('image', filename, 'std=', _std, 'too blank, skipping')
     else:
-        t0=time()
-        print('processing',infile,'into',pkl_out_file)
-        Stats=extractor.segment_cells(gray)
-        extracted,marked_tile = extractor.extract_blobs(Stats,gray)
+        Stats = extractor.segment_cells(tile)
+        extracted = extractor.extract_blobs(Stats, tile, dm=False)
+        patchesBySize = {size: [] for size in size_thresholds}  # storage for normalized patches
+        patchIndex = {size: [] for size in size_thresholds}
 
-        print('extracted',len(extracted),'patches')
-        
-        pickle.dump(extracted,open(pkl_out_file,'wb'))
-        print('properties written to',pkl_out_file)
+        # collect patches by size
+        for i in range(len(extracted)):
+            properties = extracted[i]
+            padded_size = properties['padded_size']
+            patch = properties['padded_patch']
+            if patch is None:
+                continue
+            patchesBySize[padded_size].append(patch)
 
-        cv2.imwrite(annotated_infile,marked_tile)
-        print('annotated image written to',annotated_infile)
-        print('finished in %5.1f seconds'%(time()-t0))
+        for size in size_thresholds:
+            pics = pack_pics(patchesBySize[size])
+            pics = pics.astype(np.float16)
+            order = np.random.permutation(pics.shape[0])
+            pics = pics[order, :, :]
+
+            fn = out_dir + str(size) + '.bin'
+            pics.tofile(fn)
+            print(os.path.getsize(fn))
+
+        del patchesBySize
+        print(filename, 'finished in', time() - t0, 'seconds')
