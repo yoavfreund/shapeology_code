@@ -16,6 +16,11 @@ from Cells_extractor import compute
 from lib.utils import run, configuration
 
 
+stack = args.stack
+yamlfile = os.environ['REPO_DIR'] + args.yaml
+params = configuration(yamlfile).getParams()
+credFiles = params['paths']['credFiles']
+
 dj.config['database.host'] = get_dj_creds(credFiles)['database.host']
 dj.config['database.user'] = get_dj_creds(credFiles)['database.user']
 dj.config['database.port'] = get_dj_creds(credFiles)['database.port']
@@ -25,10 +30,6 @@ dj.conn()
 schema = dj.schema('kui_diffusionmap')
 schema.spawn_missing_classes()
 
-stack = args.stack
-yamlfile = os.environ['REPO_DIR'] + args.yaml
-params = configuration(yamlfile).getParams()
-credFiles = params['paths']['credFiles']
 
 @schema
 class Cells(dj.Computed):

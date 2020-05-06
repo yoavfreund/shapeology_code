@@ -9,7 +9,7 @@ pip install mxnet
 cd shapeology_code/scripts/Cell_datajoint/
 
 #python HSV_datajoint_v2.py 'AWS' 'MD589'
-python Cells_extract_datajoint.py 'AWS' 'DK39'
+python Cells_extract_datajoint.py 'shape_params-aws.yaml' 'DK39'
 #python Patch_extractor_datajoint.py 'AWS' 'MD585'
 # python Sample_features_datajoint.py 'AWS' 'MD585'
 #python Thresholds_datajoint.py 'AWS' 'MD589'

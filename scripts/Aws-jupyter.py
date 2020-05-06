@@ -2,7 +2,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("name", type=str, default='test', help="The name of a cluster")
-parser.add_argument("number", type=int, default=10, help="The number of instances to create")
+parser.add_argument("number", type=int, default=50, help="The number of instances to create")
 args = parser.parse_args()
 name = args.name
 number = args.number
@@ -44,7 +44,7 @@ def check_status(args):
 
 while not check_status({"name": name,
                         "script": "/Users/kuiqian/Github/shapeology_code/install-project.sh",
-                        "output": False,
+                        "output": True,
                         }):
     sleep(30)
 
