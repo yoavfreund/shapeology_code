@@ -51,11 +51,17 @@ while not check_status({"name": name,
                         }):
     sleep(30)
 
-# from aws_jupyter.run_cluster import run_cluster
-# run_cluster({
-#     "script": "/Users/kuiqian/Github/shapeology_code/install-project.sh",
-#     "output": False,
-# })
+from aws_jupyter.send_files import send_files
+send_files({
+    "local": "/Users/kuiqian/Github/VaultBrain/",
+    "remote": "/home/ubuntu/data/",
+})
+
+from aws_jupyter.run_cluster import run_cluster
+run_cluster({
+    "script": "/Users/kuiqian/Github/shapeology_code/install-project.sh",
+    "output": False,
+})
 
 
 # from aws_jupyter.terminate_cluster import terminate_cluster
