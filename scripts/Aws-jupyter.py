@@ -51,7 +51,7 @@ while not check_status({"name": name,
 
 from aws_jupyter.send_files import send_files
 send_files({
-    "local": os.environ['VAULT'],
+    "local": "/Users/kuiqian//Github/VaultBrain/",
     "remote": "/home/ubuntu/data/VaultBrain/",
 })
 
