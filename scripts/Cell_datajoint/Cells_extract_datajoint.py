@@ -12,8 +12,9 @@ import pandas as pd
 sys.path.append('./lib')
 from utilities import *
 sys.path.append(os.environ['REPO_DIR'])
-from Cells_extractor import compute
 from lib.utils import run, configuration
+from Cells_extractor import compute
+
 
 
 stack = args.stack
