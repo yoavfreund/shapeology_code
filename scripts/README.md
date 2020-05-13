@@ -1,7 +1,7 @@
 ## Guidlines for Cell Shape Analysis
 
 ### Configuration Files
-* **..\environ.sh**: Exports the environment variables used for this project. The variables are set based on your file locations.
+* **..\environ.sh**: Exports the environment variables used for this project. These variables point to the directories of this deployment.
 Details:
 ```bash
 export SHAPOLOGY_DIR=~/Github/shapeology_code  # Directory for this project
