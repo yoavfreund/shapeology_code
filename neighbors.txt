@@ -1,0 +1,2 @@
+Ready. IP addresses of all instances:
+13.52.99.227

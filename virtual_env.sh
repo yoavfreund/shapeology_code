@@ -1,4 +1,3 @@
-PROJECT_DIR=/home/ubuntu/data/Github/shapeology_code
 virtualenv="shapeology_venv"
 ##################################################
 
@@ -8,12 +7,7 @@ green='\e[1;32m'
 cyan='\e[1;36m'
 NC='\033[0m' # No Color
 
-export REPO_DIR=$PROJECT_DIR/scripts/
-
-# FOR UCSD BRAIN
-export ROOT_DIR=/home/ubuntu/data/BstemAtlasDataBackup/ucsd_brain/
-
-venv_dir=/home/ubuntu/data/venv/$virtualenv
+#venv_dir=~/data/venv/$virtualenv
 
 if [ ! -d $venv_dir ]; then
     echo ""
@@ -26,7 +20,7 @@ if [ ! -d $venv_dir ]; then
 
     echo ""
     echo -e "${green}[virtualenv] Installing Python packages${NC}"
-    pip3 install -r $PROJECT_DIR/requirements.txt
+    pip3 install -r $SHAPOLOGY_DIR/requirements.txt
         
 fi
 

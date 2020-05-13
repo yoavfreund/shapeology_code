@@ -3,6 +3,7 @@ import numpy as np
 from minio import Minio
 import json
 import sys
+import os
 import yaml
 
 def get_dj_creds( credential_file_pointers='setup/credFiles.yaml' ):
@@ -14,7 +15,7 @@ def get_dj_creds( credential_file_pointers='setup/credFiles.yaml' ):
     credFiles = yaml.load(open( credential_file_pointers,'r'))
     
     # Load Datajoint Credentials
-    with open( credFiles['dj_fp'] ) as f:
+    with open( os.environ['VAULT']+credFiles['dj_fp'] ) as f:
         dj_creds = json.load(f)
     return dj_creds
 
@@ -28,7 +29,7 @@ def get_s3_client( credential_file_pointers='setup/credFiles.yaml' ):
     
     # Load AWS Credentials
     # `creds` needs the following fields: 'access_key', 'secret_access_key'
-    with open( credFiles['aws_fp'] ) as f:
+    with open( os.environ['VAULT']+credFiles['aws_fp'] ) as f:
         creds = json.load(f)
         
     return Minio( 's3.amazonaws.com', secure=True, **creds)

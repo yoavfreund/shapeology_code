@@ -1,20 +1,9 @@
 ---
-name: "local"
-paths:
-  s3stem:  's3://mousebraindata-open/MD657'
-  patches: 'permuted'
-  DiffusionMap: 'DiffusionMaps'
-
-  #local paths
-  scripts_dir: '/Users/kuiqian/Github//shapeology_code/scripts'
-  data_dir: '/Users/kuiqian/BstemAtlasDataBackup/ucsd_brain/'
-  DiffusionMap: "/Users/kuiqian/Github/shapeology_code/notebooks/diffusionMap"
-  
 preprocessing:
   polarity: -1  # invert polarity of image (cells are dark)
   min_std:  10  # if tile has std smaller than min_std then it is
                 # ignored as "too smooth"
-  offset:   -20 # offset used in cv2.adaptiveThreshold
+  offset:   -12 # offset used in cv2.adaptiveThreshold
   min_area: 10  # Patches with area smaller than min_area are ignored
 
 normalization:

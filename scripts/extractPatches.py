@@ -28,7 +28,7 @@ class patch_extractor:
         self.min_area=params['preprocessing']['min_area']
         self.Norm=normalizer(params)
         self.preprocess_kernel=self.Norm.circle_patch(radius=1)
-        self.dm_dir=params['paths']['DiffusionMap']
+        self.dm_dir=os.environ['SHAPOLOGY_DIR']+'/notebooks/diffusionMap'
         #self.tile_stats={'tile name':infile}
 
         self.size_thresholds = params['normalization']['size_thresholds']
@@ -186,7 +186,7 @@ if __name__=="__main__":
     config = configuration(args.yaml)
     params = config.getParams()
 
-    _dir=params['paths']['data_dir']
+    _dir=os.environ['ROOT_DIR']
     filename=args.file
     infile = _dir+filename
     out_dir = _dir+filename[:-4]+'_cells/'
