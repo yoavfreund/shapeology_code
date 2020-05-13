@@ -1,6 +1,7 @@
 cd ~/data/Github/
 #sleep $(shuf -i 1-100 -n 1)
 rm -rf shapeology_code
+#git config --global core.compression 9
 git clone -b kui_dev --single-branch https://github.com/yoavfreund/shapeology_code.git
 
 export SHAPOLOGY_DIR=~/data/Github/shapeology_code

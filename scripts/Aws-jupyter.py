@@ -46,16 +46,17 @@ def check_status(args):
 
 
 while not check_status({"name": name,
-                        "script": script_fp,
-                        "output": False,
+                        # "script": script_fp,
+                        # "output": False,
                         }):
     sleep(30)
 
-from aws_jupyter.send_files import send_files
-send_files({
-    "local": '/Users/kuiqian/Github/VaultBrain/',
-    "remote": "/home/ubuntu/data/VaultBrain/",
-})
+# from aws_jupyter.send_files import send_files
+# send_files({
+#     "local": '/Users/kuiqian/Github/VaultBrain/',
+#     "remote": "/home/ubuntu/data/",
+# })
+
 
 from aws_jupyter.run_cluster import run_cluster
 run_cluster({

@@ -37,14 +37,14 @@ class Sorter:
         '''
         # V = pk.load(open(pkl_file, 'rb'))
         self.size = size
-        self.dir = self.src_root + 'cells-'+str(size)+'/'
+        # self.dir = self.src_root + 'cells-'+str(size)+'/'
         self.saveDir = stem + '-' + str(size) + '/'
         if not os.path.exists(self.saveDir):
             os.makedirs(self.saveDir)
         self.fp = []
         for i in range(self.K):
             self.fp.append(open(self.saveDir + '/permuted-' + str(i) + '.bin', 'bw'))
-        total = sum([os.path.getsize(os.path.join(r, file)) for r, d, files in os.walk(self.dir) for file in files])
+        total = sum([os.path.getsize(os.path.join(r, file)) for file in glob(self.src_root+)])
         for fn in glob(self.dir+'*.bin'):
             number = int(os.path.getsize(fn)/total*M)
             V = np.fromfile(fn, np.float16)
@@ -93,7 +93,7 @@ if __name__=='__main__':
     K = args.file_num
     M = args.cell_num
 
-    yamlfile = os.environ['REPO_DIR'] + 'shape_params-aws.yaml'
+    yamlfile = os.environ['REPO_DIR'] + 'shape_params.yaml'
     params = configuration(yamlfile).getParams()
     stack = 'DK39'
     root_dir = os.environ['ROOT_DIR']
