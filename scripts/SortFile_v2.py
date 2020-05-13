@@ -44,8 +44,8 @@ class Sorter:
         self.fp = []
         for i in range(self.K):
             self.fp.append(open(self.saveDir + '/permuted-' + str(i) + '.bin', 'bw'))
-        total = sum([os.path.getsize(os.path.join(r, file)) for file in glob(self.src_root+)])
-        for fn in glob(self.dir+'*.bin'):
+        total = sum([os.path.getsize(os.path.join(r, str(size) + '.bin')) for r in glob(self.src_root+'/*')])
+        for fn in glob(self.src_root+'/*/'+str(size)+'.bin'):
             number = int(os.path.getsize(fn)/total*M)
             V = np.fromfile(fn, np.float16)
             V = V.reshape([-1,self.size,self.size])

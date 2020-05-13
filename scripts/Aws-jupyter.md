@@ -10,7 +10,7 @@ send scripts to run on them parallelly. It is based on a python module,
 
 ### Structure
 The structure is as follows:
-* **credentials.yaml**: Specifies the credentials used for aws connection. 
+* **credentials.yaml**: Specifies the credentials used for creating EC2 instances. 
 Format:
 ```yaml
 Arbitrary Name:
@@ -21,17 +21,32 @@ Arbitrary Name:
 ```
 * **..\install-project.sh**: Customizes the commands to run on cloud. Example:
 ```bash
-git clone -b kui_dev --single-branch https://github.com/yoavfreund/shapeology_code.git
-source shapeology_code/configure.sh
+cd ~/data/Github/
+## Download the project
+git clone https://github.com/yoavfreund/shapeology_code.git
+## Export environment variables on cloud
+export SHAPOLOGY_DIR=~/data/Github/shapeology_code
+export REPO_DIR=$SHAPOLOGY_DIR/scripts/
+export ROOT_DIR=~/data/BstemAtlasDataBackup/ucsd_brain/
+export VAULT=~/data/VaultBrain/
+export venv_dir=~/data/venv/shapeology_venv
+## Activate the virtual environment and run the script
+source shapeology_code/virtual_env.sh
 cd shapeology_code/scripts/Cell_datajoint/
-python Cells_extract_datajoint.py 'AWS' 'DK39'
+python Cells_extract_datajoint.py 'shape_params.yaml' 'DK39'
 ```
-* **Aws-jupyter.py**: Launches a cluster and check the status of it until all instances are running. 
+* **Vault**: Contains all the credential files for EC2 instances. See [details](README.md).
+* **Aws-jupyter.py**: Get the process done sequentially. Launches a cluster and check the status of it until all instances are running. 
 
 ### Usage
-1. Run `aws-jupyter config` to make sure the configuration 
-is properly set.
-2. Create a cluster and send `..\install-project.sh` to run.
+1.Run `aws-jupyter config` to set the configuration file. You need an AMI (a template instance) in advance.
+```bash
+Region: your_ami_region
+Instance type: your_ami_instance_type
+AMI:    your_ami_id
+Credential: path_to_credentials.yaml
+```
+2.Create a cluster, transfer **Vault** to instances of the cluster and send `..\install-project.sh` to run.
 ```bash
 python Aws-jupyter.py cluster_name number script_fp
 ```
