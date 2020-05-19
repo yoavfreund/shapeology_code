@@ -4,10 +4,9 @@ rm -rf shapeology_code
 git clone -b kui_dev --single-branch https://github.com/yoavfreund/shapeology_code.git
 
 export SHAPEOLOGY_DIR=~/data/Github/shapeology_code
-export REPO_DIR=$SHAPEOLOGY_DIR/scripts/
 export ROOT_DIR=~/data/BstemAtlasDataBackup/ucsd_brain/
 export VAULT=~/data/VaultBrain/
-export venv_dir=~/data/venv/
+export venv=~/data/venv/
 
 source shapeology_code/virtual_env.sh
 pip install awscli
