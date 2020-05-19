@@ -85,13 +85,13 @@ if __name__=='__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("file_num", type=int, default=20,
+    parser.add_argument("--file_num", type=int, default=20,
                         help="Number of permuted files to generate")
-    parser.add_argument("cell_num", type=int, default=100000,
+    parser.add_argument("--cell_num", type=int, default=100000,
                         help="Number of cells in one permuted file")
-    parser.add_argument("src_root", type=str, default='$ROOT_DIR/cells/',
+    parser.add_argument("--src_root", type=str, default='$ROOT_DIR/cells/',
                         help="Path to directory containing cell files")
-    parser.add_argument("stem", type=str, default='permute/permuted',
+    parser.add_argument("--stem", type=str, default='permute/permuted',
                         help="Stem of filename of permuted files")
     args = parser.parse_args()
     K = args.file_num
@@ -107,14 +107,14 @@ if __name__=='__main__':
     t0 = time()
     setup_download_from_s3(src_dir[len(root_dir):])
     clock('Download From S3')
-    sorter = Sorter(src_root=src_dir)
+    sorter = Sorter(src_root=src_dir,K=K)
     size_thresholds = params['normalization']['size_thresholds']
     for size in size_thresholds:
-        sorter.sort_file(size, stem=root_dir + stem)
+        sorter.sort_file(size, M=M, stem=os.path.join(root_dir, stem))
         sorter.close()
         clock('Complete files of size '+str(size))
         print('Complete files of size '+str(size), time() - t0, 'seconds')
-    log_fp = 'TimeLog/'
+    log_fp = os.path.join(root_dir, 'TimeLog/')
     if not os.path.exists(log_fp):
         os.mkdir(log_fp)
     pk.dump(time_log,open(log_fp+'Time_log_permute_new.pkl','wb'))

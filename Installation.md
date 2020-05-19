@@ -36,11 +36,13 @@ export venv=~/Github/venv/              # Directory to create virtual environmen
     aws_fp: s3-creds.json
     dj_fp: dj_local_conf.json
     ```
-* When configuration files are set, run the following commands to activate the environment variables and the virtual environment.
+* When configuration files are set, run the following commands to activate the environment variables and the virtual environment. 
+Please ensure you have installed `virtualenv`.
 ```bash
 source $SHAPEOLOGY_DIR/environ.sh
 source $SHAPEOLOGY_DIR/virtual_env.sh
 ```
+Note: Please check whether you have installed the virtual environment successfully. Clear `$venv/shapeology_venv` before you try again if failed.
 
 ## Step 3
 ### Test

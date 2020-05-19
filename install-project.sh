@@ -1,14 +1,13 @@
 cd ~/data/Github/
 #sleep $(shuf -i 1-100 -n 1)
 rm -rf shapeology_code
-#git config --global core.compression 9
 git clone -b kui_dev --single-branch https://github.com/yoavfreund/shapeology_code.git
 
-export SHAPOLOGY_DIR=~/data/Github/shapeology_code
-export REPO_DIR=$SHAPOLOGY_DIR/scripts/
+export SHAPEOLOGY_DIR=~/data/Github/shapeology_code
+export REPO_DIR=$SHAPEOLOGY_DIR/scripts/
 export ROOT_DIR=~/data/BstemAtlasDataBackup/ucsd_brain/
 export VAULT=~/data/VaultBrain/
-export venv_dir=~/data/venv/shapeology_venv
+export venv_dir=~/data/venv/
 
 source shapeology_code/virtual_env.sh
 pip install awscli

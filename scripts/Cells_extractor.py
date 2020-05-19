@@ -70,10 +70,11 @@ if __name__=="__main__":
     import argparse
     from time import time
     parser = argparse.ArgumentParser()
+    parser.add_argument("yaml", type=str,
+                        help="Path to Yaml file with parameters")
     parser.add_argument("image_dir", type=str,
                         help="Path to directory saving images")
-    parser.add_argument("yaml", type=str,
-                    help="Path to Yaml file with parameters")
+
     args = parser.parse_args()
     yamlfile = args.yaml
     img_dir = args.image_dir

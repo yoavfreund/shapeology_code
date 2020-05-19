@@ -186,7 +186,7 @@ if __name__=="__main__":
     config = configuration(args.yaml)
     params = config.getParams()
 
-    _dir=os.environ['ROOT_DIR'] + 'cells/'
+    _dir=os.path.join(os.environ['ROOT_DIR'], 'cells/')
     filename=args.file
     dot = filename.rfind('.')
     slash = filename.rfind('/')

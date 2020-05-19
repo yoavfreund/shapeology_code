@@ -7,6 +7,8 @@ This project is meant to analyze brain images based on cell shape features. The 
 * Generating detection score maps
 * Finding statistically significant regions
 
+Developed with Python 3.7.
+
 ## Installation
 Please read the [Installation.md](Installation.md) for the details of the installation process.
 
