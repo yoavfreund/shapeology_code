@@ -89,23 +89,28 @@ if __name__=='__main__':
                         help="Number of permuted files to generate")
     parser.add_argument("cell_num", type=int, default=100000,
                         help="Number of cells in one permuted file")
+    parser.add_argument("src_root", type=str, default='$ROOT_DIR/cells/',
+                        help="Path to directory containing cell files")
+    parser.add_argument("stem", type=str, default='permute/permuted',
+                        help="Stem of filename of permuted files")
     args = parser.parse_args()
     K = args.file_num
     M = args.cell_num
+    src_dir = args.src_root
+    stem = args.stem
 
     yamlfile = os.environ['REPO_DIR'] + 'shape_params.yaml'
     params = configuration(yamlfile).getParams()
-    stack = 'DK39'
     root_dir = os.environ['ROOT_DIR']
 
     clock('Process Begin')
     t0 = time()
-    setup_download_from_s3(stack+'/cells/')
+    setup_download_from_s3(src_dir[len(root_dir):])
     clock('Download From S3')
-    sorter = Sorter(src_root=root_dir + stack + '/cells/')
+    sorter = Sorter(src_root=src_dir)
     size_thresholds = params['normalization']['size_thresholds']
     for size in size_thresholds:
-        sorter.sort_file(size, stem=root_dir + 'permute/permuted')
+        sorter.sort_file(size, stem=root_dir + stem)
         sorter.close()
         clock('Complete files of size '+str(size))
         print('Complete files of size '+str(size), time() - t0, 'seconds')

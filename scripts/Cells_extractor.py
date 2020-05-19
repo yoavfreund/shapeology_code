@@ -7,6 +7,7 @@ import sys
 import shutil
 from scipy import stats
 from time import time
+from glob import glob
 from time import sleep
 sys.path.append(os.environ['REPO_DIR'])
 from lib.utils import configuration, run
@@ -64,3 +65,19 @@ def compute(file, yaml_file, stack, section, client, bucket, key):
     os.remove(os.environ['ROOT_DIR']+img_fn)
     return key
 
+if __name__=="__main__":
+
+    import argparse
+    from time import time
+    parser = argparse.ArgumentParser()
+    parser.add_argument("image_dir", type=str,
+                        help="Path to directory saving images")
+    parser.add_argument("yaml", type=str,
+                    help="Path to Yaml file with parameters")
+    args = parser.parse_args()
+    yamlfile = args.yaml
+    img_dir = args.image_dir
+    t0 = time()
+    for img in glob(img_dir+'/*'):
+        run('python {0}/extractPatches.py {1} {2}'.format(os.environ['REPO_DIR'], img, yamlfile))
+    print('Cell extraction finished in', time()-t0, 'seconds')

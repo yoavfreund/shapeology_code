@@ -19,7 +19,7 @@ Arbitrary Name:
   key_name: your_ec2_key_pair_name
   ssh_key: /path/to/the/ec2/key/pair/file
 ```
-* **..\install-project.sh**: Customizes the commands to run on cloud. Example:
+* **install-project.sh**: Customizes the commands to run on cloud. Example:
 ```bash
 cd ~/data/Github/
 ## Download the project

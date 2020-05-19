@@ -28,7 +28,7 @@ class patch_extractor:
         self.min_area=params['preprocessing']['min_area']
         self.Norm=normalizer(params)
         self.preprocess_kernel=self.Norm.circle_patch(radius=1)
-        self.dm_dir=os.environ['SHAPOLOGY_DIR']+'/notebooks/diffusionMap'
+        self.dm_dir=os.environ['SHAPEOLOGY_DIR']+'/notebooks/diffusionMap'
         #self.tile_stats={'tile name':infile}
 
         self.size_thresholds = params['normalization']['size_thresholds']
@@ -186,10 +186,12 @@ if __name__=="__main__":
     config = configuration(args.yaml)
     params = config.getParams()
 
-    _dir=os.environ['ROOT_DIR']
+    _dir=os.environ['ROOT_DIR'] + 'cells/'
     filename=args.file
-    infile = _dir+filename
-    out_dir = _dir+filename[:-4]+'_cells/'
+    dot = filename.rfind('.')
+    slash = filename.rfind('/')
+    infile = filename
+    out_dir = _dir+filename[slash+1:dot]+'_cells/'
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
@@ -223,7 +225,7 @@ if __name__=="__main__":
             pics = pics.astype(np.float16)
             order = np.random.permutation(pics.shape[0])
             pics = pics[order, :, :]
-            pics = pics[:int(pics.shape[0]*0.8), :, :]
+            # pics = pics[:int(pics.shape[0]*0.8), :, :]
             fn = out_dir + str(size) + '.bin'
             pics.tofile(fn)
             print(os.path.getsize(fn))
