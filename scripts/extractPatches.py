@@ -32,7 +32,7 @@ class patch_extractor:
         #self.tile_stats={'tile name':infile}
 
         self.size_thresholds = params['normalization']['size_thresholds']
-        self.DM = {size: diffusionMap(self.dm_dir + '-%d.pkl'%size) for size in self.size_thresholds}
+        # self.DM = {size: diffusionMap(self.dm_dir + '-%d.pkl'%size) for size in self.size_thresholds}
 
 
         self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
