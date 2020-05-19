@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/install-project.sh" beforeDir="false" afterPath="$PROJECT_DIR$/install-project.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Shift_datajoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Cells_extractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cells_extractor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/neighbors.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/neighbors.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,8 +20,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cells_extractor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1170">
-              <caret line="78" column="24" selection-start-line="78" selection-start-column="24" selection-end-line="78" selection-end-column="24" />
+            <state relative-caret-position="115">
+              <caret line="53" column="28" lean-forward="true" selection-start-line="53" selection-start-column="28" selection-end-line="53" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cells_extract_datajoint.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="48" column="28" selection-start-line="48" selection-start-column="16" selection-end-line="48" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="169">
+              <caret line="190" column="4" lean-forward="true" selection-start-line="190" selection-start-column="4" selection-end-line="190" selection-end-column="4" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -41,10 +62,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-424">
+            <state relative-caret-position="-319">
               <caret line="13" column="49" selection-start-line="13" selection-start-column="49" selection-end-line="13" selection-end-column="49" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -58,45 +79,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="365">
               <caret line="54" column="18" lean-forward="true" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../venv/shapeology_venv/lib/python3.7/site-packages/aws_jupyter/run_cluster.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="50" column="16" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="225">
-                <caret line="15" selection-start-line="15" selection-end-line="15" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/install-project.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/virtual_env.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -165,13 +147,13 @@
         <option value="$PROJECT_DIR$/scripts/README.md" />
         <option value="$PROJECT_DIR$/scripts/extractPatches.py" />
         <option value="$PROJECT_DIR$/scripts/SortFile_v2.py" />
-        <option value="$PROJECT_DIR$/scripts/Cells_extractor.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/Installation.md" />
         <option value="$PROJECT_DIR$/../venv/shapeology_venv/lib/python3.7/site-packages/aws_jupyter/send_files.py" />
         <option value="$PROJECT_DIR$/scripts/Aws-jupyter.py" />
         <option value="$PROJECT_DIR$/install-project.sh" />
+        <option value="$PROJECT_DIR$/scripts/Cells_extractor.py" />
       </list>
     </option>
   </component>
@@ -472,12 +454,12 @@
       <workItem from="1589792321887" duration="565000" />
       <workItem from="1589792923497" duration="22006000" />
       <workItem from="1589862450972" duration="13399000" />
-      <workItem from="1589927525089" duration="1208000" />
+      <workItem from="1589927525089" duration="3225000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="810060000" />
+    <option name="totallyTimeSpent" value="812077000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -492,13 +474,13 @@
     <frame x="0" y="24" width="1440" height="828" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.2746781" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.2746781" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5010941" side_tool="true" weight="0.29086894" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4985694" weight="0.32608697" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" weight="0.3283582" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4985694" visible="true" weight="0.39538044" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4985694" visible="true" weight="0.39538044" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32963988" />
@@ -534,7 +516,7 @@
     <SUITE FILE_PATH="coverage/shapeology_code$SortFile_v2.coverage" NAME="SortFile_v2 Coverage Results" MODIFIED="1589888109112" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/shapeology_code$Shape_shift_cnn.coverage" NAME="Shape_shift_cnn Coverage Results" MODIFIED="1582724755967" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/shapeology_code$Cell_score_map.coverage" NAME="Cell_score_map Coverage Results" MODIFIED="1581443991502" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/shapeology_code$Aws_jupyter.coverage" NAME="Aws-jupyter Coverage Results" MODIFIED="1589928688349" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/shapeology_code$Aws_jupyter.coverage" NAME="Aws-jupyter Coverage Results" MODIFIED="1589930960801" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/scripts/old/Cell_mark_v3.py">
@@ -714,13 +696,6 @@
     </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.md" />
     <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.md" />
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cells_extract_datajoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Cell_extractor_local.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -768,16 +743,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="181" column="40" selection-start-line="181" selection-start-column="40" selection-end-line="181" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../venv/shapeology_venv/lib/python3.7/site-packages/aws_jupyter/common.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -809,16 +774,6 @@
     <entry file="file://$PROJECT_DIR$/neighbors.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cells_extractor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1170">
-          <caret line="78" column="24" selection-start-line="78" selection-start-column="24" selection-end-line="78" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/SortFile_v2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1395">
@@ -829,13 +784,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../venv/shapeology_venv/lib/python3.7/site-packages/aws_jupyter/run_cluster.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="50" column="16" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -843,6 +791,34 @@
             <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environ.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="92" selection-start-column="92" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../venv/shapeology_venv/lib/python3.7/site-packages/aws_jupyter/run_cluster.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="50" column="16" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/virtual_env.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/install-project.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
@@ -863,34 +839,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cells_extract_datajoint.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-424">
-          <caret line="13" column="49" selection-start-line="13" selection-start-column="49" selection-end-line="13" selection-end-column="49" />
+        <state relative-caret-position="238">
+          <caret line="48" column="28" selection-start-line="48" selection-start-column="16" selection-end-line="48" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="190" column="4" lean-forward="true" selection-start-line="190" selection-start-column="4" selection-end-line="190" selection-end-column="4" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/virtual_env.sh">
+    <entry file="file://$PROJECT_DIR$/scripts/Cells_extractor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="115">
+          <caret line="53" column="28" lean-forward="true" selection-start-line="53" selection-start-column="28" selection-end-line="53" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/environ.sh">
+    <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="92" selection-start-column="92" selection-end-column="92" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/install-project.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="-319">
+          <caret line="13" column="49" selection-start-line="13" selection-start-column="49" selection-end-line="13" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

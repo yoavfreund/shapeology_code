@@ -16,7 +16,7 @@ from lib.shape_utils import *
 
 def setup_download_from_s3(rel_fp, recursive=True):
     s3_fp = 's3://mousebrainatlas-data/' + rel_fp
-    local_fp = os.environ['ROOT_DIR'] + rel_fp
+    local_fp = os.path.join(os.environ['ROOT_DIR'], rel_fp)
 
     if os.path.exists(local_fp):
         print('ALREADY DOWNLOADED FILE')
@@ -29,7 +29,7 @@ def setup_download_from_s3(rel_fp, recursive=True):
 
 def setup_upload_from_s3(s3_fp, local_fp, recursive=True):
     s3_fp = 's3://mousebrainatlas-data/' + s3_fp
-    local_fp = os.environ['ROOT_DIR'] + local_fp
+    local_fp = os.path.join(os.environ['ROOT_DIR'], local_fp)
 
     if recursive:
         run('aws s3 cp --recursive {0} {1}'.format(local_fp, s3_fp))
@@ -38,12 +38,14 @@ def setup_upload_from_s3(s3_fp, local_fp, recursive=True):
 
 def compute(file, yaml_file, stack, section, client, bucket, key):
     t0 = time()
-    img_fn = file
-    setup_download_from_s3(img_fn, recursive=False)
+    img_fn = os.path.join(os.environ['ROOT_DIR'], file)
+    setup_download_from_s3(file, recursive=False)
     run('python {0}/extractPatches.py {1} {2}'.format(os.environ['REPO_DIR'], img_fn, yaml_file))
     params = configuration(yaml_file).getParams()
     size_thresholds = params['normalization']['size_thresholds']
-    local_dir = file[:-4] + '_cells/'
+    dot = img_fn.rfind('.')
+    slash = img_fn.rfind('/')
+    local_dir = 'cells/' + img_fn[slash + 1:dot] + '_cells/'
     for size in size_thresholds:
         key_item = 'size_of_' + str(size)
         local_fp = local_dir + str(size) + '.bin'
