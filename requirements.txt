@@ -14,3 +14,5 @@ ipykernel
 scikit-learn==0.20.0
 xgboost
 shapely
+mxnet
+awscli
