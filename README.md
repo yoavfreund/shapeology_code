@@ -17,7 +17,7 @@ This step is to extract cells from brain section images and permute the generate
 [Cell_extractor_local.md](Cell_extractor_local.md) offers a guided example showing how to complete this step on your computer locally.
 
 To speed up the process, you can refer to ([Cell_extractor_aws.md](Cell_extractor_aws.md)) for the method to run on multiple AWS instances.
-Essential credential files of AWS and datajoint (**Vault**) are required.
+Essential credential files of AWS and datajoint (**VaultBrain**) are required.
 
 ### Step 2: Diffusion Map Training
 This step is to find representative cell patches via K-means++ and then use them to calculate diffusion map.
