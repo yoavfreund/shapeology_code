@@ -1,4 +1,6 @@
-#### 2. Find representative samples via K-means
+# Diffusion map
+
+### 1. Find representative samples via K-means
 ```
 python CreateVQs_v2.py padded_size  samples_size  vq_dir
 ```

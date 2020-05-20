@@ -89,7 +89,7 @@ if __name__=='__main__':
                         help="Number of permuted files to generate")
     parser.add_argument("--cell_num", type=int, default=100000,
                         help="Number of cells in one permuted file")
-    parser.add_argument("--src_root", type=str, default='$ROOT_DIR/cells/',
+    parser.add_argument("--src_root", type=str, default=os.path.join(os.environ['ROOT_DIR'],'cells/'),
                         help="Path to directory containing cell files")
     parser.add_argument("--stem", type=str, default='permute/permuted',
                         help="Stem of filename of permuted files")
