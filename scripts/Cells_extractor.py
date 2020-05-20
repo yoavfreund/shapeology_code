@@ -72,7 +72,7 @@ if __name__=="__main__":
     import argparse
     from time import time
     parser = argparse.ArgumentParser()
-    parser.add_argument("yaml", type=str,
+    parser.add_argument("--yaml", type=str, default=os.environ['REPO_DIR'] + 'shape_params.yaml',
                         help="Path to Yaml file with parameters")
     parser.add_argument("image_dir", type=str,
                         help="Path to directory saving images")
