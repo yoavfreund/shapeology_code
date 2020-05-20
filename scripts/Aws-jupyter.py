@@ -4,7 +4,7 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument("--name", type=str, default='test', help="The name of a cluster")
 parser.add_argument("--number", type=int, default=10, help="The number of instances to create")
-parser.add_argument("--script", type=str, default="../install-project.sh",
+parser.add_argument("--script", type=str, default=os.path.join(os.environ['SHAPEOLOGY_DIR'], 'install-project.sh'),
                     help='Path to bash file to run on cloud')
 args = parser.parse_args()
 name = args.name
@@ -28,6 +28,11 @@ from aws_jupyter.send_files import send_files
 from time import sleep
 
 def check_status(args):
+    """
+
+    :param args:
+    :return:
+    """
     args = load_config(args)
     status = check_cluster(args)
     ready, total = 0, 0
@@ -48,7 +53,7 @@ def check_status(args):
 
 
 while not check_status({"name": name,
-                        "local": '/Users/kuiqian/Github/VaultBrain/',
+                        "local": os.environ['VAULT'],
                         "remote": "/home/ubuntu/data/",
                         }):
     sleep(30)

@@ -39,6 +39,11 @@ class patch_extractor:
 
 
     def segment_cells(self,gray):
+        """
+        Segment cells from a given gray image
+        :param gray: a gray-scale image
+        :return:
+        """
         offset = self.params['preprocessing']['offset']
 
         thresh = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
@@ -221,11 +226,15 @@ if __name__=="__main__":
             patchesBySize[padded_size].append(patch)
 
         for size in size_thresholds:
-            pics = pack_pics(patchesBySize[size])
-            # pics = pics.astype(np.float16)
+            try:
+                pics = pack_pics(patchesBySize[size])
+                pics = pics.astype(np.float16)
+            except:
+                cell_num = len(patchesBySize[size])
+                pics = pack_pics(patchesBySize[size][:int(cell_num*0.6)])
+                pics = pics.astype(np.float16)
             order = np.random.permutation(pics.shape[0])
             pics = pics[order, :, :]
-            # pics = pics[:int(pics.shape[0]*0.6), :, :]
             fn = out_dir + str(size) + '.bin'
             pics.tofile(fn)
             print(os.path.getsize(fn))
