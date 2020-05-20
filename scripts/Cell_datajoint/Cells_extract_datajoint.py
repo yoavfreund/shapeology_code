@@ -28,7 +28,7 @@ dj.config['database.port'] = get_dj_creds(credFiles)['database.port']
 dj.config['database.password'] = get_dj_creds(credFiles)['database.password']
 dj.conn()
 
-schema = dj.schema('kui_diffusionmap')
+schema = dj.schema(get_dj_creds(credFiles)['schema'])
 schema.spawn_missing_classes()
 
 
