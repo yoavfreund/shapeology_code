@@ -62,9 +62,9 @@ def compute(file, yaml_file, stack, section, client, bucket, key):
             setup_upload_from_s3(s3_fp, local_fp, recursive=False)
         report = client.stat_object(bucket, s3_fp)
         key[key_item] = int(report.size / 1000)
-        os.remove(os.environ['ROOT_DIR'] + local_fp)
+        os.remove(os.path.join(os.environ['ROOT_DIR'], local_fp))
     print(file, 'finished in', time()-t0, 'seconds')
-    os.remove(os.environ['ROOT_DIR']+img_fn)
+    os.remove(img_fn)
     return key
 
 if __name__=="__main__":

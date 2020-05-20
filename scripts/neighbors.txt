@@ -1,2 +1,2 @@
 Ready. IP addresses of all instances:
-54.219.198.124
+54.219.175.191
