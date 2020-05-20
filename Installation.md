@@ -11,9 +11,9 @@ git clone https://github.com/yoavfreund/shapeology_code.git
 * **environ.sh**: Exports the environment variables used for this project. These variables point to the directories of this deployment.
 Details:
 ```bash
-export SHAPEOLOGY_DIR=~/Github/shapeology_code  # Directory where you git clone this project
+export SHAPEOLOGY_DIR=.  # Directory where you git clone this project
 export ROOT_DIR=~/BstemAtlasDataBackup/ucsd_brain/  # Directory where you save input images and output results
-export VAULT=~/Github/VaultBrain/             # Optional, Directory for credential files of AWS and datajoint
+export VAULT=Change to your own credentials directory             # Optional, Directory for credential files of AWS and datajoint
 export venv=~/Github/venv/              # Directory to create virtual environment
 ```
 Note: It is recommended to create new directories or files out of the project directory. Otherwise may have trouble updating the project.
