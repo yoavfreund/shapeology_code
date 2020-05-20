@@ -6,6 +6,7 @@ This project is meant to analyze brain images based on cell shape features. The 
 * Training decision trees with cell shape features
 * Generating detection score maps
 * Finding statistically significant regions
+* To be continued
 
 Developed with Python 3.7.
 

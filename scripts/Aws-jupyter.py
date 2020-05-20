@@ -3,7 +3,7 @@ import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--name", type=str, default='test', help="The name of a cluster")
-parser.add_argument("--number", type=int, default=1, help="The number of instances to create")
+parser.add_argument("--number", type=int, default=10, help="The number of instances to create")
 parser.add_argument("--script", type=str, default="../install-project.sh",
                     help='Path to bash file to run on cloud')
 args = parser.parse_args()
@@ -50,21 +50,13 @@ def check_status(args):
 while not check_status({"name": name,
                         "local": '/Users/kuiqian/Github/VaultBrain/',
                         "remote": "/home/ubuntu/data/",
-                        # "script": script_fp,
-                        # "output": False,
                         }):
     sleep(30)
 
 
-# send_files({
-#     "local": '/Users/kuiqian/Github/VaultBrain/',
-#     "remote": "/home/ubuntu/data/",
-# })
-
-
 run_cluster({
     "script": script_fp,
-    "output": True,
+    "output": False,
 })
 
 

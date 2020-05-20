@@ -16,7 +16,7 @@ export ROOT_DIR=~/BstemAtlasDataBackup/ucsd_brain/  # Directory where you save i
 export VAULT=~/Github/VaultBrain/             # Optional, Directory for credential files of AWS and datajoint
 export venv=~/Github/venv/              # Directory to create virtual environment
 ```
-* **VaultBrain**(optional): A directory contains all the credential/deployment specific files of AWS and datajoint. Must be created out of the project directory.
+* **VaultBrain** (optional): A directory contains all the credential/deployment specific files of AWS and datajoint. Must be created out of the project directory.
     * **dj_local_conf.json**: Specifies the credentials and the schema that is to be used for Datajoint connection. Format:
     ```json
     {"database.host": your_host_address,

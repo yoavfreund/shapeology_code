@@ -225,7 +225,7 @@ if __name__=="__main__":
             pics = pics.astype(np.float16)
             order = np.random.permutation(pics.shape[0])
             pics = pics[order, :, :]
-            # pics = pics[:int(pics.shape[0]*0.8), :, :]
+            pics = pics[:int(pics.shape[0]*0.6), :, :]
             fn = out_dir + str(size) + '.bin'
             pics.tofile(fn)
             print(os.path.getsize(fn))
