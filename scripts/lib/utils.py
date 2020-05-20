@@ -31,7 +31,7 @@ def run(command):
 
 def setup_download_from_s3(rel_fp, recursive=True):
     s3_fp = 's3://mousebrainatlas-data/' + rel_fp
-    local_fp = os.environ['ROOT_DIR'] + rel_fp
+    local_fp = os.path.join(os.environ['ROOT_DIR'], rel_fp)
 
     if os.path.exists(local_fp):
         print('ALREADY DOWNLOADED FILE')
@@ -44,7 +44,7 @@ def setup_download_from_s3(rel_fp, recursive=True):
 
 def setup_upload_from_s3(rel_fp, recursive=True):
     s3_fp = 's3://mousebrainatlas-data/' + rel_fp
-    local_fp = os.environ['ROOT_DIR'] + rel_fp
+    local_fp = os.path.join(os.environ['ROOT_DIR'], rel_fp)
 
     if recursive:
         run('aws s3 cp --recursive {0} {1}'.format(local_fp, s3_fp))
