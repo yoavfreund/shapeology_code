@@ -24,6 +24,7 @@ Arbitrary Name:
   ssh_key: /path/to/the/ec2/key/pair/file
 ```
 Note: Your key pair file need to be read-only.
+
 **3**. Run `aws-jupyter config` to set the configuration file for aws-jupyter. You will be guided to input the following information.
 AMI created by us is provided.
 ```bash
