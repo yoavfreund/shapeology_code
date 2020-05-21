@@ -2,8 +2,13 @@
 This documentation describes how to set up Shapeology on your own computer.
 ## Step 1
 Clone current github repository to your own computer.
+Final version:
 ```bash
 git clone https://github.com/yoavfreund/shapeology_code.git
+```
+Current version:
+```bash
+git clone -b kui_dev --single-branch https://github.com/yoavfreund/shapeology_code.git
 ```
 
 ## Step 2

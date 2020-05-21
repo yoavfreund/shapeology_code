@@ -57,9 +57,7 @@ python Cells_extract_datajoint.py 'shape_params.yaml' 'DK39'
 See details in `Usage`.
 
 ### Usage
-**1**. Create one datajoint table for paths to images on AWS S3.
-
-**2**. Create a cluster on AWS EC2 instances, transfer **VaultBrain** to instances of the cluster and send `install-project.sh` to run. 
+**1**. Run `Aws-jupyter.py` to create a cluster on AWS EC2 instances, transfer **VaultBrain** to instances of the cluster and send `install-project.sh` to run. 
 ```bash
 python $SHAPEOLOGY_DIR/scripts/Aws-jupyter.py
 ```
@@ -69,7 +67,7 @@ optional arguments:
   --number      The number of instances to create, type=int, default=10
   --script      Path to bash file to run on cloud, default=`$SHAPEOLOGY_DIR/install-project.sh`
 ```
-**3**. Terminate the cluster.
+**2**. Terminate the cluster.
 ```bash
 aws-jupyter terminate --name test
 ```
