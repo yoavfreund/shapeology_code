@@ -11,7 +11,7 @@ dill
 ray
 datajoint
 ipykernel
-scikit-learn==0.20.0
+scikit-learn
 xgboost
 shapely
 mxnet

@@ -45,8 +45,8 @@ Note: It is recommended to create new directories or files out of the project di
 * When configuration files are set, run the following commands to activate the environment variables and the virtual environment. 
 Please ensure you have installed `virtualenv`.
 ```bash
-source $SHAPEOLOGY_DIR/environ.sh
-source $SHAPEOLOGY_DIR/virtual_env.sh
+source environ.sh
+source virtual_env.sh
 ```
 Note: Please check whether you have installed the virtual environment successfully. Clear `$venv/shapeology_venv` before you try again if failed.
 
