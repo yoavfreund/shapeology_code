@@ -14,12 +14,12 @@ The structure is as follows:
     generate:
       one directory called <filename>_cells located in $ROOT_DIR/cells/. The directory contains one pickle file per padding size. The patches in each file are randomly permuted.
     ```
-* **scripts/Cells_extractor.py**: Extracts all cells from all images of a given directory. Please ensure all files in the directory are images. See details in `Usage`.
+* **scripts/Cells_extractor.py**: Extracts all cells from all images of a given directory. See details in `Usage`.
 * **scripts/SortFile_v2.py**: Permute cell files in a random order. See details in `Usage`.
 
 ## Usage
 #### Step 1. Extracting cells from your images
-This step is to extract all cells from your brain section images. The generated cell files are located in `$ROOT_DIR/cells/`.
+This step is to extract all cells from your brain section images. Please ensure all files in the directory are images. The generated cell files are located in `$ROOT_DIR/cells/`.
 ```bash
 python $SHAPEOLOGY_DIR/scripts/Cells_extractor.py image_dir 
 ```
