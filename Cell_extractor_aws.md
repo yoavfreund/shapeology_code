@@ -14,6 +14,8 @@ and send scripts to run on them parallelly. This is realized via [aws-jupyter](h
 ```bash
 pip install aws-jupyter
 ```
+Please refer to [this pull request](https://github.com/arapat/aws-jupyter/pull/4/files) to fix this module.
+
 **2**. Create `credentials.yaml` which specifies the credentials used for creating EC2 instances. 
 Format:
 ```yaml
