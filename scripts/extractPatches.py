@@ -240,7 +240,7 @@ if __name__=="__main__":
                     pics = pics.astype(np.float16)
                 except:
                     start = int(cell_num * random.uniform(0, 0.69))
-                    end = start + int(cell_num * 0.2)
+                    end = start + int(cell_num * 0.15)
                     pics = pack_pics(patchesBySize[size][start:end])
                     pics = pics.astype(np.float16)
             order = np.random.permutation(pics.shape[0])
