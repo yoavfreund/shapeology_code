@@ -234,13 +234,13 @@ if __name__=="__main__":
             except:
                 cell_num = len(patchesBySize[size])
                 try:
-                    start = int(cell_num * random.choice(0, 0.49))
+                    start = int(cell_num * random.uniform(0, 0.49))
                     end = start + int(cell_num*0.5)
                     pics = pack_pics(patchesBySize[size][start:end])
                     pics = pics.astype(np.float16)
                 except:
-                    start = int(cell_num * random.choice(0, 0.69))
-                    end = start + int(cell_num * 0.2)
+                    start = int(cell_num * random.uniform(0, 0.69))
+                    end = start + int(cell_num * 0.3)
                     pics = pack_pics(patchesBySize[size][start:end])
                     pics = pics.astype(np.float16)
             order = np.random.permutation(pics.shape[0])
