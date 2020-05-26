@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Shift_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Aws-jupyter.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Aws-jupyter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/extractPatches.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/extractPatches.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/neighbors.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/neighbors.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2630">
-              <caret line="40" column="24" selection-start-line="40" selection-start-column="24" selection-end-line="40" selection-end-column="24" />
+            <state relative-caret-position="251">
+              <caret line="234" column="42" selection-start-line="234" selection-start-column="42" selection-end-line="234" selection-end-column="42" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -143,7 +142,6 @@
         <option value="$PROJECT_DIR$/scripts/lib/utils.py" />
         <option value="$PROJECT_DIR$/VaultBrain/s3-creds.json" />
         <option value="$PROJECT_DIR$/VaultBrain/dj_local_conf.json" />
-        <option value="$PROJECT_DIR$/scripts/extractPatches.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Cells_extract_datajoint.py" />
         <option value="$PROJECT_DIR$/scripts/Cells_extractor.py" />
         <option value="$PROJECT_DIR$/scripts/SortFile_v2.py" />
@@ -155,6 +153,7 @@
         <option value="$PROJECT_DIR$/Cell_extractor_local.md" />
         <option value="$PROJECT_DIR$/Cell_extractor_aws.md" />
         <option value="$PROJECT_DIR$/scripts/Aws-jupyter.py" />
+        <option value="$PROJECT_DIR$/scripts/extractPatches.py" />
       </list>
     </option>
   </component>
@@ -473,12 +472,12 @@
       <workItem from="1589967919959" duration="10635000" />
       <workItem from="1590187185715" duration="1006000" />
       <workItem from="1590215883591" duration="892000" />
-      <workItem from="1590486148864" duration="690000" />
+      <workItem from="1590486148864" duration="2053000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="840234000" />
+    <option name="totallyTimeSpent" value="841597000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -491,6 +490,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1440" height="828" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4989059" visible="true" weight="0.3018598" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -885,8 +885,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2630">
-          <caret line="40" column="24" selection-start-line="40" selection-start-column="24" selection-end-line="40" selection-end-column="24" />
+        <state relative-caret-position="251">
+          <caret line="234" column="42" selection-start-line="234" selection-start-column="42" selection-end-line="234" selection-end-column="42" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

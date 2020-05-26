@@ -2,6 +2,7 @@ import cv2
 from cv2 import moments,HuMoments
 import pickle
 import numpy as np
+import random
 import os
 from skimage import io
 from time import time
@@ -231,7 +232,9 @@ if __name__=="__main__":
                 pics = pics.astype(np.float16)
             except:
                 cell_num = len(patchesBySize[size])
-                pics = pack_pics(patchesBySize[size][:int(cell_num*0.5)])
+                start = int(cell_num*random.choice(0,0.49))
+                end = start + int(cell_num*0.5)
+                pics = pack_pics(patchesBySize[size][start:end])
                 pics = pics.astype(np.float16)
             order = np.random.permutation(pics.shape[0])
             pics = pics[order, :, :]
