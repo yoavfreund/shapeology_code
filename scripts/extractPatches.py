@@ -231,7 +231,7 @@ if __name__=="__main__":
                 pics = pics.astype(np.float16)
             except:
                 cell_num = len(patchesBySize[size])
-                pics = pack_pics(patchesBySize[size][:int(cell_num*0.6)])
+                pics = pack_pics(patchesBySize[size][:int(cell_num*0.5)])
                 pics = pics.astype(np.float16)
             order = np.random.permutation(pics.shape[0])
             pics = pics[order, :, :]
