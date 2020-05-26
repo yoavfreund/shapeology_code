@@ -183,7 +183,8 @@ if __name__=="__main__":
                         help="Process <filename>.tif into <filename>_cells")
     parser.add_argument("yaml", type=str,
                     help="Path to Yaml file with parameters")
-    
+    parser.add_argument("--save_dir", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'cells/'),
+                        help="Path to directory saving images")
     # Add parameters for size of mexican hat and size of cell, threshold, percentile
     # Define file name based on size. Use this name for log file and for countours image.
     # save parameters in a log file ,
@@ -192,12 +193,12 @@ if __name__=="__main__":
     config = configuration(args.yaml)
     params = config.getParams()
 
-    _dir=os.path.join(os.environ['ROOT_DIR'], 'cells/')
+    _dir=args.save_dir
     filename=args.file
     dot = filename.rfind('.')
     slash = filename.rfind('/')
     infile = filename
-    out_dir = _dir+filename[slash+1:dot]+'_cells/'
+    out_dir = os.path.join(_dir, filename[slash+1:dot]+'_cells/')
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
@@ -232,10 +233,16 @@ if __name__=="__main__":
                 pics = pics.astype(np.float16)
             except:
                 cell_num = len(patchesBySize[size])
-                start = int(cell_num*random.choice(0,0.49))
-                end = start + int(cell_num*0.4)
-                pics = pack_pics(patchesBySize[size][start:end])
-                pics = pics.astype(np.float16)
+                try:
+                    start = int(cell_num * random.choice(0, 0.49))
+                    end = start + int(cell_num*0.5)
+                    pics = pack_pics(patchesBySize[size][start:end])
+                    pics = pics.astype(np.float16)
+                except:
+                    start = int(cell_num * random.choice(0, 0.69))
+                    end = start + int(cell_num * 0.3)
+                    pics = pack_pics(patchesBySize[size][start:end])
+                    pics = pics.astype(np.float16)
             order = np.random.permutation(pics.shape[0])
             pics = pics[order, :, :]
             fn = out_dir + str(size) + '.bin'
