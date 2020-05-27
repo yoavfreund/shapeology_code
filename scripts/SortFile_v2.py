@@ -3,7 +3,7 @@ import numpy as np
 import pickle as pk
 import numpy as np
 from glob import glob
-from time import time
+from time import time, asctime
 import sys
 sys.path.append('../scripts/')
 from lib.utils import configuration, setup_download_from_s3
@@ -117,4 +117,4 @@ if __name__=='__main__':
     log_fp = os.path.join(root_dir, 'TimeLog/')
     if not os.path.exists(log_fp):
         os.mkdir(log_fp)
-    pk.dump(time_log,open(log_fp+'Time_log_permute_new.pkl','wb'))
+    pk.dump(time_log,open(log_fp+'Time_log_permute_'+asctime()+'.pkl','wb'))

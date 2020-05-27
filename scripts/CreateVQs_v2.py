@@ -1,8 +1,20 @@
+import numpy
+import matplotlib
+from matplotlib import pylab, mlab, pyplot
+np = numpy
+plt = pyplot
+
+from IPython.display import display
+from IPython.core.pylabtools import figsize, getfigs
+
+from pylab import *
+from numpy import *
+
 import pickle as pk
-import numpy as np
 from glob import glob
 import os
 import sys
+from time import time,asctime
 sys.path.append('../scripts/')
 from lib.shape_utils import *
 
@@ -90,15 +102,17 @@ def Kmeans(data,n=100,scale=550):
 
 if __name__=='__main__':
     import argparse
-    from time import time
 
     parser = argparse.ArgumentParser()
+    parser.add_argument("--samples_size", type=int, default=500000,
+                        help="Number of samples")
+    parser.add_argument("--src_root", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'permute/'),
+                        help="Path to directory containing permuted cell files")
+    parser.add_argument("--save_dir", type=str, default='vq/',
+                        help="Path to directory containing cell files")
     parser.add_argument("padded_size", type=int,
                         help="One of the three padded size")
-    parser.add_argument("samples_size", type=int,
-                        help="Number of samples")
-    # parser.add_argument("yaml", type=str,
-    #                     help="Path to Yaml file with parameters")
+
 
     # Add parameters for the size of patches and the path to the credential yaml file
     # Define file name based on size.
@@ -108,12 +122,12 @@ if __name__=='__main__':
     N = args.samples_size
     # config = configuration(args.yaml)
     # params = config.getParams()
-    root_dir = os.environ['ROOT_DIR'] + 'vq/'
+    root_dir = os.path.join(os.environ['ROOT_DIR'], args.save_dir)
     if not os.path.exists((root_dir)):
         os.makedirs(root_dir)
-    data_dir = os.environ['ROOT_DIR'] + 'permute'
-    dir_name = "/permuted-%d" % size
-    patch_dir = data_dir + dir_name
+    data_dir = args.src_root
+    dir_name = "permuted-%d" % size
+    patch_dir = os.path.join(data_dir, dir_name)
 
     clock('Process Begin')
     pics_list = []
@@ -134,10 +148,10 @@ if __name__=='__main__':
     print('Finished in', time() - t0, 'seconds')
     clock('Process finished')
 
-    log_fp = 'TimeLog/'
+    log_fp = os.path.join(os.environ['ROOT_DIR'], 'TimeLog/')
     if not os.path.exists(log_fp):
         os.mkdir(log_fp)
-    pk.dump(time_log, open(log_fp + 'Time_log_kmeans_'+ str(size)+'.pkl', 'wb'))
+    pk.dump(time_log, open(log_fp + 'Time_log_kmeans_'+ str(size)+'_'+asctime()+'.pkl', 'wb'))
 
 
 
