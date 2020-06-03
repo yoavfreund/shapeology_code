@@ -109,7 +109,7 @@ if __name__=='__main__':
     parser.add_argument("--src_root", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'permute/'),
                         help="Path to directory containing permuted cell files")
     parser.add_argument("--save_dir", type=str, default='vq/',
-                        help="Path to directory containing cell files")
+                        help="Path to directory saving VQ files")
     parser.add_argument("padded_size", type=int,
                         help="One of the three padded size")
 

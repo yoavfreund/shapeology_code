@@ -23,11 +23,11 @@ export venv=$PWD         # Directory to create virtual environment
 # Directory where you save input images 
 export Data_storage=change_to_your_directory   
 # Directory for output results
-export tmp_dir = /tmp
+export tmp_dir=/tmp/
 # Optional, Directory for credential files of AWS and datajoint
 export VAULT=change_to_your_directory            
 ```
-Note: Your new directories or files should be out of the project directory. Otherwise may have trouble updating the project.
+Note: Your new directories or files should be out of the project directory to avoid uploading them to Github.
 * **VaultBrain** (optional, for AWS use): A directory created to contain all the credential/deployment specific files for AWS and datajoint.
     * **dj_local_conf.json**: Specifies the credentials and the schema that is to be used for Datajoint connection. Format:
     ```json
