@@ -2,13 +2,19 @@ import cv2
 from cv2 import moments,HuMoments
 import pickle
 import numpy as np
+import random
+import os
+from skimage import io
+from time import time
+
 
 from label_patch import diffusionMap
 from patch_normalizer import normalizer
 from lib.utils import mark_contours, configuration
+from lib.shape_utils import *
 
 class patch_extractor:
-    def __init__(self,infile,params):
+    def __init__(self,params):
         """Initialize a patch extractor. 
         The extractor works by first checking if the gray 
         value std is too small, in which case it aborts.
@@ -23,14 +29,22 @@ class patch_extractor:
         self.min_area=params['preprocessing']['min_area']
         self.Norm=normalizer(params)
         self.preprocess_kernel=self.Norm.circle_patch(radius=1)
-        
-        self.tile_stats={'tile name':infile}
-        #self.DM = diffusionMap(params['paths']['DiffusionMap'])
+        self.dm_dir=os.environ['SHAPEOLOGY_DIR']+'/notebooks/diffusionMap'
+        #self.tile_stats={'tile name':infile}
 
         self.size_thresholds = params['normalization']['size_thresholds']
+        # self.DM = {size: diffusionMap(self.dm_dir + '-%d.pkl'%size) for size in self.size_thresholds}
+
+
         self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
 
+
     def segment_cells(self,gray):
+        """
+        Segment cells from a given gray image
+        :param gray: a gray-scale image
+        :return:
+        """
         offset = self.params['preprocessing']['offset']
 
         thresh = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
@@ -41,7 +55,7 @@ class patch_extractor:
         Stats=cv2.connectedComponentsWithStats(thresh)
         return Stats
 
-    def extract_blobs(self,Stats,tile,gray):
+    def extract_blobs(self,Stats,gray,dm=True):
         """given a set of connected components extract convexified components from gray image and annotate on color image(tile)
 
         :param Stats: Output from cv2.connectedComponentsWithStats
@@ -60,7 +74,7 @@ class patch_extractor:
         height = props[:,3]
         area = props[:,4]
 
-        marked_tile=np.copy(tile)
+        # marked_tile=np.copy(tile)
         size_step=20
         extracted=[]
         H,W=seg.shape
@@ -80,7 +94,7 @@ class patch_extractor:
             _thr=np.min(masked_image.flatten())
 
             # compute convex hull of sub_mask
-            im2, contours, hierarchy = cv2.findContours(sub_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            contours, hierarchy = cv2.findContours(sub_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             convex_contour=cv2.convexHull(contours[0][:,0,:],returnPoints=True)
             slate=np.zeros([b-t,r-l,3],dtype=np.uint8)
             convex_mask = cv2.drawContours(slate, [convex_contour],0,(0,255,0),-1)[:,:,1]
@@ -94,7 +108,11 @@ class patch_extractor:
                         'width':width[i],
                         'height':height[i],
                         'area':area[i]}
-            more_properties = self.Norm.normalize_patch(masked_image, properties)
+            try:
+                more_properties = self.Norm.normalize_patch(masked_image, properties)
+            except:
+                continue
+            
             properties.update(more_properties)
             extracted.append(properties)
 
@@ -106,17 +124,22 @@ class patch_extractor:
 
             #print(properties.keys())
             #break
-            cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
+            # cv2.drawContours(marked_tile[t:b,l:r], [convex_contour],0,(0,255,0),1)
 
         ## compute diffusion vectors
-        # self.computeDMs(extracted)
+        # self.timestamps = []
+        # self.timestamps.append(('before DM',time()))
+        if dm:
+            self.computeDMs(extracted)
+        # self.timestamps.append(('after DM',time()))
             
-        return extracted,marked_tile
+        return extracted #,marked_tile
 
     def computeDMs(self,extracted):
+        #self.timestamps.append(('start compute DM', time()))
         patchesBySize={size:[] for size in self.size_thresholds} # storage for normalized patches
         patchIndex={size:[] for size in self.size_thresholds}
-
+      
         #collect patches by size
         for i in range(len(extracted)):
             properties=extracted[i]
@@ -128,75 +151,103 @@ class patch_extractor:
             patchIndex[padded_size].append(i)
 
         # compute DM for each size
-        # _size=51    #temporary: until we have maps for all sizes
+        for size in self.size_thresholds:
+            _size=size    #temporary: until we have maps for all sizes
 
-        asList=patchesBySize[_size]
-        indexList=patchIndex[_size]
-        _len=len(asList)
-        asMat=np.zeros([_len,_size*_size])
-        for i in range(_len):
-            asMat[i,:]=asList[i]
-        print('size os asMat:',asMat.shape)
-        DMMat=self.DM.transform(asMat)
-        print(asMat.shape,DMMat.shape)
+            asList=patchesBySize[_size]
+            indexList=patchIndex[_size]
+            _len=len(asList)
+            if _len:
+                asMat=np.zeros([_len,_size*_size])
+                for i in range(_len):
+                    asMat[i,:]=asList[i]
+                #print('size os asMat:',asMat.shape)
+                # self.timestamps.append(('befor transform DM', time()))
 
-        # insert DM vectors back into properties
-        for i in range(len(asList)):
-            index=indexList[i]
-            extracted[index]['DMVec']=DMMat[i,:]
+                DMMat=self.DM[_size].transform(asMat)
+                # self.timestamps.append(('after transform DM', time()))
+
+                #print(asMat.shape,DMMat.shape)
+
+                # insert DM vectors back into properties
+                for i in range(len(asList)):
+                    index=indexList[i]
+                    extracted[index]['DMVec']=DMMat[i,:]
 
 if __name__=="__main__":
 
     import argparse
     from time import time
     parser = argparse.ArgumentParser()
-    parser.add_argument("filestem", type=str,
-                    help="Process <filestem>.tif into <filestem>_extracted.pkl")
+    parser.add_argument("file", type=str,
+                        help="Process <filename>.tif into <filename>_cells")
     parser.add_argument("yaml", type=str,
                     help="Path to Yaml file with parameters")
-    
+    parser.add_argument("--save_dir", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'cells/'),
+                        help="Path to directory saving images")
     # Add parameters for size of mexican hat and size of cell, threshold, percentile
     # Define file name based on size. Use this name for log file and for countours image.
     # save parameters in a log file ,
     
     args = parser.parse_args()
     config = configuration(args.yaml)
-    params=config.getParams()
+    params = config.getParams()
 
-    _dir=params['paths']['data_dir']+'/tiles/'
-    stem=args.filestem
-    infile = _dir+stem+'.tif'
-    out_stem= stem+'.'+params['name']
-    #pkl_dir=params['paths']['pickle_subdir']
-    pkl_out_file= _dir+'pickles/'+out_stem+'.pkl'
-    annotated_infile=_dir+out_stem+'_contours.jpg'
+    _dir=args.save_dir
+    filename=args.file
+    dot = filename.rfind('.')
+    slash = filename.rfind('/')
+    infile = filename
+    out_dir = os.path.join(_dir, filename[slash+1:dot]+'_cells/')
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
 
-    extractor=patch_extractor(infile,params)
+    extractor = patch_extractor(params)
+    min_std = params['preprocessing']['min_std']
+    size_thresholds = params['normalization']['size_thresholds']
 
-    tile=cv2.imread(infile)
-    gray = cv2.cvtColor(tile,cv2.COLOR_BGR2GRAY)
-
-    if params['preprocessing']['polarity']==-1:
-        gray = 255-gray
-
-    #n_window=extractor.check_and_normalize(gray)
-
-    min_std=params['preprocessing']['min_std']
-    _std = np.std(gray.flatten())
-    
+    t0 = time()
+    img = io.imread(infile)
+    tile = 255 - img.copy()
+    _std = np.std(tile.flatten())
     if _std < min_std:
-        print('image',infile,'std=',_std, 'too blank, skipping')
+        print('image', filename, 'std=', _std, 'too blank, skipping')
     else:
-        t0=time()
-        print('processing',infile,'into',pkl_out_file)
-        Stats=extractor.segment_cells(gray)
-        extracted,marked_tile = extractor.extract_blobs(Stats,tile,gray)
+        Stats = extractor.segment_cells(tile)
+        extracted = extractor.extract_blobs(Stats, tile, dm=False)
+        patchesBySize = {size: [] for size in size_thresholds}  # storage for normalized patches
+        patchIndex = {size: [] for size in size_thresholds}
 
-        print('extracted',len(extracted),'patches')
-        
-        pickle.dump(extracted,open(pkl_out_file,'wb'))
-        print('properties written to',pkl_out_file)
+        # collect patches by size
+        for i in range(len(extracted)):
+            properties = extracted[i]
+            padded_size = properties['padded_size']
+            patch = properties['padded_patch']
+            if patch is None:
+                continue
+            patchesBySize[padded_size].append(patch)
 
-        cv2.imwrite(annotated_infile,marked_tile)
-        print('annotated image written to',annotated_infile)
-        print('finished in %5.1f seconds'%(time()-t0))
+        for size in size_thresholds:
+            try:
+                pics = pack_pics(patchesBySize[size])
+                pics = pics.astype(np.float16)
+            except:
+                cell_num = len(patchesBySize[size])
+                try:
+                    start = int(cell_num * random.uniform(0, 0.49))
+                    end = start + int(cell_num*0.5)
+                    pics = pack_pics(patchesBySize[size][start:end])
+                    pics = pics.astype(np.float16)
+                except:
+                    start = int(cell_num * random.uniform(0, 0.69))
+                    end = start + int(cell_num * 0.15)
+                    pics = pack_pics(patchesBySize[size][start:end])
+                    pics = pics.astype(np.float16)
+            order = np.random.permutation(pics.shape[0])
+            pics = pics[order, :, :]
+            fn = out_dir + str(size) + '.bin'
+            pics.tofile(fn)
+            print(os.path.getsize(fn))
+
+        del patchesBySize
+        print(filename, 'finished in', time() - t0, 'seconds')

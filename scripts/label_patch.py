@@ -16,7 +16,11 @@ class diffusionMap:
         :param dmapFilename: name of pickle file containing the pydiffmap.dmap object 
         """
         self.DM=pk.load(open(dmapFilename,'rb'))
-        print(type(self.DM))
+        # data=self.DM.data
+        # self.DM = self.DM.from_sklearn(alpha=self.DM.alpha, k=self.DM.k, kernel_type=self.DM.kernel_type, epsilon=self.DM.epsilon, \
+        #                            n_evecs=self.DM.n_evecs, neighbor_params=self.DM.neighbor_params)
+        # self.DM.fit(data)
+        #print(type(self.DM))
     
 
     def transform(self,data1D):
@@ -43,6 +47,7 @@ class diffusionMap:
         :rtype: list
 
         """
+        _sub_size=51
         data1D=np.zeros((len(Patches),_sub_size*_sub_size))
         for i in range(len(Patches)):
             data1D[i,:] = Patches[i].flatten();

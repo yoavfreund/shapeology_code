@@ -1,0 +1,2 @@
+aws_fp: s3-creds.json
+dj_fp: dj_local_conf.json
