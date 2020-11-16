@@ -14,7 +14,7 @@ from lib.utils import mark_contours, configuration
 from lib.shape_utils import *
 
 class patch_extractor:
-    def __init__(self,params):
+    def __init__(self,params,dm=True,stem='diffusionMap'):
         """Initialize a patch extractor. 
         The extractor works by first checking if the gray 
         value std is too small, in which case it aborts.
@@ -29,11 +29,13 @@ class patch_extractor:
         self.min_area=params['preprocessing']['min_area']
         self.Norm=normalizer(params)
         self.preprocess_kernel=self.Norm.circle_patch(radius=1)
-        self.dm_dir=os.environ['SHAPEOLOGY_DIR']+'/notebooks/diffusionMap'
+        self.dm_dir=stem
+        self.train=dm
         #self.tile_stats={'tile name':infile}
 
         self.size_thresholds = params['normalization']['size_thresholds']
-        # self.DM = {size: diffusionMap(self.dm_dir + '-%d.pkl'%size) for size in self.size_thresholds}
+        if dm:
+            self.DM = {size: diffusionMap(self.dm_dir + '-%d.pkl'%size) for size in self.size_thresholds}
 
 
         self.V={size:[] for size in self.size_thresholds} # storage for normalized patches
@@ -55,7 +57,7 @@ class patch_extractor:
         Stats=cv2.connectedComponentsWithStats(thresh)
         return Stats
 
-    def extract_blobs(self,Stats,gray,dm=True):
+    def extract_blobs(self,Stats,gray):
         """given a set of connected components extract convexified components from gray image and annotate on color image(tile)
 
         :param Stats: Output from cv2.connectedComponentsWithStats
@@ -129,7 +131,7 @@ class patch_extractor:
         ## compute diffusion vectors
         # self.timestamps = []
         # self.timestamps.append(('before DM',time()))
-        if dm:
+        if self.train:
             self.computeDMs(extracted)
         # self.timestamps.append(('after DM',time()))
             
@@ -202,7 +204,7 @@ if __name__=="__main__":
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
-    extractor = patch_extractor(params)
+    extractor = patch_extractor(params, dm=False)
     min_std = params['preprocessing']['min_std']
     size_thresholds = params['normalization']['size_thresholds']
 
@@ -214,7 +216,7 @@ if __name__=="__main__":
         print('image', filename, 'std=', _std, 'too blank, skipping')
     else:
         Stats = extractor.segment_cells(tile)
-        extracted = extractor.extract_blobs(Stats, tile, dm=False)
+        extracted = extractor.extract_blobs(Stats, tile)
         patchesBySize = {size: [] for size in size_thresholds}  # storage for normalized patches
         patchIndex = {size: [] for size in size_thresholds}
 

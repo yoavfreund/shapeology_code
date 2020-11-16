@@ -138,7 +138,7 @@ class VQ_creator:
         for pic in self.data_stream():
             pics_list.append(np.array(pic, dtype=np.float32))
             i += 1
-            if i >= 500000:
+            if i >= 350000:
                 break
         self.data = pack_pics(pics_list)
         t0 = time()
