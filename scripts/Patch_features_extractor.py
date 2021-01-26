@@ -57,6 +57,7 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack):
         t1 = time()
         savepath = cell_dir + structure + '/'
         pkl_out_file = savepath + stack + '_' + structure + '_' + state + '.pkl'
+        cell_out_file = savepath + stack + '_' + structure + '_' + state + '_cells.pkl'
         if os.path.exists(os.environ['ROOT_DIR'] + pkl_out_file):
             print(structure + '_' + state + ' ALREADY EXIST')
             continue
@@ -76,6 +77,7 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack):
                        glob(os.environ['ROOT_DIR'] + patch_dir + structure + '_surround_500um_noclass/*')]
 
         features = []
+        # cell_features = []
 
         n_choose = min(len(patches), 1000)
         indices_choose = np.random.choice(range(len(patches)), n_choose, replace=False)
@@ -93,7 +95,8 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack):
             extracted = []
             if _std < min_std:
                 print('image', patches[i], 'std=', _std, 'too blank')
-                features.append([0] * 1982)
+                # features.append([0] * 1982)
+                features.append([0] * 5942)
             else:
                 try:
                     Stats = extractor.segment_cells(tile)
@@ -109,12 +112,20 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack):
                             miu = transform[cells[k][3]]['miu']
                             cells[k][10] = np.dot(cells[k][10], M) + miu
                     origin = np.concatenate((np.array(list(cells[:, 10])).reshape([-1,10]), cells[:, 0:10]), axis=1)
+                    # cell_features.append(origin)
                     for k in range(origin.shape[1]):
-                        x, y = CDF(origin[:, k])
-                        ten = [y[np.argmin(np.absolute(x - threshold[k][j]))] for j in range(99)]
+                        ten = []
+                        x, y = CDF(origin[origin[:,13]==15, k])
+                        ten.extend([y[np.argmin(np.absolute(x - threshold[k][j]))] for j in range(99)])
+                        x, y = CDF(origin[origin[:, 13] == 51, k])
+                        ten.extend([y[np.argmin(np.absolute(x - threshold[k][99+j]))] for j in range(99)])
+                        x, y = CDF(origin[origin[:, 13] == 201, k])
+                        ten.extend([y[np.argmin(np.absolute(x - threshold[k][198+j]))] for j in range(99)])
+                        # x, y = CDF(origin[:, k])
+                        # ten = [y[np.argmin(np.absolute(x - threshold[k][j]))] for j in range(99)]
                         extracted.extend(ten)
                     extracted.extend([cells.shape[0]])
-                    extracted.extend([origin[:, 10].sum() / (224 * 224)])
+                    extracted.extend([origin[:, 12].sum() / (317 * 317)])
                     features.append(extracted)
                 except:
                     continue
@@ -125,6 +136,7 @@ def generator(structure, state, threshold, cell_dir, patch_dir, stack):
         count = len(features)
         print(structure + '_' + state, count)
         pickle.dump(features, open(os.environ['ROOT_DIR'] + pkl_out_file, 'wb'))
+        # pickle.dump(cell_features, open(os.environ['ROOT_DIR'] + cell_out_file, 'wb'))
         # setup_upload_from_s3(pkl_out_file, recursive=False)
         print(structure + '_' + state + ' finished in %5.1f seconds' % (time() - t1))
 

@@ -14,11 +14,5 @@ pip install shapely
 pip install mxnet
 cd shapeology_code/scripts/Cell_datajoint/
 
-#python HSV_datajoint_v2.py 'AWS' 'MD589'
-python Cells_extract_datajoint.py 'shape_params.yaml' 'DK39'
-#python Patch_extractor_datajoint.py 'AWS' 'MD585'
-# python Sample_features_datajoint.py 'AWS' 'MD585'
-#python Thresholds_datajoint.py 'AWS' 'MD589'
-#python Sqlite_datajoint.py 'AWS' 'MD589'
-# python Scoremap_datajoint.py 'AWS' 'MD594'
-# python Cell_mark_datajoint.py 'AWS' 'MD594'
+#python Cells_extract_datajoint.py 'shape_params.yaml' 'DK39'
+python Shift_score_datajoint.py 'MD589'
