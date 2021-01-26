@@ -41,7 +41,7 @@ scripts_dir = os.environ['REPO_DIR']
 @schema
 class Shift3D(dj.Computed):
     definition="""
-    -> SectionV2
+    -> SectionMD589
     -----
     size_of_file : int   #size of pkl file of each section
     """

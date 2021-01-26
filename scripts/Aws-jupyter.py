@@ -3,7 +3,7 @@ import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--name", type=str, default='test', help="The name of a cluster")
-parser.add_argument("--number", type=int, default=10, help="The number of instances to create")
+parser.add_argument("--number", type=int, default=1, help="The number of instances to create")
 parser.add_argument("--script", type=str, default=os.path.join(os.environ['SHAPEOLOGY_DIR'], 'install-project.sh'),
                     help='Path to bash file to run on cloud')
 args = parser.parse_args()
