@@ -97,6 +97,8 @@ param['nthread'] = 7  # Number of threads used
 param['num_class'] = 1
 num_round = 100
 
+setup_download_from_s3('CSHL_patch_samples_features_v1/MD594/')
+setup_download_from_s3('CSHL_patch_samples_features_v1/MD585/')
 cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v1/MD594/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v1/MD585/'
 
