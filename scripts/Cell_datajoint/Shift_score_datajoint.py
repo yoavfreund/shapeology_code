@@ -35,11 +35,11 @@ dj.conn()
 schema = dj.schema(get_dj_creds(credFiles)['schema'])
 schema.spawn_missing_classes()
 
-pkl_fp = 'CSHL_shift_scores/'+stack+'/'
+pkl_fp = 'CSHL_shift_scores/'+stack+'_2D/'
 scripts_dir = os.environ['REPO_DIR']
 
 @schema
-class Shift3D(dj.Computed):
+class Shift2D(dj.Computed):
     definition="""
     -> SectionMD589
     -----
@@ -56,13 +56,13 @@ class Shift3D(dj.Computed):
         try:
             report = self.client.stat_object(self.bucket, s3_fp)
         except:
-            run('python {0}/Shape_shift_3D.py {1} {2}'.format(scripts_dir, stack, section))
+            run('python {0}/Shape_shift.py {1} {2}'.format(scripts_dir, stack, section))
             setup_upload_from_s3(s3_fp, recursive=False)
             report = self.client.stat_object(self.bucket, s3_fp)
         key[key_item] = int(report.size / 1000)
         self.insert1(key)
 
 
-Shift3D.populate(suppress_errors=True,reserve_jobs=True)
+Shift2D.populate(suppress_errors=True,reserve_jobs=True)
 
 

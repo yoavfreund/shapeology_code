@@ -73,16 +73,16 @@ def features_to_score(features, thresholds, bst, object_area):
         extracted.extend(ten)
     extracted.extend([features.shape[0] / object_area * 317 * 317])
     extracted.extend([features[:, 12].sum() / object_area])
-    print('CDF', time() - t0)
+    # print('CDF', time() - t0)
     xtest = xgb.DMatrix(extracted)
     score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
     return score
 
-
-contours = pickle.load(open(
-    '/data/Shapeology_Files/BstemAtlasDataBackup/ucsd_brain/masks/MD589/MD589_aligned_section_structure_vertices_down16.pickle',
-    'rb'))
+fn = 'CSHL_data_processed/MD589/MD589_aligned_section_structure_vertices_down16.pickle'
+setup_download_from_s3(fn, recursive=False)
+contours = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
 polygons = contours[section]
+valid_sections = contours.keys()
 
 fn = 'CSHL_data_processed/MD589/ThresholdsV2.pkl'
 setup_download_from_s3(fn, recursive=False)
@@ -97,13 +97,15 @@ param['nthread'] = 7  # Number of threads used
 param['num_class'] = 1
 num_round = 100
 
-cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v1/MD589/'
+setup_download_from_s3('CSHL_patch_samples_features_v1/MD594/')
+setup_download_from_s3('CSHL_patch_samples_features_v1/MD585/')
+cell_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v1/MD594/'
 cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v1/MD585/'
 
 savepath = 'CSHL_shift_scores/'
 if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
     os.mkdir(os.environ['ROOT_DIR'] + savepath)
-savepath = savepath + stack + '/'
+savepath = savepath + stack + '_2D/'
 if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
     os.mkdir(os.environ['ROOT_DIR'] + savepath)
 
@@ -130,7 +132,7 @@ clock('Process Begin')
 for structure in polygons.keys():
     if structure not in all_structures:
         continue
-
+    t2 = time()
     len_max = 0
     for sec in contours.keys():
         if structure not in contours[sec].keys():
@@ -147,8 +149,8 @@ for structure in polygons.keys():
 
     print(structure)
     fp = []
-    fp.append(cell_dir + structure + '/MD589_' + structure + '_positive.pkl')
-    fp.append(cell_dir + structure + '/MD589_' + structure + '_negative.pkl')
+    fp.append(cell_dir + structure + '/MD594_' + structure + '_positive.pkl')
+    fp.append(cell_dir + structure + '/MD594_' + structure + '_negative.pkl')
     X_train = []
     y_train = []
     for state in range(2):
@@ -172,22 +174,19 @@ for structure in polygons.keys():
                                int(np.ceil(max(polygon[:, 0]) + margin + half * step_size)),
                                int(max(min(polygon[:, 1]) - margin - half * step_size, 0)),
                                int(np.ceil(max(polygon[:, 1]) + margin + half * step_size))]
-    clock('Connect database')
-    t0 = time()
+
+    inside_area = Polygon(polygon).area
+    outside_area = Polygon(polygon).buffer(margin, resolution=2).area - inside_area
+
     conn = sqlite3.connect(os.environ['ROOT_DIR'] + db_fp)
     cur = conn.cursor()
     raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?', (left, right, up, down))
     info = np.array(list(raws))
     locations = info[:, 1:3]
     features = info[:, 3:]
-    print(structure, 'Database', time() - t0)
-    clock('Finish database')
 
     Scores[structure][str(section) + '_positive'] = {}
     Scores[structure][str(section) + '_negative'] = {}
-    inside_area = Polygon(polygon).area
-    outside_area = Polygon(polygon).buffer(margin, resolution=2).area - inside_area
-
     xy_shift_positive = np.zeros([2 * half + 1, 2 * half + 1])
     xy_shift_negative = np.zeros([2 * half + 1, 2 * half + 1])
     z_shift_positive = []
@@ -198,76 +197,75 @@ for structure in polygons.keys():
             region = polygon.copy()
             region[:, 0] += i * step_size
             region[:, 1] += j * step_size
-            clock('Collect cells')
-            t0 = time()
             path = Path(region)
             indices_inside = np.where(path.contains_points(locations))[0]
             features_inside = features[indices_inside]
+            if features_inside.shape[0]:
+                score = features_to_score(features_inside, thresholds, bst, inside_area)
+                xy_shift_positive[j + half, i + half] = score
 
             surround = Polygon(region).buffer(margin, resolution=2)
             path = Path(list(surround.exterior.coords))
             indices_sur = np.where(path.contains_points(locations))[0]
             indices_outside = np.setdiff1d(indices_sur, indices_inside)
             features_outside = features[indices_outside]
-            print('Collect cells', time() - t0)
-            clock('finish collection')
-
-            clock('Boosting Scores')
-            t0 = time()
-            if features_inside.shape[0]:
-                score = features_to_score(features_inside, thresholds, bst, inside_area)
-                # x_shift_positive.append(score)
-                xy_shift_positive[j + half, i + half] = score
-            # else:
-            # x_shift_positive.append(0)
-
             if features_outside.shape[0]:
                 score = features_to_score(features_outside, thresholds, bst, outside_area)
-                # x_shift_negative.append(score)
                 xy_shift_negative[j + half, i + half] = score
-            print('Boosting scores', time() - t0)
-            clock('Finish scores')
-            # else:
-            # x_shift_negative.append(0)
-
-            # region = polygon.copy()
-            # region[:, 1] += i * step_size
-            # path = Path(region)
-            # indices_inside = np.where(path.contains_points(locations))[0]
-            # features_inside = features[indices_inside]
-            # if features_inside.shape[0]:
-            #     score = features_to_score(features_inside, thresholds, bst, inside_area)
-            #     y_shift_positive.append(score)
-            # else:
-            #     y_shift_positive.append(0)
-            #
-            # surround = Polygon(region).buffer(margin, resolution=2)
-            # path = Path(list(surround.exterior.coords))
-            # indices_sur = np.where(path.contains_points(locations))[0]
-            # indices_outside = np.setdiff1d(indices_sur, indices_inside)
-            # features_outside = features[indices_outside]
-            # if features_outside.shape[0]:
-            #     score = features_to_score(features_outside, thresholds, bst, outside_area)
-            #     y_shift_negative.append(score)
-            # else:
-            #     y_shift_negative.append(0)
 
     conn.close()
+    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin, 0)),
+                               int(np.ceil(max(polygon[:, 0]) + margin)),
+                               int(max(min(polygon[:, 1]) - margin, 0)),
+                               int(np.ceil(max(polygon[:, 1]) + margin))]
 
-    # Scores[structure][str(section) + '_positive']['x'] = x_shift_positive
-    # Scores[structure][str(section) + '_positive']['y'] = y_shift_positive
+    for i in range(-half, half + 1):
+        loc_z = section + i
+        try:
+            sec_fp = db_dir + str(loc_z) + '.db'
+            setup_download_from_s3(sec_fp, recursive=False)
+            conn = sqlite3.connect(os.environ['ROOT_DIR'] + sec_fp)
+            cur = conn.cursor()
+            raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?', (left, right, up, down))
+            info = np.array(list(raws))
+            locations = info[:, 1:3]
+            features = info[:, 3:]
+
+            path = Path(polygon)
+            indices_inside = np.where(path.contains_points(locations))[0]
+            features_inside = features[indices_inside]
+
+            score = features_to_score(features_inside, thresholds, bst, inside_area)
+            z_shift_positive.append(score)
+
+            surround = Polygon(polygon).buffer(margin, resolution=2)
+            path = Path(list(surround.exterior.coords))
+            indices_sur = np.where(path.contains_points(locations))[0]
+            indices_outside = np.setdiff1d(indices_sur, indices_inside)
+            features_outside = features[indices_outside]
+
+            score = features_to_score(features_outside, thresholds, bst, outside_area)
+            z_shift_negative.append(score)
+        except:
+            z_shift_positive.append(0)
+            z_shift_negative.append(0)
+
+        conn.close()
+
     Scores[structure][str(section) + '_positive']['xy'] = xy_shift_positive
+    Scores[structure][str(section) + '_positive']['z'] = z_shift_positive
 
-    # Scores[structure][str(section) + '_negative']['x'] = x_shift_negative
-    # Scores[structure][str(section) + '_negative']['y'] = y_shift_negative
     Scores[structure][str(section) + '_negative']['xy'] = xy_shift_negative
+    Scores[structure][str(section) + '_negative']['z'] = z_shift_negative
 
     count += 1
-    print(section, structure, count, '/', len(polygons))
+    print(section, structure, count, '/', len(polygons), time()-t2)
 
-# shutil.rmtree(os.environ['ROOT_DIR']+db_dir)
+
+
+shutil.rmtree(os.environ['ROOT_DIR']+db_dir)
 filename = savepath + str(section) + '.pkl'
 pickle.dump(Scores, open(os.environ['ROOT_DIR'] + filename, 'wb'))
-# setup_upload_from_s3(filename, recursive=False)
+setup_upload_from_s3(filename, recursive=False)
 # os.remove(os.environ['ROOT_DIR']+img_fn)
 print(str(section) + ' finished in %5.1f seconds' % (time() - t1))
