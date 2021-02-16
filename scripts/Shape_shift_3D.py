@@ -143,7 +143,7 @@ for structure in polygons.keys():
         width = polygon[:, 1].max() - polygon[:, 1].min()
         if max(length, width) > len_max:
             len_max = max(length, width)
-    step_size = max(int(len_max / 30), int(30 / resol))
+    step_size = max(int(len_max / 20), int(30 / resol))
 
     polygon = polygons[structure].copy() #* 16 * 1.4154
     Scores[structure] = {}
