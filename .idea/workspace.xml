@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Shift_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Shape_shift.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Shape_shift.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Shape_shift_3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Shape_shift_3D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/neighbors.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/neighbors.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/install-project.sh" beforeDir="false" afterPath="$PROJECT_DIR$/install-project.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Aws-jupyter.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Aws-jupyter.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,17 +28,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/install-project.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="270">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="930">
-              <caret line="63" column="19" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="19" />
+            <state relative-caret-position="945">
+              <caret line="63" column="19" lean-forward="true" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="19" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -50,7 +46,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="591">
@@ -133,12 +129,12 @@
         <option value="$PROJECT_DIR$/scripts/Sqlite_CDF.py" />
         <option value="$PROJECT_DIR$/scripts/Shape_shift_v2.py" />
         <option value="$PROJECT_DIR$/scripts/old/Shape_shift_V3.py" />
-        <option value="$PROJECT_DIR$/install-project.sh" />
-        <option value="$PROJECT_DIR$/scripts/Aws-jupyter.py" />
         <option value="$PROJECT_DIR$/scripts/Structure_samples_generator.py" />
         <option value="$PROJECT_DIR$/scripts/Shape_shift.py" />
         <option value="$PROJECT_DIR$/scripts/Shape_shift_3D.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py" />
+        <option value="$PROJECT_DIR$/scripts/Aws-jupyter.py" />
+        <option value="$PROJECT_DIR$/install-project.sh" />
       </list>
     </option>
   </component>
@@ -152,6 +148,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -174,7 +171,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -494,12 +490,12 @@
       <workItem from="1612509793446" duration="89000" />
       <workItem from="1612692987141" duration="748000" />
       <workItem from="1612924107896" duration="7208000" />
-      <workItem from="1613499649158" duration="234000" />
+      <workItem from="1613499649158" duration="401000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1031189000" />
+    <option name="totallyTimeSpent" value="1031590000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -866,23 +862,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/install-project.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="930">
-          <caret line="63" column="19" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cells_extractor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -926,22 +905,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Shape_shift.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
+        <state relative-caret-position="2640">
           <caret line="176" column="21" selection-start-line="176" selection-start-column="4" selection-end-line="176" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="53" column="33" lean-forward="true" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_3D.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1178">
-          <caret line="198" column="36" lean-forward="true" selection-start-line="198" selection-start-column="36" selection-end-line="198" selection-end-column="36" />
+        <state relative-caret-position="547">
+          <caret line="198" column="36" selection-start-line="198" selection-start-column="36" selection-end-line="198" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="591">
+          <caret line="53" column="33" lean-forward="true" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/install-project.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="945">
+          <caret line="63" column="19" lean-forward="true" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

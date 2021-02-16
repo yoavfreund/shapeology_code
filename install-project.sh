@@ -15,4 +15,4 @@ pip install mxnet
 cd shapeology_code/scripts/Cell_datajoint/
 
 #python Cells_extract_datajoint.py 'shape_params.yaml' 'DK39'
-python Shift_score_datajoint.py 'MD589'
+python Shift_score_datajoint.py 'DK52'
