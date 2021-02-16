@@ -41,7 +41,7 @@ scripts_dir = os.environ['REPO_DIR']
 @schema
 class Shift3D(dj.Computed):
     definition="""
-    -> SectionMD589
+    -> SectionDK52
     -----
     size_of_file : int   #size of pkl file of each section
     """
@@ -49,7 +49,7 @@ class Shift3D(dj.Computed):
     bucket = "mousebrainatlas-data"
     client = get_s3_client(credFiles)
     def make(self, key):
-        section = (SectionMD589 & key).fetch1('section_id')
+        section = (SectionDK52 & key).fetch1('section_id')
         print('populating for ', section, end='\n')
         key_item = 'size_of_file'
         s3_fp = pkl_fp + str(section) + '.pkl'

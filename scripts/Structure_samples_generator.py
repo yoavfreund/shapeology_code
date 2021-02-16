@@ -78,8 +78,7 @@ def features_to_score(features, thresholds, bst, object_area):
     score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
     return score
 
-# fn = 'CSHL_data_processed/MD589/MD589_aligned_section_structure_vertices_down16.pickle'
-fn = 'CSHL_data_processed/DK52/DK52_landmarks.pkl'
+fn = 'CSHL_data_processed/MD589/MD589_aligned_section_structure_vertices_down16.pickle'
 setup_download_from_s3(fn, recursive=False)
 contours = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
 polygons = contours[section]
@@ -131,27 +130,24 @@ count = 0
 Scores = {}
 clock('Process Begin')
 for structure in polygons.keys():
-    # if structure not in all_structures:
-    #     continue
+    if structure not in all_structures:
+        continue
     t2 = time()
     len_max = 0
     for sec in contours.keys():
         if structure not in contours[sec].keys():
             continue
-        polygon = contours[sec][structure].copy() #* 16 * 1.4154
+        polygon = contours[sec][structure].copy() * 16 * 1.4154
         length = polygon[:, 0].max() - polygon[:, 0].min()
         width = polygon[:, 1].max() - polygon[:, 1].min()
         if max(length, width) > len_max:
             len_max = max(length, width)
     step_size = max(int(len_max / 30), int(30 / resol))
 
-    polygon = polygons[structure].copy() #* 16 * 1.4154
+    polygon = polygons[structure].copy() * 16 * 1.4154
     Scores[structure] = {}
 
     print(structure)
-    rname = structure
-    if structure.rfind('_') != -1:
-        structure = structure[:structure.rfind('_')]
     fp = []
     fp.append(cell_dir + structure + '/MD594_' + structure + '_positive.pkl')
     fp.append(cell_dir + structure + '/MD594_' + structure + '_negative.pkl')
@@ -174,7 +170,6 @@ for structure in polygons.keys():
     dtrain = xgb.DMatrix(X_train, label=y_train)
     bst = xgb.train(param, dtrain, num_round, verbose_eval=False)
 
-    structure = rname
     [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
                                int(np.ceil(max(polygon[:, 0]) + margin + half * step_size)),
                                int(max(min(polygon[:, 1]) - margin - half * step_size, 0)),
