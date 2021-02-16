@@ -190,7 +190,7 @@ for structure in polygons.keys():
         loc_z = section + k
         t0 = time()
         try:
-            sec_fp = db_dir + str(loc_z) + '.db'
+            sec_fp = db_dir + '%03d' % loc_z + '.db'
             setup_download_from_s3(sec_fp, recursive=False)
             conn = sqlite3.connect(os.environ['ROOT_DIR'] + sec_fp)
             cur = conn.cursor()
