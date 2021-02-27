@@ -61,7 +61,7 @@ while not check_status({"name": name,
 
 run_cluster({
     "script": script_fp,
-    "output": True,
+    "output": False,
 })
 
 

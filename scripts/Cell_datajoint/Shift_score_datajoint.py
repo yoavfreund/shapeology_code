@@ -35,7 +35,7 @@ dj.conn()
 schema = dj.schema(get_dj_creds(credFiles)['schema'])
 schema.spawn_missing_classes()
 
-pkl_fp = 'CSHL_shift_scores/'+stack+'/'
+pkl_fp = 'CSHL_shift_scores/'+stack+'_correct/'
 scripts_dir = os.environ['REPO_DIR']
 
 @schema
