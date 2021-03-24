@@ -80,7 +80,7 @@ def features_to_score(features, thresholds, bst, object_area):
 
 # fn = 'CSHL_data_processed/MD589/MD589_aligned_section_structure_vertices_down16.pickle'
 fn = 'CSHL_data_processed/DK52/DK52_noise_landmarks.pkl'
-fn = 'CSHL_data_processed/DK52/DK52_correct_landmarks.pkl'
+# fn = 'CSHL_data_processed/DK52/DK52_correct_landmarks.pkl'
 # fn = 'CSHL_data_processed/DK52/DK52_landmarks.pkl'
 setup_download_from_s3(fn, recursive=False)
 contours = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
