@@ -79,6 +79,7 @@ def features_to_score(features, thresholds, bst, object_area):
     return score
 
 # fn = 'CSHL_data_processed/MD589/MD589_aligned_section_structure_vertices_down16.pickle'
+fn = 'CSHL_data_processed/DK52/DK52_noise_landmarks.pkl'
 fn = 'CSHL_data_processed/DK52/DK52_correct_landmarks.pkl'
 # fn = 'CSHL_data_processed/DK52/DK52_landmarks.pkl'
 setup_download_from_s3(fn, recursive=False)
@@ -108,7 +109,7 @@ savepath = 'CSHL_shift_scores/'
 if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
     os.mkdir(os.environ['ROOT_DIR'] + savepath)
 # savepath = savepath + stack + '_search/'
-savepath = savepath + stack + '_correct/'
+savepath = savepath + stack + '_noise/'
 if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
     os.mkdir(os.environ['ROOT_DIR'] + savepath)
 
