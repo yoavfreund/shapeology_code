@@ -79,9 +79,9 @@ def features_to_score(features, thresholds, bst, object_area):
     return score
 
 # fn = 'CSHL_data_processed/MD589/MD589_aligned_section_structure_vertices_down16.pickle'
-fn = 'CSHL_data_processed/DK52/DK52_noise_landmarks.pkl'
+# fn = 'CSHL_data_processed/DK52/DK52_noise_landmarks.pkl'
 # fn = 'CSHL_data_processed/DK52/DK52_correct_landmarks.pkl'
-# fn = 'CSHL_data_processed/DK52/DK52_landmarks.pkl'
+fn = 'CSHL_data_processed/'+stack+'/'+stack+'_landmarks.pkl'
 setup_download_from_s3(fn, recursive=False)
 contours = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
 polygons = contours[section]
@@ -108,8 +108,8 @@ cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v1/MD585/'
 savepath = 'CSHL_shift_scores/'
 if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
     os.mkdir(os.environ['ROOT_DIR'] + savepath)
-# savepath = savepath + stack + '_search/'
-savepath = savepath + stack + '_noise/'
+savepath = savepath + stack + '_search/'
+# savepath = savepath + stack + '_noise/'
 if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
     os.mkdir(os.environ['ROOT_DIR'] + savepath)
 
@@ -146,7 +146,7 @@ for structure in polygons.keys():
         width = polygon[:, 1].max() - polygon[:, 1].min()
         if max(length, width) > len_max:
             len_max = max(length, width)
-    step_size = max(int(len_max / 30), int(30 / resol))
+    step_size = max(int(len_max / 20), int(30 / resol))
 
     polygon = polygons[structure].copy() #* 16 * 1.4154
     Scores[structure] = {}
