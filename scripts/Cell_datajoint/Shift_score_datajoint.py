@@ -37,7 +37,7 @@ schema.spawn_missing_classes()
 
 # pkl_fp = 'CSHL_shift_scores/'+stack+'_search/'
 # pkl_fp = 'CSHL_shift_scores/'+stack+'_correct/'
-pkl_fp = 'CSHL_shift_scores/'+stack+'_noise_search/'
+pkl_fp = 'CSHL_shift_scores/'+stack+'_noise_correct/'
 scripts_dir = os.environ['REPO_DIR']
 
 @schema
