@@ -79,8 +79,8 @@ def features_to_score(features, thresholds, bst, object_area):
     return score
 
 # fn = 'CSHL_data_processed/MD589/MD589_aligned_section_structure_vertices_down16.pickle'
-# fn = 'CSHL_data_processed/DK52/DK52_noise_landmarks.pkl'
-fn = 'CSHL_data_processed/'+stack+'/'+stack+'_correct_landmarks.pkl'
+fn = 'CSHL_data_processed/'+stack+'/'+stack+'_noise_landmarks.pkl'
+# fn = 'CSHL_data_processed/'+stack+'/'+stack+'_correct_landmarks.pkl'
 # fn = 'CSHL_data_processed/'+stack+'/'+stack+'_landmarks.pkl'
 setup_download_from_s3(fn, recursive=False)
 contours = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
@@ -108,8 +108,8 @@ cell2_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v1/MD585/'
 savepath = 'CSHL_shift_scores/'
 if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
     os.mkdir(os.environ['ROOT_DIR'] + savepath)
-# savepath = savepath + stack + '_search/'
-savepath = savepath + stack + '_correct/'
+savepath = savepath + stack + '_noise_search/'
+# savepath = savepath + stack + '_correct/'
 if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
     os.mkdir(os.environ['ROOT_DIR'] + savepath)
 
