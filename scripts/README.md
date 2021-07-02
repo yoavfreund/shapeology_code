@@ -14,6 +14,12 @@ optional arguments:
   stack       The name of the brain, type=str, default='MD594'
 ```
 
+## Interface to pipeline:
+
+* Recieve approximate com's
+* Generate new COMs using detectors, initialized at approximate COMs
+
+
 
 
 
