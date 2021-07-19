@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/Shift_datajoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/Shift_datajoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/Shape_shift_3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Shape_shift_3D.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/neighbors.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/neighbors.txt" afterDir="false" />
     </list>
@@ -19,21 +19,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/install-project.sh">
+        <entry file="file://$PROJECT_DIR$/scripts/Axon_bundle_mark.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="52" selection-start-line="6" selection-start-column="52" selection-end-line="6" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="960">
-              <caret line="64" column="2" selection-start-line="64" selection-start-column="2" selection-end-line="64" selection-end-column="2" />
+            <state relative-caret-position="1245">
+              <caret line="89" column="42" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="42" />
               <folding>
-                <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -42,17 +33,34 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_3D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-133">
-              <caret line="84" column="62" lean-forward="true" selection-start-line="84" selection-start-column="62" selection-end-line="84" selection-end-column="62" />
+            <state relative-caret-position="2925">
+              <caret line="195" column="33" selection-start-line="195" selection-start-column="33" selection-end-line="195" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
+        <entry file="file://$PROJECT_DIR$/scripts/Sqlite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="113" column="53" selection-start-line="113" selection-start-column="44" selection-end-line="113" selection-end-column="59" />
+            <state relative-caret-position="1005">
+              <caret line="68" column="7" selection-start-line="68" selection-end-line="68" selection-end-column="7" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/environ.sh">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/Cells_extractor.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1110">
+              <caret line="84" column="16" selection-start-line="84" selection-start-column="16" selection-end-line="84" selection-end-column="16" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -61,19 +69,58 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
+        <entry file="file://$PROJECT_DIR$/scripts/SortFile_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="81" column="49" lean-forward="true" selection-start-line="81" selection-start-column="49" selection-end-line="81" selection-end-column="49" />
+            <state relative-caret-position="1590">
+              <caret line="112" column="62" selection-start-line="112" selection-start-column="54" selection-end-line="112" selection-end-column="62" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Cell_extractor_aws.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="285">
+                <caret line="19" column="7" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/CreateVQs_v2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1425">
+              <caret line="97" column="34" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="309">
+              <caret line="102" column="36" selection-start-line="102" selection-start-column="36" selection-end-line="102" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="47" column="41" lean-forward="true" selection-start-line="47" selection-start-column="41" selection-end-line="47" selection-end-column="41" />
+            <state relative-caret-position="525">
+              <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -98,7 +145,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_datajoint.py" />
         <option value="$PROJECT_DIR$/scripts/Shape_shift_cnn_v2.py" />
         <option value="$PROJECT_DIR$/scripts/patch_normalizer.py" />
         <option value="$PROJECT_DIR$/scripts/old/post-processing.py" />
@@ -116,7 +162,6 @@
         <option value="$PROJECT_DIR$/configure_mac.sh" />
         <option value="$PROJECT_DIR$/scripts/Aws-jupyter_v2.py" />
         <option value="$PROJECT_DIR$/scripts/Aws-jupyter.md" />
-        <option value="$PROJECT_DIR$/virtual_env.sh" />
         <option value="$PROJECT_DIR$/../venv/shapeology_venv/lib/python3.7/site-packages/aws_jupyter/send_files.py" />
         <option value="$PROJECT_DIR$/scripts/lib/utils.py" />
         <option value="$PROJECT_DIR$/VaultBrain/s3-creds.json" />
@@ -147,14 +192,16 @@
         <option value="$PROJECT_DIR$/scripts/Shape_shift.py" />
         <option value="$PROJECT_DIR$/scripts/Aws-jupyter.py" />
         <option value="$PROJECT_DIR$/install-project.sh" />
-        <option value="$PROJECT_DIR$/scripts/Shape_shift_3D.py" />
         <option value="$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py" />
+        <option value="$PROJECT_DIR$/scripts/Shape_shift_3D.py" />
+        <option value="$PROJECT_DIR$/virtual_env.sh" />
+        <option value="$PROJECT_DIR$/scripts/Axon_bundle_mark.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1496" />
-    <option name="y" value="569" />
+    <option name="x" value="1463" />
+    <option name="y" value="518" />
     <option name="width" value="1440" />
     <option name="height" value="797" />
   </component>
@@ -505,12 +552,32 @@
       <workItem from="1614464540645" duration="5945000" />
       <workItem from="1615885532564" duration="8285000" />
       <workItem from="1617217856596" duration="11000" />
-      <workItem from="1617522782753" duration="7723000" />
+      <workItem from="1617522782753" duration="9382000" />
+      <workItem from="1618429123089" duration="15000" />
+      <workItem from="1618850691455" duration="365000" />
+      <workItem from="1619388984408" duration="194000" />
+      <workItem from="1619477581182" duration="216000" />
+      <workItem from="1619605004713" duration="534000" />
+      <workItem from="1620030264805" duration="1151000" />
+      <workItem from="1620604980605" duration="3593000" />
+      <workItem from="1620652940607" duration="177000" />
+      <workItem from="1620707715788" duration="130000" />
+      <workItem from="1620719726976" duration="313000" />
+      <workItem from="1621282978269" duration="932000" />
+      <workItem from="1621384306265" duration="841000" />
+      <workItem from="1621891177175" duration="1663000" />
+      <workItem from="1622057069376" duration="655000" />
+      <workItem from="1622603787915" duration="1356000" />
+      <workItem from="1623318412006" duration="1361000" />
+      <workItem from="1624087052729" duration="3698000" />
+      <workItem from="1624139094794" duration="292000" />
+      <workItem from="1624475500092" duration="782000" />
+      <workItem from="1624584901780" duration="11000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1066484000" />
+    <option name="totallyTimeSpent" value="1086422000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -522,10 +589,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1496" y="569" width="1440" height="797" extended-state="0" />
-    <editor active="true" />
+    <frame x="1463" y="518" width="1440" height="797" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4967033" visible="true" weight="0.25250357" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4967033" visible="true" weight="0.3311874" />
       <window_info id="Structure" order="1" sideWeight="0.50329673" side_tool="true" weight="0.25250357" />
       <window_info id="Favorites" order="2" sideWeight="0.5010941" side_tool="true" weight="0.29086894" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -538,8 +604,8 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4985694" weight="0.3248227" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50214595" side_tool="true" weight="0.32428765" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49785408" visible="true" weight="0.35460994" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5028612" side_tool="true" weight="0.35460994" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49713877" visible="true" weight="0.35460994" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32765958" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -570,33 +636,6 @@
     <SUITE FILE_PATH="coverage/shapeology_code$Aws_jupyter.coverage" NAME="Aws-jupyter Coverage Results" MODIFIED="1611665428352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Thresholds_datajoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="66" column="8" selection-start-line="66" selection-end-line="66" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/notebooks/FeaturesShow.ipynb">
-      <provider selected="true" editor-type-id="jupyter-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/diffusionmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="69" selection-start-line="69" selection-end-line="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Cell_extractor_local.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="248">
-            <caret line="17" column="67" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="67" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -680,16 +719,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Cell_extractor_aws.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="120">
-            <caret line="8" column="43" selection-start-line="8" selection-start-column="43" selection-end-line="8" selection-end-column="43" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../venv/shapeology_venv/lib/python3.7/site-packages/scipy/stats/stats.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="625">
@@ -706,16 +735,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1698">
           <caret line="164" column="19" selection-start-line="164" selection-start-column="19" selection-end-line="164" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Sqlite.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="58" column="56" selection-start-line="58" selection-start-column="56" selection-end-line="58" selection-end-column="56" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
@@ -833,9 +852,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/environ.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Shape_shift.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2640">
@@ -868,7 +884,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/CreateVQs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-636">
+        <state relative-caret-position="-963">
           <caret line="107" column="51" selection-start-line="107" selection-start-column="51" selection-end-line="107" selection-end-column="51" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
@@ -876,57 +892,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/CreateVQs_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="148" column="25" lean-forward="true" selection-start-line="148" selection-start-column="25" selection-end-line="148" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/SortFile_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="112" column="62" selection-start-line="112" selection-start-column="54" selection-end-line="112" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cells_extractor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="84" column="25" lean-forward="true" selection-start-line="84" selection-start-column="25" selection-end-line="84" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/neighbors.txt">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/neighbors.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
+        <state relative-caret-position="-263">
           <caret line="10" column="12" lean-forward="true" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="113" column="53" selection-start-line="113" selection-start-column="44" selection-end-line="113" selection-end-column="59" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="81" column="49" lean-forward="true" selection-start-line="81" selection-start-column="49" selection-end-line="81" selection-end-column="49" />
+        <state relative-caret-position="375">
+          <caret line="81" column="49" selection-start-line="81" selection-start-column="49" selection-end-line="81" selection-end-column="49" />
         </state>
       </provider>
     </entry>
@@ -937,16 +916,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_3D.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-133">
-          <caret line="84" column="62" lean-forward="true" selection-start-line="84" selection-start-column="62" selection-end-line="84" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
+        <state relative-caret-position="945">
           <caret line="64" column="2" selection-start-line="64" selection-start-column="2" selection-end-line="64" selection-end-column="2" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
@@ -954,10 +926,100 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/virtual_env.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Axon_bundle_mark.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1245">
+          <caret line="89" column="42" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Shape_shift_3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2925">
+          <caret line="195" column="33" selection-start-line="195" selection-start-column="33" selection-end-line="195" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Sqlite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1005">
+          <caret line="68" column="7" selection-start-line="68" selection-end-line="68" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environ.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Cells_extractor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1110">
+          <caret line="84" column="16" selection-start-line="84" selection-start-column="16" selection-end-line="84" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/SortFile_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1590">
+          <caret line="112" column="62" selection-start-line="112" selection-start-column="54" selection-end-line="112" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Cell_extractor_aws.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="285">
+            <caret line="19" column="7" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/CreateVQs_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="97" column="34" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Shift_score_datajoint.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="47" column="41" lean-forward="true" selection-start-line="47" selection-start-column="41" selection-end-line="47" selection-end-column="41" />
+        <state relative-caret-position="525">
+          <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/extractPatches.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="102" column="36" selection-start-line="102" selection-start-column="36" selection-end-line="102" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

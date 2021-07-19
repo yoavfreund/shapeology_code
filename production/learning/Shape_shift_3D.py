@@ -148,6 +148,7 @@ for structure in polygons.keys():
         if max(length, width) > len_max:
             len_max = max(length, width)
     step_size = max(int(len_max / 60), int(20 / resol)) # len_max/30 for search, len_max/30 for check
+    step_z = 1 if step_size*resol<40 else 2
 
     polygon = polygons[structure].copy() #* 16 * 1.4154
     Scores[structure] = {}
@@ -179,10 +180,6 @@ for structure in polygons.keys():
     bst = xgb.train(param, dtrain, num_round, verbose_eval=False)
 
     structure = rname
-    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin - half * step_size, 0)),
-                               int(np.ceil(max(polygon[:, 0]) + margin + half * step_size)),
-                               int(max(min(polygon[:, 1]) - margin - half * step_size, 0)),
-                               int(np.ceil(max(polygon[:, 1]) + margin + half * step_size))]
 
     inside_area = Polygon(polygon).area
     outside_area = Polygon(polygon).buffer(margin, resolution=2).area - inside_area
@@ -191,20 +188,26 @@ for structure in polygons.keys():
     xyz_shift_negative = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
 
     for k in range(-half, half+1):
-        loc_z = section + k
+        loc_z = section + k * step_z
         t0 = time()
         try:
             sec_fp = db_dir + '%03d' % loc_z + '.db'
             setup_download_from_s3(sec_fp, recursive=False)
             conn = sqlite3.connect(os.environ['ROOT_DIR'] + sec_fp)
             cur = conn.cursor()
-            raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?', (left, right, up, down))
-            info = np.array(list(raws))
-            locations = info[:, 1:3]
-            features = info[:, 3:]
 
             for i in range(-half, half + 1):
                 for j in range(-half, half + 1):
+                    [left, right, up, down] = [int(max(min(polygon[:, 0]) - margin + i * step_size, 0)),
+                                               int(np.ceil(max(polygon[:, 0]) + margin + i * step_size)),
+                                               int(max(min(polygon[:, 1]) - margin + j * step_size, 0)),
+                                               int(np.ceil(max(polygon[:, 1]) + margin + j * step_size))]
+                    raws = cur.execute('SELECT * FROM features WHERE x>=? AND x<=? AND y>=? AND y<=?',
+                                       (left, right, up, down))
+                    info = np.array(list(raws))
+                    locations = info[:, 1:3]
+                    features = info[:, 3:]
+
                     region = polygon.copy()
                     region[:, 0] += i * step_size
                     region[:, 1] += j * step_size
@@ -238,7 +241,7 @@ for structure in polygons.keys():
 
 
 
-shutil.rmtree(os.environ['ROOT_DIR']+db_dir)
+# shutil.rmtree(os.environ['ROOT_DIR']+db_dir)
 filename = savepath + str(section) + '.pkl'
 pickle.dump(Scores, open(os.environ['ROOT_DIR'] + filename, 'wb'))
 setup_upload_from_s3(filename, recursive=False)
