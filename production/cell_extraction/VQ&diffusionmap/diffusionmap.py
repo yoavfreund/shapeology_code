@@ -10,42 +10,20 @@ from pylab import *
 from numpy import *
 import sys
 import os
-sys.path.append('../scripts/lib/')
-from shape_utils import *
+sys.path.append('../scripts/')
+from lib.shape_utils import *
 
 import dill
-from PIL import Image
+import pickle
+from glob import glob
+from time import time
 
 from pydiffmap import diffusion_map as dm
 # initialize Diffusion map object.
 neighbor_params = {'n_jobs': -1, 'algorithm': 'ball_tree'}
 
 
-def scatter_images(pics,dmap,d1=0,d2=1,canvas_sz=1000):
-    canvas_size=np.array([canvas_sz,canvas_sz])
-    _minx=min(dmap[:,d1])
-    _maxx=max(dmap[:,d1])
-    _miny=min(dmap[:,d2])
-    _maxy=max(dmap[:,d2])
-    shift_x = -_minx
-    scale_x = canvas_size[0]/(_maxx - _minx)
-    shift_y = -_miny
-    scale_y = canvas_size[1]/(_maxy - _miny)
-
-    x=[int((_x+shift_x)*scale_x) for _x in dmap[:,d1]]
-    y=[int((_y+shift_y)*scale_y) for _y in dmap[:,d2]]
-
-    image_size=np.array(pics.shape[1:])
-    canvas=Image.new('LA', tuple(canvas_size+image_size))
-    for i in range(pics.shape[0]):
-        gray = pics[i,:,:]
-        gray = np.uint8(gray/gray.max()*255)
-        img = Image.fromarray(gray)
-        img.putalpha(255)
-        canvas.paste(img, (x[i],y[i]))
-    return canvas
-
-def plot_dm(vq_name, dm_name, stack, size, knear=100, eps=3000, canvas_sz=1000, train=True):
+def sample_and_mapping(vq_name, dm_name, size, knear=100, eps=2500, train=True):
     vq = pickle.load(open(vq_name, 'rb'))
     Reps, Reps_count = vq[size]
     Reps_mat = pack_pics(Reps)
@@ -57,26 +35,94 @@ def plot_dm(vq_name, dm_name, stack, size, knear=100, eps=3000, canvas_sz=1000, 
     else:
         mydmap = dill.load(open(dm_name, 'rb'))
         dmap = mydmap.transform(data1D)
+    return Reps_mat, dmap
 
-    save_dir = os.path.join(os.environ['ROOT_DIR'], 'scatterplots/%s/scatterplots-%d/'%(stack, size))
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-    for d1 in range(5):
-        for d2 in range(d1+1,8):
-            fn = save_dir + 'scatter%d%d.png'%(d1,d2)
-            canvas=scatter_images(Reps_mat,dmap,d1=d1,d2=d2,canvas_sz=canvas_sz)
-            canvas.save(fn)
+def read_files():
+    '''
+    A generator loads each permuted file.
+    :return: a 3D array consisting of patches
+    '''
+    for filename in glob(patch_dir+'/permuted-*.bin'):
+        D=np.fromfile(filename,dtype=np.float16)
+        pics=D.reshape([-1,size,size])
+        print('in read_files filename=%s, shape='%filename,pics.shape)
+        #!rm $data_dir/$filename
+        yield pics
+
+def data_stream():
+    '''
+    A generator takes the 3D array from read-files() into patches.
+    :return: one cell patch per time
+    '''
+    for pics in read_files():
+        for i in range(pics.shape[0]):
+            yield pics[i,:,:]
+
+
+def transformation(A,B,parameter=False):
+    coef1 = np.dot(A.T, A)/len(A)-np.dot(A.mean(axis=0).reshape(-1,1),A.mean(axis=0).reshape(1,-1))
+    coef2 = np.dot(A.T, B)/len(A)-np.dot(A.mean(axis=0).reshape(-1,1),B.mean(axis=0).reshape(1,-1))
+    M = np.dot(np.linalg.inv(coef1),coef2).T
+    miu = B.mean(axis=0).reshape(1,-1)-np.dot(A.mean(axis=0).reshape(1,-1),M.T)
+    A_transform = np.dot(A,M.T)+miu
+    if parameter:
+        return A_transform,M,miu
+    else:
+        return A_transform
+
 
 if __name__=='__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--samples_size", type=int, default=500000,
-                        help="Number of samples")
-    parser.add_argument("--src_root", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'permute/'),
+    parser.add_argument("--src_root", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'vq/'),
                         help="Path to directory containing permuted cell files")
-    parser.add_argument("--save_dir", type=str, default='vq/',
+    parser.add_argument("--save_dir", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'diffusionmap/'),
                         help="Path to directory saving VQ files")
-    parser.add_argument("padded_size", type=int,
-                        help="One of the three padded size")
+    parser.add_argument("stack", type=str, help="The name of the brain")
 
+    args = parser.parse_args()
+    data_root = args.src_root
+    dm_dir = args.save_dir
+    stack = args.stack
+
+    if not os.path.exists(dm_dir + stack):
+        os.makedirs(dm_dir + stack)
+
+    epsilon = {15:300,51:2500,201:5000}
+    transform = {}
+    num = 10
+    for size in [15,51,201]:
+        t0 = time()
+        vq_name = data_root + '%s/VQ%d.pkl' % (stack, size)
+        dm_name = dm_dir + '%s/diffusionMap-%d.pkl' % (stack, size)
+        Reps_mat1, dmap = sample_and_mapping(vq_name, dm_name, size, eps=epsilon[size], train=True)
+
+        dir_name = "permuted-%d" % size
+        patch_dir = os.path.join(os.environ['ROOT_DIR'], 'permute/DK39/', dir_name)
+        pics_list = []
+        i = 0
+        for pic in data_stream():
+            pics_list.append(np.array(pic, dtype=np.float32))
+            if size==201:
+                i += 1
+                if i >= 50000:
+                    break
+        pics = pack_pics(pics_list)
+        data1D = np.concatenate([x.reshape([1, size * size]) for x in pics])
+        mydmap = dill.load(open(dm_name, 'rb'))
+        dmap2_full = mydmap.transform(data1D)
+
+        dm_name = dm_dir+'%s/diffusionMap-%d.pkl'%('DK39', size)
+        mydmap = dill.load(open(dm_name, 'rb'))
+        dmap1_full = mydmap.transform(data1D)
+
+        dmap2_T, M, miu = transformation(dmap2_full[:, :num], dmap1_full[:, :num], parameter=True)
+        transform[size] = {}
+        transform[size]['M'] = M.T
+        transform[size]['miu'] = miu
+
+        print(size, 'Finished in', time() - t0, 'seconds')
+
+    fn = os.path.join(dm_dir + stack + '/transform.pkl')
+    pickle.dump(transform, open(fn, 'wb'))
