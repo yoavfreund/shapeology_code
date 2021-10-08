@@ -66,9 +66,13 @@ def collect_inside_cell_features(loc):
     features_in_box = features_in_box[indices]
 
     values = grid3D[coord[:, 0], coord[:, 1], coord[:, 2]]
-    inside_shape_features = features_in_box[values == 2]
-    sur_shape_features = features_in_box[values == 1]
-    return inside_shape_features,sur_shape_features
+    indices = (values == 2)
+    inside_shape_features = features_in_box[indices]
+    inside_coord = coord[indices]
+    indices = (values == 1)
+    sur_shape_features = features_in_box[indices]
+    sur_coord = coord[indices]
+    return inside_shape_features,sur_shape_features,inside_coord,sur_coord
 
 def features_to_vector(features, thresholds, object_area):
     extracted = []
@@ -104,8 +108,7 @@ if __name__=='__main__':
     # grid3D, total_shape_area, min_x, min_y, len_max = pickle.load(open(fn,'rb'))
     step_size = max(int(len_max / 30), int(20 / resol))
     step_z = int(step_size * resol / 20)
-    total_shape_area = sum(list(total_shape_area.values()))
-    total_sur_area = sum(list(total_sur_area.values()))
+
 
     half = 15
     fn = stack + '/' + stack + '_beth_COMs.pkl'
@@ -113,6 +116,7 @@ if __name__=='__main__':
     centroid = COMs[structure]
     contours = COMs_to_contours(COMs)
     seq = sorted([section for section in contours.keys() if structure in contours[section].keys()])
+
     C = {i: contours[i][structure] for i in contours if structure in contours[i]}
     section_numbers = sorted(C.keys())
     Concat = np.concatenate([C[i] for i in C])
@@ -133,7 +137,7 @@ if __name__=='__main__':
 
     db_dir = 'CSHL_databases/' + stack + '/'
     cell_shape_features = []
-    for section in expend_seq:
+    for section in seq:
         try:
             sec_fp = db_dir + '%03d' % section + '.db'
 
@@ -152,27 +156,30 @@ if __name__=='__main__':
     ratio = int(20 / resol)
     positive_sample_features = []
     negative_sample_features = []
-    for k in range(-half, half + 1):
-        for i in range(-half, half + 1):
-            for j in range(-half, half + 1):
-                # Collect cells in the shifted 3D shapes
-                start_time = time()
+    for i in range(-half, half + 1):
+        for j in range(-half, half + 1):
+            # Collect cells in the shifted 3D shapes
+            start_time = time()
 
-                loc = np.array([seq[0] + k * step_z, center[0] + min_x-margin + i * step_size, center[1] + min_y-margin + j * step_size])
-                inside_shape_features,sur_shape_features = collect_inside_cell_features(loc)
-                inside_cdf = features_to_vector(inside_shape_features, thresholds, total_shape_area)
-                sur_cdf = features_to_vector(sur_shape_features, thresholds, total_sur_area)
-                feature_vector = np.array(inside_cdf) - np.array(sur_cdf)
+            loc = np.array([seq[0], center[0] + min_x-margin + i * step_size, center[1] + min_y-margin + j * step_size])
+            inside_shape_features, sur_shape_features, inside_coord, sur_coord = collect_inside_cell_features(loc)
+            for sec in seq:
+                inside_features = inside_shape_features[inside_coord[:, 0] == sec - seq[0]]
+                outside_features = sur_shape_features[sur_coord[:, 0] == sec - seq[0]]
+                if inside_features.shape[0] and outside_features.shape[0]:
+                    inside_cdf = features_to_vector(inside_features, thresholds, total_shape_area[sec - seq[0]])
+                    sur_cdf = features_to_vector(outside_features, thresholds, total_sur_area[sec - seq[0]])
+                    feature_vector = np.array(inside_cdf) - np.array(sur_cdf)
 
-                if centroid[2]+k * step_z in seq:
-                    polygon = contours[centroid[2]+k * step_z][structure].copy()
+                    polygon = contours[sec][structure].copy()
                     outline = Path(polygon)
-                    if outline.contains_point([centroid[0]+ i * step_size,centroid[1]+j*step_size]):
+                    region = polygon.copy()
+                    region[:, 0] += i * step_size
+                    region[:, 1] += j * step_size
+                    if outline.contains_point(list(Polygon(region).centroid.coords)[0]):
                         positive_sample_features.append(feature_vector)
                     else:
                         negative_sample_features.append(feature_vector)
-                else:
-                    negative_sample_features.append(feature_vector)
     print(structure, len(positive_sample_features), len(negative_sample_features))
 
     rname = structure
@@ -182,7 +189,7 @@ if __name__=='__main__':
     indices_choose = np.random.choice(range(len(positive_sample_features)), n_choose, replace=False)
     positive_sample_features = np.array(positive_sample_features)
     positive_sample_features = positive_sample_features[indices_choose]
-    save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v4/' + stack + '/' + rname
+    save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v5/' + stack + '/' + rname
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     pkl_out_file = save_dir + '/' + stack + '_' + structure + '_positive.pkl'

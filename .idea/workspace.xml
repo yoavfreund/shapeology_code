@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer_v2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/production/cell_extraction/VQ&amp;diffusionmap/diffusionmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/cell_extraction/VQ&amp;diffusionmap/diffusionmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/production/learning/Shape_shift_3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/learning/Shape_shift_3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Compute_detection_map.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map_ks_2D.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/learning/Compute_detection_map_2D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map_ks_3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/learning/Compute_detection_map_3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Compute_detection_map_v2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/production/learning/Generate_training_samples.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/learning/Generate_training_samples.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,31 +23,67 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/production/learning/Shape_shift_3D.py">
+        <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3855">
-              <caret line="257" column="48" selection-start-line="257" selection-start-column="20" selection-end-line="257" selection-end-column="48" />
+            <state relative-caret-position="-274">
+              <caret line="4" column="18" lean-forward="true" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/extractPatches_database.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer_v2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="17" column="11" lean-forward="true" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_3D.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="299">
+              <caret line="77" column="23" lean-forward="true" selection-start-line="68" selection-start-column="4" selection-end-line="77" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py">
+        <entry file="file://$PROJECT_DIR$/production/learning/Process_detection_map.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="200" column="73" lean-forward="true" selection-start-line="200" selection-start-column="73" selection-end-line="200" selection-end-column="73" />
+            <state relative-caret-position="1035">
+              <caret line="69" column="23" lean-forward="true" selection-start-line="69" selection-start-column="23" selection-end-line="69" selection-end-column="23" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#0#13#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map.py">
+        <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_2D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="141" column="24" selection-start-line="141" selection-start-column="24" selection-end-line="141" selection-end-column="24" />
+            <state relative-caret-position="-1013">
+              <caret line="92" column="40" selection-start-line="92" selection-start-column="40" selection-end-line="92" selection-end-column="40" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -52,61 +92,11 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_ks_3D.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="138" column="44" lean-forward="true" selection-start-line="138" selection-start-column="44" selection-end-line="138" selection-end-column="44" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/extractPatches.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-848">
-              <caret line="102" column="36" lean-forward="true" selection-start-line="102" selection-start-column="36" selection-end-line="102" selection-end-column="36" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_ks_2D.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="159" lean-forward="true" selection-start-line="159" selection-end-line="159" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/production/learning/Generate_training_samples.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-635">
-              <caret line="104" column="13" lean-forward="true" selection-start-line="104" selection-start-column="13" selection-end-line="104" selection-end-column="13" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_v2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-963">
-              <caret line="49" column="57" lean-forward="true" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="57" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
+        <entry file="file://$PROJECT_DIR$/production/learning/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor />
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -131,9 +121,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/scripts/shape_params.yaml" />
-        <option value="$PROJECT_DIR$/scripts/Cell_datajoint/lib/utilities.py" />
-        <option value="$PROJECT_DIR$/scripts/shape_params-aws.yaml" />
         <option value="$PROJECT_DIR$/scripts/path.yaml" />
         <option value="$PROJECT_DIR$/configure_mac.sh" />
         <option value="$PROJECT_DIR$/scripts/Aws-jupyter_v2.py" />
@@ -173,21 +160,24 @@
         <option value="$PROJECT_DIR$/virtual_env.sh" />
         <option value="$PROJECT_DIR$/scripts/Axon_bundle_mark.py" />
         <option value="$PROJECT_DIR$/production/cell_extraction/VQ&amp;diffusionmap/diffusionmap.py" />
-        <option value="$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py" />
         <option value="$PROJECT_DIR$/production/cell_extraction/VQ&amp;diffusionmap/CreateVQs.py" />
         <option value="$PROJECT_DIR$/production/learning/Shape_shift_3D.py" />
         <option value="$PROJECT_DIR$/production/learning/parellel.sh" />
-        <option value="$PROJECT_DIR$/production/learning/Generate_training_samples.py" />
         <option value="$PROJECT_DIR$/production/learning/Compute_detection_map_v2.py" />
         <option value="$PROJECT_DIR$/production/learning/Compute_detection_map.py" />
+        <option value="$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py" />
+        <option value="$PROJECT_DIR$/production/learning/Generate_training_samples.py" />
+        <option value="$PROJECT_DIR$/production/learning/Generate_training_samples_2D.py" />
         <option value="$PROJECT_DIR$/production/learning/Compute_detection_map_ks_3D.py" />
         <option value="$PROJECT_DIR$/production/learning/Compute_detection_map_ks_2D.py" />
+        <option value="$PROJECT_DIR$/production/cell_extraction/Core/extractPatches_database.py" />
+        <option value="$PROJECT_DIR$/production/learning/Process_detection_map.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="45" />
-    <option name="y" value="120" />
+    <option name="x" value="1445" />
+    <option name="y" value="677" />
     <option name="width" value="1180" />
     <option name="height" value="718" />
   </component>
@@ -196,6 +186,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -249,14 +240,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Markdown" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/production/learning" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/production/cell_extraction/Core" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -268,14 +258,15 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/production/learning" />
-      <recent name="$PROJECT_DIR$/scripts" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/scripts" />
       <recent name="$PROJECT_DIR$/notebooks" />
       <recent name="$PROJECT_DIR$/scripts/old" />
       <recent name="$PROJECT_DIR$/scripts/Cell_datajoint" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/production/cell_extraction/Core" />
+      <recent name="$PROJECT_DIR$/production/learning" />
       <recent name="$PROJECT_DIR$/scripts" />
     </key>
   </component>
@@ -610,12 +601,13 @@
       <workItem from="1631649995451" duration="199000" />
       <workItem from="1631691894953" duration="12192000" />
       <workItem from="1632004320039" duration="36000" />
-      <workItem from="1632218576102" duration="21704000" />
+      <workItem from="1632218576102" duration="22319000" />
+      <workItem from="1633373814511" duration="15693000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1181881000" />
+    <option name="totallyTimeSpent" value="1198189000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -627,10 +619,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="45" y="120" width="1180" height="718" extended-state="0" />
+    <frame x="1445" y="677" width="1180" height="718" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4967033" visible="true" weight="0.24516696" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4967033" visible="true" weight="0.24956064" />
       <window_info id="Structure" order="1" sideWeight="0.50329673" side_tool="true" weight="0.25250357" />
       <window_info id="Favorites" order="2" sideWeight="0.5010941" side_tool="true" weight="0.29086894" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -644,7 +636,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4985694" weight="0.3248227" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5028612" side_tool="true" weight="0.35460994" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49713877" visible="true" weight="0.2891374" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49713877" visible="true" weight="0.2891374" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32765958" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -675,44 +667,6 @@
     <SUITE FILE_PATH="coverage/shapeology_code$Aws_jupyter.coverage" NAME="Aws-jupyter Coverage Results" MODIFIED="1611665428352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scripts/Sqlite_CDF.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="96" column="42" selection-start-line="96" selection-start-column="35" selection-end-line="96" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/old/Shape_shift.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2374">
-          <caret line="364" column="58" selection-start-line="364" selection-start-column="58" selection-end-line="364" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Cell_datajoint/Cells_extract_datajoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-182">
-          <caret line="19" column="18" lean-forward="true" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/old/Cell_generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1288">
-          <caret line="190" column="25" selection-start-line="190" selection-start-column="17" selection-end-line="190" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/old/Cell_collection.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="42" column="36" lean-forward="true" selection-start-line="42" selection-start-column="36" selection-end-line="42" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Structure_samples_generator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="534">
@@ -799,16 +753,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/patch_normalizer.py" />
-    <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
-          <caret line="64" column="2" selection-start-line="64" selection-start-column="2" selection-end-line="64" selection-end-column="2" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -933,17 +877,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/production/learning/parellel.sh">
+    <entry file="file://$PROJECT_DIR$/production/learning/Axon_bundle_mark.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
+        <state relative-caret-position="-1555">
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Aws-jupyter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="55" column="43" selection-start-line="55" selection-start-column="36" selection-end-line="55" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/install-project.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="31" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+        <state relative-caret-position="225">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
@@ -954,38 +910,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/production/learning/Axon_bundle_mark.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Compute_detection_map.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1555">
+        <state relative-caret-position="448">
+          <caret line="147" column="36" lean-forward="true" selection-start-line="147" selection-start-column="36" selection-end-line="147" selection-end-column="36" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/production/learning/Generate_training_samples.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-635">
-          <caret line="104" column="13" lean-forward="true" selection-start-line="104" selection-start-column="13" selection-end-line="104" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-963">
-          <caret line="49" column="57" lean-forward="true" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="57" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_ks_2D.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
+        <state relative-caret-position="78">
           <caret line="159" lean-forward="true" selection-start-line="159" selection-end-line="159" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
@@ -993,30 +930,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_ks_3D.py">
+    <entry file="file://$PROJECT_DIR$/production/learning/Generate_training_samples_2D.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="138" column="44" lean-forward="true" selection-start-line="138" selection-start-column="44" selection-end-line="138" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="137">
+          <caret line="172" lean-forward="true" selection-start-line="169" selection-start-column="20" selection-end-line="172" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/extractPatches.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Compute_detection_map_v2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-848">
-          <caret line="102" column="36" lean-forward="true" selection-start-line="102" selection-start-column="36" selection-end-line="102" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="141" column="24" selection-start-line="141" selection-start-column="24" selection-end-line="141" selection-end-column="24" />
+        <state relative-caret-position="145">
+          <caret line="135" column="56" lean-forward="true" selection-start-line="135" selection-start-column="16" selection-end-line="135" selection-end-column="56" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -1025,10 +949,79 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="200" column="73" lean-forward="true" selection-start-line="200" selection-start-column="73" selection-end-line="200" selection-end-column="73" />
+        <state relative-caret-position="-274">
+          <caret line="4" column="18" lean-forward="true" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/extractPatches.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="17" column="11" lean-forward="true" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/extractPatches_database.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/learning/parellel.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_2D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1013">
+          <caret line="92" column="40" selection-start-line="92" selection-start-column="40" selection-end-line="92" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/learning/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor />
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="77" column="23" lean-forward="true" selection-start-line="68" selection-start-column="4" selection-end-line="77" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/learning/Process_detection_map.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1035">
+          <caret line="69" column="23" lean-forward="true" selection-start-line="69" selection-start-column="23" selection-end-line="69" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -24,13 +24,9 @@ def collect_inside_cell_features(loc):
     features_in_box = features_in_box[indices]
 
     values = grid3D[coord[:, 0], coord[:, 1], coord[:, 2]]
-    indices = (values == 2)
-    inside_shape_features = features_in_box[indices]
-    inside_coord = coord[indices]
-    indices = (values == 1)
-    sur_shape_features = features_in_box[indices]
-    sur_coord = coord[indices]
-    return inside_shape_features,sur_shape_features,inside_coord,sur_coord
+    inside_shape_features = features_in_box[values == 2]
+    sur_shape_features = features_in_box[values == 1]
+    return inside_shape_features,sur_shape_features
 
 def CDF_comparison(features_inside,features_outside):
     eva = 0
@@ -81,7 +77,7 @@ if __name__=='__main__':
     structure = args.structure
     stack = args.center
 
-    savepath = 'CSHL_shift_scores/'+ stack + '_ks_2D/'
+    savepath = 'CSHL_shift_scores/'+ stack + '_cdf_3D/'
     if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
         os.makedirs(os.environ['ROOT_DIR'] + savepath)
 
@@ -91,6 +87,8 @@ if __name__=='__main__':
     grid3D, total_shape_area, total_sur_area, min_x, min_y, len_max = pickle.load(open(fn,'rb'))
     step_size = max(int(len_max / 20), int(30 / resol))
     step_z = int(step_size * resol / 20)
+    total_shape_area = sum(list(total_shape_area.values()))
+    total_sur_area = sum(list(total_sur_area.values()))
 
     half = 15
     fn = stack + '/' + stack + '_rough_landmarks.pkl'
@@ -106,10 +104,10 @@ if __name__=='__main__':
         polygon = contours[sec][structure].copy()
         polygon_set.append(polygon)
     polygon_set = np.concatenate(polygon_set)
-    [left, right, up, down] = [int(max(min(polygon_set[:, 0]) -margin -half * step_size, 0)),
-                               int(np.ceil(max(polygon_set[:, 0])  +margin + half * step_size)),
-                               int(max(min(polygon_set[:, 1])  -margin - half * step_size, 0)),
-                               int(np.ceil(max(polygon_set[:, 1]) +margin + half * step_size))]
+    [left, right, up, down] = [int(max(min(polygon_set[:, 0]) - margin - half * step_size, 0)),
+                               int(np.ceil(max(polygon_set[:, 0]) + margin + half * step_size)),
+                               int(max(min(polygon_set[:, 1]) - margin - half * step_size, 0)),
+                               int(np.ceil(max(polygon_set[:, 1]) + margin + half * step_size))]
     expend_seq = list(range(seq[0] - half * step_z, seq[0]))
     expend_seq.extend(seq)
     expend_seq.extend(list(range(seq[-1] + 1, seq[-1] + half * step_z + 1)))
@@ -133,9 +131,8 @@ if __name__=='__main__':
     cell_shape_features = np.concatenate(cell_shape_features)
 
     ratio = int(20 / resol)
-    # vectors_as_input = []
-    xyz_shift_map = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
-    section_map = {}
+    vectors_input = []
+    cdf_collection = {}
 
     for k in range(-half, half + 1):
         print(k)
@@ -145,21 +142,19 @@ if __name__=='__main__':
                 start_time = time()
 
                 loc = np.array([seq[0] + k * step_z, center[0] + min_x-margin + i * step_size, center[1] + min_y-margin + j * step_size])
-                inside_shape_features,sur_shape_features,inside_coord,sur_coord = collect_inside_cell_features(loc)
+                inside_shape_features,sur_shape_features = collect_inside_cell_features(loc)
+                inside_cdf = features_to_vector(inside_shape_features, thresholds, total_shape_area)
+                sur_cdf = features_to_vector(sur_shape_features, thresholds, total_sur_area)
+                feature_vector = np.array(inside_cdf) - np.array(sur_cdf)
+                cdf_collection[(j, i, k)] = feature_vector
+                vectors_input.append(feature_vector)
 
-                for sec in seq:
-                    if sec- seq[0] not in section_map.keys():
-                        section_map[sec- seq[0]] = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
-
-                    inside_features = inside_shape_features[inside_coord[:, 0] == sec - seq[0]]
-                    outside_features = sur_shape_features[sur_coord[:, 0] == sec - seq[0]]
-                    if inside_features.shape[0] and outside_features.shape[0]:
-                        score = CDF_comparison(inside_features, outside_features)
-                        section_map[sec- seq[0]][j + half, i + half, k + half] = score
-                        xyz_shift_map[j + half, i + half, k + half] += score
-
+    bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/v4/' + structure + '.pkl', 'rb'))
+    xtest = xgb.DMatrix(vectors_input)
+    score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
+    scoremap = score.reshape([2 * half + 1, 2 * half + 1, -1], order='F')
     fn = savepath + structure + '.pkl'
-    pickle.dump(xyz_shift_map, open(os.environ['ROOT_DIR'] + fn, 'wb'))
-    fn = savepath + structure + '_maps.pkl'
-    pickle.dump(section_map, open(os.environ['ROOT_DIR'] + fn, 'wb'))
+    pickle.dump(scoremap, open(os.environ['ROOT_DIR'] + fn, 'wb'))
+    fn = savepath + structure + '_vectors.pkl'
+    pickle.dump(cdf_collection, open(os.environ['ROOT_DIR'] + fn, 'wb'))
 
