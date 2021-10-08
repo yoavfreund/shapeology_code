@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer_v2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Compute_detection_map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map_ks_2D.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/learning/Compute_detection_map_2D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map_ks_3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/learning/Compute_detection_map_3D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Compute_detection_map_v2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/production/learning/Generate_training_samples.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/learning/Generate_training_samples.py" afterDir="false" />
-    </list>
+    <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,8 +49,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_3D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="77" column="23" lean-forward="true" selection-start-line="68" selection-start-column="4" selection-end-line="77" selection-end-column="23" />
+            <state relative-caret-position="-728">
+              <caret line="89" column="39" selection-start-line="89" selection-start-column="39" selection-end-line="89" selection-end-column="39" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -67,11 +58,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/production/learning/Process_detection_map.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1035">
-              <caret line="69" column="23" lean-forward="true" selection-start-line="69" selection-start-column="23" selection-end-line="69" selection-end-column="23" />
+            <state relative-caret-position="165">
+              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -79,11 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_2D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1013">
-              <caret line="92" column="40" selection-start-line="92" selection-start-column="40" selection-end-line="92" selection-end-column="40" />
+            <state relative-caret-position="192">
+              <caret line="91" column="55" selection-start-line="91" selection-start-column="16" selection-end-line="91" selection-end-column="55" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -92,10 +83,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/production/learning/README.md">
+        <entry file="file://$PROJECT_DIR$/Cell_extractor_local.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor />
+              <first_editor relative-caret-position="330">
+                <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+              </first_editor>
               <second_editor />
             </state>
           </provider>
@@ -602,12 +595,12 @@
       <workItem from="1631691894953" duration="12192000" />
       <workItem from="1632004320039" duration="36000" />
       <workItem from="1632218576102" duration="22319000" />
-      <workItem from="1633373814511" duration="15693000" />
+      <workItem from="1633373814511" duration="18170000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1198189000" />
+    <option name="totallyTimeSpent" value="1200666000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -622,7 +615,7 @@
     <frame x="1445" y="677" width="1180" height="718" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4967033" visible="true" weight="0.24956064" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4967033" visible="true" weight="0.24956064" />
       <window_info id="Structure" order="1" sideWeight="0.50329673" side_tool="true" weight="0.25250357" />
       <window_info id="Favorites" order="2" sideWeight="0.5010941" side_tool="true" weight="0.29086894" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -636,7 +629,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4985694" weight="0.3248227" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5028612" side_tool="true" weight="0.35460994" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49713877" visible="true" weight="0.2891374" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49713877" visible="true" weight="0.2891374" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32765958" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -831,14 +824,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Cell_extractor_local.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/production/cell_extraction/VQ&amp;diffusionmap/CreateVQs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1231">
@@ -988,12 +973,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_2D.py">
+    <entry file="file://$PROJECT_DIR$/production/learning/Process_detection_map.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1013">
-          <caret line="92" column="40" selection-start-line="92" selection-start-column="40" selection-end-line="92" selection-end-column="40" />
+        <state relative-caret-position="165">
+          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1006,22 +991,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Cell_extractor_local.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="330">
+            <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_3D.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="77" column="23" lean-forward="true" selection-start-line="68" selection-start-column="4" selection-end-line="77" selection-end-column="23" />
+        <state relative-caret-position="-728">
+          <caret line="89" column="39" selection-start-line="89" selection-start-column="39" selection-end-line="89" selection-end-column="39" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/production/learning/Process_detection_map.py">
+    <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_2D.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1035">
-          <caret line="69" column="23" lean-forward="true" selection-start-line="69" selection-start-column="23" selection-end-line="69" selection-end-column="23" />
+        <state relative-caret-position="192">
+          <caret line="91" column="55" selection-start-line="91" selection-start-column="16" selection-end-line="91" selection-end-column="55" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
