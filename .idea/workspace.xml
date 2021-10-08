@@ -17,7 +17,7 @@
         <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-274">
-              <caret line="4" column="18" lean-forward="true" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+              <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -41,7 +41,7 @@
         <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer_v2.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="195">
-              <caret line="17" column="11" lean-forward="true" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+              <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -70,7 +70,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_2D.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="192">
@@ -82,12 +82,17 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Coding Archive.ipynb">
+          <provider selected="true" editor-type-id="jupyter-editor" />
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Cell_extractor_local.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
               <first_editor relative-caret-position="330">
-                <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+                <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
               </first_editor>
               <second_editor />
             </state>
@@ -211,12 +216,6 @@
               <item name="production" type="462c0819:PsiDirectoryNode" />
               <item name="cell_extraction" type="462c0819:PsiDirectoryNode" />
               <item name="VQ&amp;diffusionmap" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shapeology_code" type="462c0819:PsiDirectoryNode" />
-              <item name="production" type="462c0819:PsiDirectoryNode" />
-              <item name="learning" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="shapeology_code" type="b2602c69:ProjectViewProjectNode" />
@@ -595,12 +594,12 @@
       <workItem from="1631691894953" duration="12192000" />
       <workItem from="1632004320039" duration="36000" />
       <workItem from="1632218576102" duration="22319000" />
-      <workItem from="1633373814511" duration="18170000" />
+      <workItem from="1633373814511" duration="18378000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1200666000" />
+    <option name="totallyTimeSpent" value="1200874000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -660,13 +659,6 @@
     <SUITE FILE_PATH="coverage/shapeology_code$Aws_jupyter.coverage" NAME="Aws-jupyter Coverage Results" MODIFIED="1611665428352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scripts/Structure_samples_generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="205" lean-forward="true" selection-start-line="205" selection-end-line="205" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Patch_features_extractor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-525">
@@ -935,7 +927,7 @@
     <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-274">
-          <caret line="4" column="18" lean-forward="true" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -952,7 +944,7 @@
     <entry file="file://$PROJECT_DIR$/production/cell_extraction/Core/patch_normalizer_v2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
-          <caret line="17" column="11" lean-forward="true" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -995,7 +987,7 @@
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="330">
-            <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+            <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
           </first_editor>
           <second_editor />
         </state>
@@ -1020,6 +1012,9 @@
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Coding Archive.ipynb">
+      <provider selected="true" editor-type-id="jupyter-editor" />
     </entry>
   </component>
 </project>
