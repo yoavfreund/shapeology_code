@@ -7,6 +7,12 @@ import xgboost as xgb
 import pickle
 
 def middle_angle(cdfs,angles):
+    '''
+    Find the middle angle of a region where most cells have rotations located in [-alpha/2,+alpha/2] of this angle
+    :param cdfs:
+    :param angles:
+    :return:
+    '''
     alpha = 20
     for cdf in cdfs:
         max_diff = 0
@@ -28,6 +34,12 @@ def color_angle(score):
         return [0,0,255]
 
 def max_difference(cdfs,angles):
+    '''
+    Find the percentage of cells whose rotations are located in [-alpha/2,+alpha/2] of middle angles with different alphas
+    :param cdfs:
+    :param angles:
+    :return:
+    '''
     diff = []
     for cdf in cdfs:
         value = []
@@ -135,7 +147,7 @@ if __name__=="__main__":
             for k in range(cells.shape[1]):
                 data1 = np.sort(cells[:, k])
                 ten = np.searchsorted(data1, thresholds[k], side='right') / n1
-                if k == 14:
+                if k == 14:# feature 14 is rotation
                     new_features = max_difference(np.array(ten).reshape(1, -1), np.array(thresholds[14]))
                     new_features = list(new_features.reshape(new_features.shape[1]))
                 extracted.extend(ten)

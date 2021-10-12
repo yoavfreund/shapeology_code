@@ -6,6 +6,11 @@ import os
 import sqlite3
 from scipy import stats
 
+time_log = {}
+def time_count(message,duration):
+    if message not in time_log.keys():
+        time_log[message] = 0
+    time_log[message] += duration
 
 def collect_inside_cell_features(loc):
     coord = cell_shape_features[:, :3] - loc
@@ -47,6 +52,8 @@ def CDF_comparison(features_inside,features_outside):
 def features_to_vector(features, thresholds, object_area):
     extracted = []
     n1 = features.shape[0]
+    np.sort(features,axis=0)
+    # for k in list(range(10)) + [14]:
     for k in range(features.shape[1]): #iterate over features, one feature equal one cdf
         data1 = np.sort(features[:, k]) # sort feature k
         cdf = np.searchsorted(data1, thresholds[k], side='right') / n1
@@ -81,7 +88,9 @@ if __name__=='__main__':
     structure = args.structure
     stack = args.center
 
-    savepath = 'CSHL_shift_scores/'+ stack + '_cdf_2D/'
+    # savepath = 'CSHL_shift_scores/'+ stack + '_dm_2D/'
+    t0 = time()
+    savepath = 'CSHL_shift_scores/cdf_fine_2D/' + stack + '/'
     if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
         os.makedirs(os.environ['ROOT_DIR'] + savepath)
 
@@ -89,11 +98,13 @@ if __name__=='__main__':
     margin = 200 / resol
     fn = os.environ['ROOT_DIR'] + 'Detection_preparation_v2/' + structure+'.pkl'
     grid3D, total_shape_area, total_sur_area, min_x, min_y, len_max = pickle.load(open(fn,'rb'))
-    step_size = max(int(len_max / 20), int(30 / resol))
+    # step_size = max(int(len_max / 20), int(30 / resol))
+    step_size = max(int(len_max / 30), int(20 / resol))
     step_z = int(step_size * resol / 20)
 
     half = 15
-    fn = stack + '/' + stack + '_rough_landmarks.pkl'
+    fn = stack + '/' + stack + '_search_landmarks.pkl'
+    # fn = stack + '/' + stack + '_rough_landmarks.pkl'
     contours = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
     seq = sorted([section for section in contours.keys() if structure in contours[section].keys()])
     C = {i: contours[i][structure] for i in contours if structure in contours[i]}
@@ -133,6 +144,7 @@ if __name__=='__main__':
     cell_shape_features = np.concatenate(cell_shape_features)
 
     ratio = int(20 / resol)
+    # bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/dm_only/' + structure + '.pkl', 'rb'))
     bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/v5/' + structure + '.pkl', 'rb'))
     # vectors_as_input = []
     xyz_shift_map = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
@@ -149,30 +161,37 @@ if __name__=='__main__':
 
                 loc = np.array([seq[0] + k * step_z, center[0] + min_x-margin + i * step_size, center[1] + min_y-margin + j * step_size])
                 inside_shape_features,sur_shape_features,inside_coord,sur_coord = collect_inside_cell_features(loc)
-
+                time_count('Collect cells', time() - start_time)
                 vectors_input = []
                 for sec in seq:
                     if sec- seq[0] not in section_map.keys():
                         section_map[sec- seq[0]] = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
-
+                    start_time = time()
                     inside_features = inside_shape_features[inside_coord[:, 0] == sec - seq[0]]
                     outside_features = sur_shape_features[sur_coord[:, 0] == sec - seq[0]]
+                    time_count('Collect cells by section', time() - start_time)
                     if inside_features.shape[0] and outside_features.shape[0]:
+                        start_time = time()
                         inside_cdf = features_to_vector(inside_features, thresholds, total_shape_area[sec - seq[0]])
                         sur_cdf = features_to_vector(outside_features, thresholds, total_sur_area[sec - seq[0]])
                         feature_vector = np.array(inside_cdf) - np.array(sur_cdf)
+                        time_count('Compute CDFs', time() - start_time)
                         vectors_input.append(feature_vector)
                         cdf_collection[(j, i, k)][sec - seq[0]] = feature_vector
                 if len(vectors_input):
+                    start_time = time()
                     xtest = xgb.DMatrix(vectors_input)
                     score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
                     xyz_shift_map[j + half, i + half, k + half] = sum(score)
+                    time_count('Compute xgboost', time() - start_time)
                     for indice in range(len(vectors_input)):
                         sec = sorted(cdf_collection[(j, i, k)].keys())[indice]
                         section_map[sec][j + half, i + half, k + half] = score[indice]
 
     fn = savepath + structure + '.pkl'
     pickle.dump(xyz_shift_map, open(os.environ['ROOT_DIR'] + fn, 'wb'))
+    time_count('Total', time() - t0)
+    pickle.dump(xyz_shift_map, open(os.environ['ROOT_DIR'] + savepath + structure + '_time.pkl', 'wb'))
     fn = savepath + structure + '_maps.pkl'
     pickle.dump(section_map, open(os.environ['ROOT_DIR'] + fn, 'wb'))
     # fn = savepath + structure + '_vectors.pkl'

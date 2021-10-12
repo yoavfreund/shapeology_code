@@ -77,7 +77,8 @@ def collect_inside_cell_features(loc):
 def features_to_vector(features, thresholds, object_area):
     extracted = []
     n1 = features.shape[0]
-    for k in range(features.shape[1]): #iterate over features, one feature equal one cdf
+    for k in list(range(10)) + [14]:
+    # for k in range(features.shape[1]): #iterate over features, one feature equal one cdf
         data1 = np.sort(features[:, k]) # sort feature k
         cdf = np.searchsorted(data1, thresholds[k], side='right') / n1
         extracted.extend(cdf)
@@ -189,7 +190,8 @@ if __name__=='__main__':
     indices_choose = np.random.choice(range(len(positive_sample_features)), n_choose, replace=False)
     positive_sample_features = np.array(positive_sample_features)
     positive_sample_features = positive_sample_features[indices_choose]
-    save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v5/' + stack + '/' + rname
+    # save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v5/' + stack + '/' + rname
+    save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_dm_only/' + stack + '/' + rname
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     pkl_out_file = save_dir + '/' + stack + '_' + structure + '_positive.pkl'
