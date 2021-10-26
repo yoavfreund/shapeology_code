@@ -53,8 +53,8 @@ def features_to_vector(features, thresholds, object_area):
     extracted = []
     n1 = features.shape[0]
     np.sort(features,axis=0)
-    # for k in list(range(10)) + [14]:
-    for k in range(features.shape[1]): #iterate over features, one feature equal one cdf
+    for k in list(range(10)) + [14]:
+    # for k in range(features.shape[1]): #iterate over features, one feature equal one cdf
         data1 = np.sort(features[:, k]) # sort feature k
         cdf = np.searchsorted(data1, thresholds[k], side='right') / n1
         extracted.extend(cdf)
@@ -88,9 +88,9 @@ if __name__=='__main__':
     structure = args.structure
     stack = args.center
 
-    # savepath = 'CSHL_shift_scores/'+ stack + '_dm_2D/'
+    savepath = 'CSHL_shift_scores/'+ stack + '_dm_2D/'
     t0 = time()
-    savepath = 'CSHL_shift_scores/cdf_fine_2D/' + stack + '/'
+    # savepath = 'CSHL_shift_scores/cdf_fine_2D/' + stack + '/'
     if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
         os.makedirs(os.environ['ROOT_DIR'] + savepath)
 
@@ -98,13 +98,13 @@ if __name__=='__main__':
     margin = 200 / resol
     fn = os.environ['ROOT_DIR'] + 'Detection_preparation_v2/' + structure+'.pkl'
     grid3D, total_shape_area, total_sur_area, min_x, min_y, len_max = pickle.load(open(fn,'rb'))
-    # step_size = max(int(len_max / 20), int(30 / resol))
-    step_size = max(int(len_max / 30), int(20 / resol))
+    step_size = max(int(len_max / 20), int(30 / resol))
+    # step_size = max(int(len_max / 30), int(20 / resol))
     step_z = int(step_size * resol / 20)
 
     half = 15
-    fn = stack + '/' + stack + '_search_landmarks.pkl'
-    # fn = stack + '/' + stack + '_rough_landmarks.pkl'
+    # fn = stack + '/' + stack + '_search_landmarks.pkl'
+    fn = stack + '/' + stack + '_rough_landmarks.pkl'
     contours = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
     seq = sorted([section for section in contours.keys() if structure in contours[section].keys()])
     C = {i: contours[i][structure] for i in contours if structure in contours[i]}
@@ -144,8 +144,8 @@ if __name__=='__main__':
     cell_shape_features = np.concatenate(cell_shape_features)
 
     ratio = int(20 / resol)
-    # bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/dm_only/' + structure + '.pkl', 'rb'))
-    bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/v5/' + structure + '.pkl', 'rb'))
+    bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/dm_only/' + structure + '.pkl', 'rb'))
+    # bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/v5/' + structure + '.pkl', 'rb'))
     # vectors_as_input = []
     xyz_shift_map = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
     section_map = {}
@@ -191,7 +191,7 @@ if __name__=='__main__':
     fn = savepath + structure + '.pkl'
     pickle.dump(xyz_shift_map, open(os.environ['ROOT_DIR'] + fn, 'wb'))
     time_count('Total', time() - t0)
-    pickle.dump(xyz_shift_map, open(os.environ['ROOT_DIR'] + savepath + structure + '_time.pkl', 'wb'))
+    pickle.dump(time_log, open(os.environ['ROOT_DIR'] + savepath + structure + '_time.pkl', 'wb'))
     fn = savepath + structure + '_maps.pkl'
     pickle.dump(section_map, open(os.environ['ROOT_DIR'] + fn, 'wb'))
     # fn = savepath + structure + '_vectors.pkl'
