@@ -4,6 +4,7 @@ import xgboost as xgb
 from time import time
 import os
 import sqlite3
+from joblib import Parallel, delayed
 
 time_log = {}
 def time_count(message,duration):
@@ -14,10 +15,10 @@ def time_count(message,duration):
 def features_to_vector(features, thresholds, object_area):
     extracted = []
     n1 = features.shape[0]
-    np.sort(features,axis=0)
+    data = np.sort(features,axis=0)
     # for k in list(range(10)) + [14]:
     for k in range(features.shape[1]): #iterate over features, one feature equal one cdf
-        data1 = np.sort(features[:, k]) # sort feature k
+        data1 = data[:,k]#np.sort(features[:, k]) # sort feature k
         cdf = np.searchsorted(data1, thresholds[k], side='right') / n1
         extracted.extend(cdf)
     extracted.extend([features.shape[0] / object_area * 317 * 317]) # cell number normalized by region area
@@ -44,14 +45,61 @@ def collect_bitmap_cell_features(loc,all_cells,mask,area):
 
     return bitmaps
 
-def combine_vectors(elements, feature_map):
-    feature_vector = np.array(feature_map[elements[0]])
-    if len(elements)>1:
-        vectors = np.array([feature_map[index] for index in elements])
-        alpha = vectors[:,-2].sum()
-        feature_vector[:-2] = np.dot(vectors[:,-2].reshape([1,-1]), vectors[:,:-2])/alpha
-        feature_vector[-2:] = vectors[:,-2:].sum(axis=0)
-    return feature_vector
+# def combine_vectors(elements, feature_map):
+#     feature_vector = feature_map[elements[0]]
+#     if len(elements)>1:
+#         start_time = time()
+#         vectors = feature_map[elements]
+#         time_count('Combine CDFs: transform', time() - start_time)
+#         start_time = time()
+#         alpha = vectors[:,-2].sum()
+#         feature_vector[:-2] = np.dot(vectors[:,-2].reshape([1,-1]), vectors[:,:-2])/alpha
+#         feature_vector[-2:] = vectors[:,-2:].sum(axis=0)
+#         time_count('Combine CDFs: calculate', time() - start_time)
+#     return feature_vector
+
+def combine_vectors(keys, bitmaps, unique_combinations):
+    X = unique_combinations[keys].T
+    coefficient = X*bitmaps[:,-2]
+    alpha = coefficient.sum(axis=1)
+    cdfs = np.dot(coefficient,bitmaps[:,:-2])/alpha.reshape([-1,1])
+    scalars = np.dot(X,bitmaps[:,-2:])
+    feature_vectors = np.concatenate((cdfs,scalars),axis=1)
+    return feature_vectors
+
+def computation(section, xyz_shift_map=0):
+    print(section - section_numbers[0], (time() - t0) / 60)
+    fn = os.environ['ROOT_DIR'] + 'Detection_preparation_mask/' + structure + '/' + \
+         str(section - section_numbers[0]) + '.pkl'
+    unique_combinations_inner, indices_inner, unique_combinations_outer, indices_outer = \
+        pickle.load(open(fn, 'rb'))
+    inside_area = total_shape_area[section - section_numbers[0]]
+    outside_area = total_sur_area[section - section_numbers[0]]
+    vectors_input = []
+    for k in range(-half, half + 1):
+        loc = np.array([center[0] + min_x - margin - half * step_size,
+                        center[1] + min_y - margin - half * step_size])
+        features_section = cell_shape_features[cell_shape_features[:, 0] == int(section + k * step_z)]
+        start_time = time()
+        bitmaps_inner = collect_bitmap_cell_features(loc, features_section, indices_inner, inside_area)
+        bitmaps_outer = collect_bitmap_cell_features(loc, features_section, indices_outer, outside_area)
+        bitmaps_inner, keys_inner = np.array(list(bitmaps_inner.values())), np.array(list(bitmaps_inner.keys()))
+        bitmaps_outer, keys_outer = np.array(list(bitmaps_outer.values())), np.array(list(bitmaps_outer.keys()))
+        time_count('Compute CDFs', time() - start_time)
+
+        start_time = time()
+        cdf_inner = combine_vectors(keys_inner, bitmaps_inner, unique_combinations_inner)
+        cdf_outer = combine_vectors(keys_outer, bitmaps_outer, unique_combinations_outer)
+        time_count('Combine CDFs', time() - start_time)
+        vectors_input.extend(list(cdf_inner - cdf_outer))
+
+    start_time = time()
+    xtest = xgb.DMatrix(vectors_input)
+    score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
+    xyz_shift_map += score.reshape([2 * half + 1, 2 * half + 1, -1], order='F')
+    time_count('Compute xgboost', time() - start_time)
+    return xyz_shift_map
+
 
 param = {}
 param['max_depth'] = 3  # depth of tree
@@ -134,47 +182,71 @@ if __name__=='__main__':
     ratio = round(20 / resol)
     bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/v5/' + structure + '.pkl', 'rb'))
     xyz_shift_map = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
+    score_maps = Parallel(n_jobs=10)(delayed(computation)(i, xyz_shift_map) for i in section_numbers)
+    xyz_shift_map = np.sum(score_maps, axis=0)
 
-    for section in section_numbers:
-        print(section, (time() - t0)/60)
-        fn = os.environ['ROOT_DIR'] + 'Detection_preparation_mask/' + structure +'/'+ \
-             str(section - section_numbers[0]) + '.pkl'
-        unique_combinations_inner, indices_inner, unique_combinations_outer, indices_outer = \
-        pickle.load(open(fn,'rb'))
-        inside_area = total_shape_area[section - section_numbers[0]]
-        outside_area = total_sur_area[section - section_numbers[0]]
-        vectors_input = []
-        loc_input = []
-        for k in range(-half, half + 1):
-            loc = np.array([center[0] + min_x - margin - half * step_size,
-                            center[1] + min_y - margin - half * step_size])
-            features_section = cell_shape_features[cell_shape_features[:, 0] == int(section + k * step_z)]
-            start_time = time()
-            bitmaps_inner = collect_bitmap_cell_features(loc,features_section,indices_inner,inside_area)
-            bitmaps_outer = collect_bitmap_cell_features(loc, features_section, indices_outer,outside_area)
-            time_count('Compute CDFs', time() - start_time)
-
-            for i in range(-half, half + 1):
-                for j in range(-half, half + 1):
-                    element_inner = [index for index in bitmaps_inner.keys() \
-                                     if unique_combinations_inner[index][i*(2*half+1)+j]]
-                    element_outer = [index for index in bitmaps_outer.keys() \
-                                     if unique_combinations_outer[index][i * (2 * half + 1) + j]]
-                    if len(element_inner) and len(element_outer):
-                        start_time = time()
-                        cdf_inner = combine_vectors(element_inner, bitmaps_inner)
-                        cdf_outer = combine_vectors(element_outer, bitmaps_outer)
-                        feature_vector = cdf_inner - cdf_outer
-                        time_count('Combine CDFs', time() - start_time)
-                        vectors_input.append(feature_vector)
-                        loc_input.append(np.array([j + half, i + half, k + half]))
-
-        start_time = time()
-        xtest = xgb.DMatrix(vectors_input)
-        score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
-        loc_input = np.stack(loc_input)
-        xyz_shift_map[loc_input[:,0], loc_input[:,1], loc_input[:,2]] += score
-        time_count('Compute xgboost', time() - start_time)
+    # for section in section_numbers:
+    #     print(section, (time() - t0)/60)
+    #     fn = os.environ['ROOT_DIR'] + 'Detection_preparation_mask/' + structure +'/'+ \
+    #          str(section - section_numbers[0]) + '.pkl'
+    #     unique_combinations_inner, indices_inner, unique_combinations_outer, indices_outer = \
+    #     pickle.load(open(fn,'rb'))
+    #     inside_area = total_shape_area[section - section_numbers[0]]
+    #     outside_area = total_sur_area[section - section_numbers[0]]
+    #     vectors_input = []
+    #     # loc_input = []
+    #     for k in range(-half, half + 1):
+    #         loc = np.array([center[0] + min_x - margin - half * step_size,
+    #                         center[1] + min_y - margin - half * step_size])
+    #         features_section = cell_shape_features[cell_shape_features[:, 0] == int(section + k * step_z)]
+    #         start_time = time()
+    #         bitmaps_inner = collect_bitmap_cell_features(loc,features_section,indices_inner,inside_area)
+    #         bitmaps_outer = collect_bitmap_cell_features(loc, features_section, indices_outer,outside_area)
+    #         bitmaps_inner, keys_inner = np.array(list(bitmaps_inner.values())), np.array(list(bitmaps_inner.keys()))
+    #         bitmaps_outer, keys_outer = np.array(list(bitmaps_outer.values())), np.array(list(bitmaps_outer.keys()))
+    #         time_count('Compute CDFs', time() - start_time)
+    #
+    #         start_time = time()
+    #         cdf_inner = combine_vectors(keys_inner, bitmaps_inner, unique_combinations_inner)
+    #         cdf_outer = combine_vectors(keys_outer, bitmaps_outer, unique_combinations_outer)
+    #         time_count('Combine CDFs', time() - start_time)
+    #         vectors_input.extend(list(cdf_inner - cdf_outer))
+    #
+    #         # for i in range(-half, half + 1):
+    #         #     for j in range(-half, half + 1):
+    #         #         element_inner = np.array([index for index in range(len(keys_inner)) \
+    #         #                                   if unique_combinations_inner[keys_inner[index]][
+    #         #                                       (i + half) * (2 * half + 1) + j + half]])
+    #         #         element_outer = np.array([index for index in range(len(keys_outer)) \
+    #         #                                   if unique_combinations_outer[keys_outer[index]][
+    #         #                                       (i + half) * (2 * half + 1) + j + half]])
+    #         #         # element_inner = [index for index in bitmaps_inner.keys() \
+    #         #         #                  if unique_combinations_inner[index][i*(2*half+1)+j]]
+    #         #         # element_outer = [index for index in bitmaps_outer.keys() \
+    #         #         #                  if unique_combinations_outer[index][i * (2 * half + 1) + j]]
+    #         #         if len(element_inner) and len(element_outer):
+    #         #             start_time = time()
+    #         #             cdf_inner = combine_vectors(element_inner, bitmaps_inner.copy())
+    #         #             cdf_outer = combine_vectors(element_outer, bitmaps_outer.copy())
+    #         #             # cdf_inner = combine_vectors(element_inner, bitmaps_inner)
+    #         #             # cdf_outer = combine_vectors(element_outer, bitmaps_outer)
+    #         #             time_count('Combine CDFs: in&out', time() - start_time)
+    #         #             feature_vector = cdf_inner - cdf_outer
+    #         #             time_count('Combine CDFs', time() - start_time)
+    #         #             vectors_input.append(feature_vector)
+    #         #             loc_input.append(np.array([j + half, i + half, k + half]))
+    #
+    #     # start_time = time()
+    #     # xtest = xgb.DMatrix(vectors_input)
+    #     # score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
+    #     # loc_input = np.stack(loc_input)
+    #     # xyz_shift_map[loc_input[:,0], loc_input[:,1], loc_input[:,2]] += score
+    #     # time_count('Compute xgboost', time() - start_time)
+    #     start_time = time()
+    #     xtest = xgb.DMatrix(vectors_input)
+    #     score = bst.predict(xtest, output_margin=True, ntree_limit=bst.best_ntree_limit)
+    #     xyz_shift_map += score.reshape([2 * half + 1, 2 * half + 1, -1], order='F')
+    #     time_count('Compute xgboost', time() - start_time)
 
     fn = savepath + structure + '.pkl'
     pickle.dump(xyz_shift_map, open(os.environ['ROOT_DIR'] + fn, 'wb'))
