@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2a26d61-efb7-4706-8128-8e2547ee1523" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/production/learning/Compute_detection_map_bitmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/production/learning/Compute_detection_map_bitmap.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,13 +27,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_bitmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="64" column="48" selection-start-line="64" selection-end-line="65" />
+            <state relative-caret-position="262">
+              <caret line="20" column="20" lean-forward="true" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/production/learning/ErrorPlot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="885">
+              <caret line="59" column="17" lean-forward="true" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -108,7 +119,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../venv/shapeology_venv/lib/python3.7/site-packages/aws_jupyter/send_files.py" />
         <option value="$PROJECT_DIR$/scripts/lib/utils.py" />
         <option value="$PROJECT_DIR$/VaultBrain/s3-creds.json" />
         <option value="$PROJECT_DIR$/VaultBrain/dj_local_conf.json" />
@@ -159,14 +169,15 @@
         <option value="$PROJECT_DIR$/production/learning/shift_mask.py" />
         <option value="$PROJECT_DIR$/production/learning/Compute_detection_map_ks_2D.py" />
         <option value="$PROJECT_DIR$/production/learning/Compute_detection_map_bitmap.py" />
+        <option value="$PROJECT_DIR$/production/learning/ErrorPlot.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1461" />
-    <option name="y" value="203" />
+    <option name="y" value="698" />
     <option name="width" value="1180" />
-    <option name="height" value="834" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -591,12 +602,12 @@
       <workItem from="1632218576102" duration="22319000" />
       <workItem from="1633373814511" duration="48613000" />
       <workItem from="1634790629352" duration="38726000" />
-      <workItem from="1636259745193" duration="8658000" />
+      <workItem from="1636259745193" duration="11822000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1278493000" />
+    <option name="totallyTimeSpent" value="1281657000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -608,10 +619,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1461" y="203" width="1180" height="834" extended-state="0" />
+    <frame x="1461" y="698" width="1180" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4967033" visible="true" weight="0.258348" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4967033" visible="true" weight="0.258348" />
       <window_info id="Structure" order="1" sideWeight="0.50329673" side_tool="true" weight="0.25250357" />
       <window_info id="Favorites" order="2" sideWeight="0.5010941" side_tool="true" weight="0.29086894" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -625,7 +636,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4985694" weight="0.3248227" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5028612" side_tool="true" weight="0.35460994" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49713877" visible="true" weight="0.24393532" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49713877" visible="true" weight="0.23057325" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32765958" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -656,13 +667,6 @@
     <SUITE FILE_PATH="coverage/shapeology_code$Aws_jupyter.coverage" NAME="Aws-jupyter Coverage Results" MODIFIED="1611665428352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scripts/old/Shape_shift_V2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="270" column="34" selection-start-line="270" selection-start-column="34" selection-end-line="270" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/old/Cell_mark_v3.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1245">
@@ -1012,10 +1016,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/production/learning/Compute_detection_map_bitmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="64" column="48" selection-start-line="64" selection-end-line="65" />
+        <state relative-caret-position="262">
+          <caret line="20" column="20" lean-forward="true" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production/learning/ErrorPlot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="885">
+          <caret line="59" column="17" lean-forward="true" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
