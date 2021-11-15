@@ -12,20 +12,25 @@ def time_count(message,duration):
         time_log[message] = 0
     time_log[message] += duration
 
-def features_to_vector(features, object_area):
-    extracted = []
-    cdf = np.sum(features[:,:-1],axis=0)/features.shape[0]
-    extracted.extend(list(cdf))
-    extracted.extend([features.shape[0] / object_area * 317 * 317]) # cell number normalized by region area
-    extracted.extend([features[:, -1].sum() / object_area]) # cell areas in total normalized by region area
-    return extracted
 
-def collect_bitmap_cell_features(loc,all_cells,mask,area):
+def collect_bitmap_cell_features(loc, all_cells, mask, area):
+    '''
+    This function is to use pre-computed masks to collect cells and compute feature vectors for all regions
+    divided by bit combinations (0 or 1 defining outside or inside the shifting 2D shape for each shift).
+    :param loc: x,y coordinates of the first point in the 2D scanning region
+    :param all_cells: a matrix containing coordinates, 20*99 feature values and shape area for each cell in the shifting section
+    :param mask: the pre-computed mask matrix giving indices of bit combinations to all sampled points in the 2D scanning region
+    :param area: the area of a 2D shape
+    :return: a matrix containing feature vectors for all bit combinations and a vector containing indices of bit combinations
+    '''
+    # Get the coordinates of cells centered by the first point in the 2D scanning region
     coord = all_cells[:, 1:3] - loc
     features_in_box = all_cells[:, 3:]
+    # Get the coordinates of cells into the mask space by sampling ratio
     coord /= ratio
     coord = np.int16(coord)
 
+    # Collect cells inside the scanning region
     indices = (coord[:, 0] >= 0) & (mask.shape[0] > coord[:, 0])
     coord = coord[indices]
     features_in_box = features_in_box[indices]
@@ -33,14 +38,34 @@ def collect_bitmap_cell_features(loc,all_cells,mask,area):
     coord = coord[indices]
     features_in_box = features_in_box[indices]
 
+    # Compute feature vectors for all bit combinations
+    start_time = time()
     bitvalues = mask[coord[:, 0], coord[:, 1]]
-    bitmaps = {}
-    for index in np.unique(bitvalues):
-        bitmaps[index] = features_to_vector(features_in_box[bitvalues == index], thresholds, area)
+    cell_index = np.zeros([bitvalues.max() + 1, len(bitvalues)])
+    cell_index[bitvalues, np.arange(bitvalues.size)] = 1
+    time_count('Compute CDFs: construct matrix', time() - start_time)
+    start_time = time()
+    cell_index = cell_index[~np.all(cell_index == 0, axis=1)]
+    time_count('Compute CDFs: delete zero raw', time() - start_time)
+    start_time = time()
+    cell_number = cell_index.sum(axis=1)
+    cdfs = np.dot(cell_index, features_in_box[:, :-1]) / cell_number.reshape([-1, 1])
+    number_ratio = cell_number.reshape([-1, 1]) / area * 317 * 317
+    area_ratio = np.dot(cell_index, features_in_box[:, -1]).reshape([-1, 1]) / area
+    feature_vectors = np.concatenate((cdfs, number_ratio, area_ratio), axis=1)
+    time_count('Compute CDFs: cdf', time() - start_time)
 
-    return bitmaps
+    return feature_vectors, np.sort(np.unique(bitvalues))
 
 def combine_vectors(keys, bitmaps, unique_combinations):
+    '''
+    This function is to combine feature vectors of all regions inside a shifted 2D shape into
+    one feature vector for each shift
+    :param keys: indices for all bit combinations in the current section
+    :param bitmaps: a matrix containing feature vectors for all bit combinations
+    :param unique_combinations: all possible bit combinations in the mask
+    :return: a matrix containing feature vectors for all shifts
+    '''
     X = unique_combinations[keys].T
     coefficient = X*bitmaps[:,-2]
     alpha = coefficient.sum(axis=1)
@@ -50,6 +75,12 @@ def combine_vectors(keys, bitmaps, unique_combinations):
     return feature_vectors
 
 def computation(section, xyz_shift_map=0):
+    '''
+    This function is to compute the detection score map for one 2D shape
+    :param section: the section number of the 2D shape
+    :param xyz_shift_map: the sum of detection score maps of processed 2D shapes
+    :return: updated sum of detection score maps of processed 2D shapes
+    '''
     print(section - section_numbers[0], (time() - t0) / 60)
     fn = os.environ['ROOT_DIR'] + 'Detection_preparation_mask/' + structure + '/' + \
          str(section - section_numbers[0]) + '.pkl'
@@ -63,10 +94,8 @@ def computation(section, xyz_shift_map=0):
                         center[1] + min_y - margin - half * step_size])
         features_section = cell_shape_features[cell_shape_features[:, 0] == int(section + k * step_z)]
         start_time = time()
-        bitmaps_inner = collect_bitmap_cell_features(loc, features_section, indices_inner, inside_area)
-        bitmaps_outer = collect_bitmap_cell_features(loc, features_section, indices_outer, outside_area)
-        bitmaps_inner, keys_inner = np.array(list(bitmaps_inner.values())), np.array(list(bitmaps_inner.keys()))
-        bitmaps_outer, keys_outer = np.array(list(bitmaps_outer.values())), np.array(list(bitmaps_outer.keys()))
+        bitmaps_inner, keys_inner = collect_bitmap_cell_features(loc, features_section, indices_inner, inside_area)
+        bitmaps_outer, keys_outer = collect_bitmap_cell_features(loc, features_section, indices_outer, outside_area)
         time_count('Compute CDFs', time() - start_time)
 
         start_time = time()
@@ -160,12 +189,27 @@ if __name__=='__main__':
         except:
             continue
     cell_shape_features = np.concatenate(cell_shape_features)
+    # Transfer each feature value into a 99-bit form
+    sample_len = len(thresholds[0])
+    bit_features = np.zeros([cell_shape_features.shape[0], (cell_shape_features.shape[1] - 3) * sample_len])
+    for k in range(len(thresholds)):
+        feature_k = cell_shape_features[:, 3 + k].copy()
+        for i in range(sample_len):
+            if i == 0:
+                bit_features[:, k * sample_len + i:(k + 1) * sample_len][thresholds[k][i] >= feature_k] = 1
+            indices = (feature_k > thresholds[k][i]) & (thresholds[k][i + 1] >= feature_k) if i < sample_len - 1 \
+                else (feature_k > thresholds[k][i])
+            bit_features[:, k * sample_len + i + 1:(k + 1) * sample_len][indices] = 1
+    cell_shape_features = np.concatenate(
+        (cell_shape_features[:, :3], bit_features, cell_shape_features[:, 15].reshape([-1, 1])), axis=1)
 
     ratio = round(20 / resol)
     bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/v5/' + structure + '.pkl', 'rb'))
     xyz_shift_map = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
-    score_maps = Parallel(n_jobs=10)(delayed(computation)(i, xyz_shift_map) for i in section_numbers)
-    xyz_shift_map = np.sum(score_maps, axis=0)
+    for section in section_numbers:
+        xyz_shift_map = computation(section, xyz_shift_map)
+    # score_maps = Parallel(n_jobs=10)(delayed(computation)(i, xyz_shift_map) for i in section_numbers)
+    # xyz_shift_map = np.sum(score_maps, axis=0)
 
 
     fn = savepath + structure + '.pkl'
