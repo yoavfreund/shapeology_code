@@ -6,13 +6,12 @@ from matplotlib.path import Path
 from shapely.geometry import Polygon
 
 class mask_generator:
-    def __init__(self, structure, annotation_file=os.environ['ROOT_DIR']+'DK43/DK43_initial_landmarks.pkl', \
-                 com_file=os.environ['ROOT_DIR']+'DK43/DK43_beth_COMs.pkl'):
+    def __init__(self, structure, annotation_file=os.environ['ROOT_DIR']+'DK43/DK43_rough_landmarks.pkl'):
         self.struc = structure
         assert os.path.exists(annotation_file)
-        assert os.path.exists(com_file)
+        # assert os.path.exists(com_file)
         self.contours = pickle.load((open(annotation_file, 'rb')))
-        self.COMs = pickle.load(open(com_file,'rb'))
+        # self.COMs = pickle.load(open(com_file,'rb'))
 
     def decentralization(self):
         C = {i:self.contours[i][self.struc] for i in self.contours if self.struc in self.contours[i]}
@@ -70,15 +69,18 @@ class mask_generator:
         print(grid3D.shape, sum(list(total_shape_area.values())), self.min_x, self.min_y, len_max)
         pickle.dump([grid3D, total_shape_area, total_sur_area, self.min_x, self.min_y, len_max], open(fn, 'wb'))
 
-    def shift_mask(self,src_doot=os.environ['ROOT_DIR'] + 'Detection_preparation_v2/',\
+    def shift_mask(self,mode='search',src_doot=os.environ['ROOT_DIR'] + 'Detection_preparation_v2/',\
                    save_dir=os.environ['ROOT_DIR'] + 'Detection_preparation_mask/'):
         fn = src_doot + self.struc + '.pkl'
         assert os.path.exists(fn)
-        save_dir += self.struc + '/'
+        save_dir += mode + '/' + self.struc + '/'
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         grid3D, total_shape_area, total_sur_area, min_x, min_y, len_max = pickle.load(open(fn, 'rb'))
-        shift_step_size = max(round(len_max / 20), round(30 / self.resol))
+        if mode=='search':
+            shift_step_size = max(round(len_max / 20), round(30 / self.resol))
+        elif mode=='refine':
+            shift_step_size = max(round(len_max / 30), round(20 / self.resol))
         half = 15
         x_grid = np.arange(self.min_x-self.margin-shift_step_size*half, self.max_x+self.margin+shift_step_size*half, self.step_size)
         y_grid = np.arange(self.min_y-self.margin-shift_step_size*half, self.max_y+self.margin+shift_step_size*half, self.step_size)

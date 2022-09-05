@@ -57,7 +57,7 @@ def collect_bitmap_cell_features(loc, all_cells, mask, area):
 
     return feature_vectors, np.sort(np.unique(bitvalues))
 
-def combine_vectors(keys, bitmaps, unique_combinations):
+def combine_vectors(keys, bitmaps, unique_combinations, area):
     '''
     This function is to combine feature vectors of all regions inside a shifted 2D shape into
     one feature vector for each shift
@@ -67,14 +67,14 @@ def combine_vectors(keys, bitmaps, unique_combinations):
     :return: a matrix containing feature vectors for all shifts
     '''
     X = unique_combinations[keys].T
-    coefficient = X*bitmaps[:,-2]
+    coefficient = X*bitmaps[:,-2] * area / 317 / 317
     alpha = coefficient.sum(axis=1)
     cdfs = np.dot(coefficient,bitmaps[:,:-2])/alpha.reshape([-1,1])
     scalars = np.dot(X,bitmaps[:,-2:])
     feature_vectors = np.concatenate((cdfs,scalars),axis=1)
     return feature_vectors
 
-def computation(section, xyz_shift_map=0):
+def computation(section, mode='search', xyz_shift_map=0):
     '''
     This function is to compute the detection score map for one 2D shape
     :param section: the section number of the 2D shape
@@ -82,7 +82,8 @@ def computation(section, xyz_shift_map=0):
     :return: updated sum of detection score maps of processed 2D shapes
     '''
     print(section - section_numbers[0], (time() - t0) / 60)
-    fn = os.environ['ROOT_DIR'] + 'Detection_preparation_mask/' + structure + '/' + \
+    mode = 'search' if mode=='search' else 'refine'
+    fn = os.environ['ROOT_DIR'] + 'Detection_preparation_mask/' + mode + '/'+ structure + '/' + \
          str(section - section_numbers[0]) + '.pkl'
     unique_combinations_inner, indices_inner, unique_combinations_outer, indices_outer = \
         pickle.load(open(fn, 'rb'))
@@ -99,8 +100,8 @@ def computation(section, xyz_shift_map=0):
         time_count('Compute CDFs', time() - start_time)
 
         start_time = time()
-        cdf_inner = combine_vectors(keys_inner, bitmaps_inner, unique_combinations_inner)
-        cdf_outer = combine_vectors(keys_outer, bitmaps_outer, unique_combinations_outer)
+        cdf_inner = combine_vectors(keys_inner, bitmaps_inner, unique_combinations_inner, inside_area)
+        cdf_outer = combine_vectors(keys_outer, bitmaps_outer, unique_combinations_outer, outside_area)
         time_count('Combine CDFs', time() - start_time)
         vectors_input.extend(list(cdf_inner - cdf_outer))
 
@@ -121,7 +122,8 @@ param['nthread'] = 7  # Number of threads used
 param['num_class'] = 1
 num_round = 100
 
-fn = 'CSHL_data_processed/MD589/ThresholdsV2.pkl'
+# fn = 'CSHL_data_processed/MD589/ThresholdsV2.pkl'
+fn = 'CSHL_data_processed/MD589/Thresholds_refined.pkl'
 thresholds = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
 
 if __name__=='__main__':
@@ -132,12 +134,15 @@ if __name__=='__main__':
                         help="atlas information for one structure")
     parser.add_argument("--center", type=str, default='DK52.pkl',
                         help="annotation information for one brain")
+    parser.add_argument("mode", type=str,
+                        help="Search or refine")
     args = parser.parse_args()
     structure = args.structure
     stack = args.center
+    mode = args.mode
 
     t0 = time()
-    savepath = 'CSHL_shift_scores/bitmap/' + stack + '/'
+    savepath = 'CSHL_shift_scores/bitmap_retrained/' + mode+ '/' + stack + '/'
     if not os.path.exists(os.environ['ROOT_DIR'] + savepath):
         os.makedirs(os.environ['ROOT_DIR'] + savepath)
 
@@ -145,13 +150,20 @@ if __name__=='__main__':
     margin = 200 / resol
     fn = os.environ['ROOT_DIR'] + 'Detection_preparation_v2/' + structure+'.pkl'
     grid3D, total_shape_area, total_sur_area, min_x, min_y, len_max = pickle.load(open(fn,'rb'))
-    step_size = max(round(len_max / 20), round(30 / resol))
-    # step_size = max(int(len_max / 30), int(20 / resol))
+    if mode == 'search':
+        step_size = max(round(len_max / 20), round(30 / resol))
+        fn = stack + '/' + stack + '_rough_landmarks.pkl'
+        model_fn = 'Detection_models/v6_refine/'
+    elif mode == 'refine':
+        step_size = max(int(len_max / 30), int(20 / resol))
+        fn = stack + '/retrained/' + stack + '_search_landmarks.pkl'
+        model_fn = 'Detection_models/v6_refine/'
+    elif mode == 'retrain':
+        step_size = max(int(len_max / 30), int(20 / resol))
+        fn = stack + '/' + stack + '_detected_landmarks.pkl'
+        model_fn = 'Detection_models/v5_refine/'
     step_z = int(round(step_size * resol / 20))
-
     half = 15
-    # fn = stack + '/' + stack + '_search_landmarks.pkl'
-    fn = stack + '/' + stack + '_rough_landmarks.pkl'
     contours = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
     seq = sorted([section for section in contours.keys() if structure in contours[section].keys()])
     C = {i: contours[i][structure] for i in contours if structure in contours[i]}
@@ -204,12 +216,13 @@ if __name__=='__main__':
         (cell_shape_features[:, :3], bit_features, cell_shape_features[:, 15].reshape([-1, 1])), axis=1)
 
     ratio = round(20 / resol)
-    bst = pickle.load(open(os.environ['ROOT_DIR'] + 'Detection_models/v5/' + structure + '.pkl', 'rb'))
+    rname = structure[:structure.rfind('_')] if structure.rfind('_') != -1 else structure
+    bst = pickle.load(open(os.environ['ROOT_DIR'] + model_fn + rname + '.pkl', 'rb'))
     xyz_shift_map = np.zeros([2 * half + 1, 2 * half + 1, 2 * half + 1])
-    for section in section_numbers:
-        xyz_shift_map = computation(section, xyz_shift_map)
-    # score_maps = Parallel(n_jobs=10)(delayed(computation)(i, xyz_shift_map) for i in section_numbers)
-    # xyz_shift_map = np.sum(score_maps, axis=0)
+    # for section in section_numbers:
+    #     xyz_shift_map = computation(section, xyz_shift_map)
+    score_maps = Parallel(n_jobs=10)(delayed(computation)(i, mode, xyz_shift_map) for i in section_numbers)
+    xyz_shift_map = np.sum(score_maps, axis=0)
 
 
     fn = savepath + structure + '.pkl'

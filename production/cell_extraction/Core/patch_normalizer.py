@@ -176,25 +176,6 @@ class normalizer:
         pad[_from:_to,_from:_to]=patch
         return pad,sz_block
 
-    def minRect(self,patch):
-        too_big = True
-        size = patch.shape[0]
-        for sz_block in self.size_thresholds:
-            if size < sz_block:
-                too_big = False
-                break
-        if too_big:
-            return None, size
-
-        contours, hierarchy = cv2.findContours(patch, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        # find largest contour
-        contour_sizes = [(cv2.contourArea(contour), contour) for contour in contours]
-        # print (contour_sizes)
-        biggest_contour = max(contour_sizes, key=lambda x: x[0])[1]
-        # bounding rectangle
-        x, y, w, h = cv2.boundingRect(biggest_contour)
-        return patch[x:y,w:h],size
-
     def normalize_patch(self,ex,props):
         ex_in_circle = self.put_in_circle(np.copy(ex),props)
         #normalize patch interms of grey values and in terms of rotation

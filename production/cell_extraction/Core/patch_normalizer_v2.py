@@ -17,7 +17,6 @@ class normalizer:
         :param params
         """
         self.params=params
-        self.size_thresholds = params['normalization']['size_thresholds']
 
     def circle_patch(self,radius):
         size=2*radius+1
@@ -159,33 +158,7 @@ class normalizer:
         circ_patch[y1:y2,x1:x2]=ex
         return circ_patch
 
-    def pad_patch(self,patch):
-        too_big=True
-        size=patch.shape[0]
-        for sz_block in self.size_thresholds:
-            if size<sz_block:
-                too_big=False
-                break
-        if too_big:
-            return None,size
-
-        pad=np.zeros([sz_block,sz_block],dtype=np.float64)
-        _from=int((sz_block-size)/2)
-        _to = int(sz_block-_from)
-        # print(size,sz_block,_from,_to)
-        pad[_from:_to,_from:_to]=patch
-        return pad,sz_block
-
     def minRect(self,patch):
-        too_big = True
-        size = patch.shape[0]
-        for sz_block in self.size_thresholds:
-            if size < sz_block:
-                too_big = False
-                break
-        if too_big:
-            return None, size
-
         contours, hierarchy = cv2.findContours(patch, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         # find largest contour
         contour_sizes = [(cv2.contourArea(contour), contour) for contour in contours]
@@ -193,7 +166,7 @@ class normalizer:
         biggest_contour = max(contour_sizes, key=lambda x: x[0])[1]
         # bounding rectangle
         x, y, w, h = cv2.boundingRect(biggest_contour)
-        return patch[x:y,w:h],size
+        return patch[y:y+h,x:x+w]
 
     def normalize_patch(self,ex,props):
         ex_in_circle = self.put_in_circle(np.copy(ex),props)
@@ -208,22 +181,20 @@ class normalizer:
         confidence=conf2
         normalized_patch =  ex_rotation_normed*self.mask
 
-        padded_patch,padded_size = self.pad_patch(normalized_patch)
-        padded_patch, grey_level_stats = self.normalize_greyvals(padded_patch)
-        # bounded_patch,padded_size = self.minRect(normalized_patch)
-        # final_patch, grey_level_stats = self.normalize_greyvals(bounded_patch)
+        normalized_patch, grey_level_stats = self.normalize_greyvals(normalized_patch)
+        bounded_patch = self.minRect(normalized_patch)
+
 
         Dict={
             #'original_patch':ex,
             # 'patch_in_circle':ex_in_circle,
             # 'ex_grey_normed':ex_grey_normed,
             # 'normalized_patch':normalized_patch,
-            'padded_size':padded_size,
-            'padded_patch':padded_patch,
+            'Normalized_patch':bounded_patch,
             'rotation':total_rotation,
             'rotation_confidence':confidence,
-            'horiz_std':calc_width(normalized_patch),
-            'vert_std':calc_width(normalized_patch.T)
+            # 'horiz_std':calc_width(normalized_patch),
+            # 'vert_std':calc_width(normalized_patch.T)
         }
         Dict.update(grey_level_stats)
 

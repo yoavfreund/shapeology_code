@@ -9,6 +9,7 @@ from scipy import stats
 from time import time
 from glob import glob
 from time import sleep
+from joblib import Parallel, delayed
 sys.path.append(os.environ['REPO_DIR'])
 from lib.utils import configuration, run
 from lib.shape_utils import *
@@ -67,6 +68,9 @@ def compute(file, yaml_file, stack, section, client, bucket, key):
     os.remove(img_fn)
     return key
 
+def compute_locally(stack, img, cell_dir):
+    run('python {0}/extractPatches_database.py {1} {2} --save_dir {3}'.format(os.environ['REPO_DIR'], stack, img, cell_dir))
+
 if __name__=="__main__":
 
     import argparse
@@ -74,6 +78,7 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--yaml", type=str, default=os.environ['REPO_DIR'] + 'shape_params.yaml',
                         help="Path to Yaml file with parameters")
+    parser.add_argument("stack", type=str, help="The name of the brain")
     parser.add_argument("image_dir", type=str,
                         help="Path to directory saving images")
     parser.add_argument("--save_dir", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'cells/'),
@@ -83,7 +88,9 @@ if __name__=="__main__":
     yamlfile = args.yaml
     img_dir = args.image_dir
     cell_dir = args.save_dir
+    stack = args.stack
     t0 = time()
-    for img in glob(img_dir+'/*'):
-        run('python {0}/extractPatches.py {1} {2} --save_dir {3}'.format(os.environ['REPO_DIR'], img, yamlfile, cell_dir))
+    Parallel(n_jobs=10)(delayed(compute_locally)(stack, img, cell_dir) for img in glob(img_dir+'/*'))
+    # for img in glob(img_dir+'/*'):
+    #     run('python {0}/extractPatches.py {1} {2} --save_dir {3}'.format(os.environ['REPO_DIR'], img, yamlfile, cell_dir))
     print('Cell extraction finished in', time()-t0, 'seconds')

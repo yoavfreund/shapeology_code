@@ -1,17 +1,19 @@
 import cv2
-from cv2 import moments,HuMoments
 import pickle
 import numpy as np
 import random
 import os
+import sys
 from skimage import io
+import pandas as pd
+import zlib
 from time import time
 
 from label_patch import diffusionMap
-from patch_normalizer import normalizer
+from patch_normalizer_v2 import normalizer
 from lib.utils import mark_contours, configuration
 from lib.shape_utils import *
-sys.path.append('/home/k1qian/data/Github/pipeline/notebooks/Will/add_cell_data/')
+sys.path.append('/home/k1qian/data/Github/pipeline/in_development/Will/showcase/cell_extraction/add_cell_data/')
 from controller import FeaturesController
 from cell_model import Cell
 
@@ -114,17 +116,19 @@ class patch_extractor:
                         'area':area[i]}
             try:
                 more_properties = self.Norm.normalize_patch(masked_image, properties)
+            # except Exception as e:
+            #     print(f'Error {e}')
             except:
                 continue
             
             properties.update(more_properties)
             extracted.append(properties)
 
-            padded_patch=properties['padded_patch']
-            padded_size=properties['padded_size']
-
-            if not padded_patch is None:
-                self.V[padded_size].append(padded_patch)
+            # padded_patch=properties['padded_patch']
+            # padded_size=properties['padded_size']
+            #
+            # if not padded_patch is None:
+            #     self.V[padded_size].append(padded_patch)
 
             #print(properties.keys())
             #break
@@ -183,10 +187,11 @@ if __name__=="__main__":
     import argparse
     from time import time
     parser = argparse.ArgumentParser()
+    parser.add_argument("stack", type=str, help="The name of the brain")
     parser.add_argument("file", type=str,
                         help="Process <filename>.tif into <filename>_cells")
-    parser.add_argument("yaml", type=str,
-                    help="Path to Yaml file with parameters")
+    parser.add_argument("--yaml", type=str, default=os.environ['REPO_DIR'] + 'shape_params.yaml',
+                        help="Path to Yaml file with parameters")
     parser.add_argument("--save_dir", type=str, default=os.path.join(os.environ['ROOT_DIR'], 'cells/'),
                         help="Path to directory saving images")
     # Add parameters for size of mexican hat and size of cell, threshold, percentile
@@ -196,22 +201,22 @@ if __name__=="__main__":
     args = parser.parse_args()
     config = configuration(args.yaml)
     params = config.getParams()
+    stack = args.stack
 
     _dir=args.save_dir
     filename=args.file
     dot = filename.rfind('.')
     slash = filename.rfind('/')
-    infile = filename
-    out_dir = os.path.join(_dir, filename[slash+1:dot]+'_cells/')
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
+    section = int(filename[slash+1:dot])
+    out_dir = os.path.join(_dir, filename[slash+1:dot]+'_cells')
+    if not os.path.exists(_dir):
+        os.makedirs(_dir)
 
     extractor = patch_extractor(params, dm=False)
     min_std = params['preprocessing']['min_std']
-    size_thresholds = params['normalization']['size_thresholds']
 
     t0 = time()
-    img = io.imread(infile)
+    img = io.imread(filename)
     tile = 255 - img.copy()
     _std = np.std(tile.flatten())
     if _std < min_std:
@@ -219,39 +224,33 @@ if __name__=="__main__":
     else:
         Stats = extractor.segment_cells(tile)
         extracted = extractor.extract_blobs(Stats, tile)
-        patchesBySize = {size: [] for size in size_thresholds}  # storage for normalized patches
-        patchIndex = {size: [] for size in size_thresholds}
 
-        # collect patches by size
-        for i in range(len(extracted)):
-            properties = extracted[i]
-            padded_size = properties['padded_size']
-            patch = properties['padded_patch']
-            if patch is None:
-                continue
-            patchesBySize[padded_size].append(patch)
+        cells = pd.DataFrame(extracted)
+        cells = cells[cells['Normalized_patch'].notnull()]
+        cells['section'] = int(section)
+        cells['x'] = cells['left'] + cells['width'] / 2
+        cells['y'] = cells['top'] + cells['height'] / 2
+        cells = cells.astype({'x': int, 'y': int})
+        cells = cells.drop(['left', 'top'], 1)
+        cells = cells.to_dict('records')
 
-        for size in size_thresholds:
-            try:
-                pics = pack_pics(patchesBySize[size])
-                pics = pics.astype(np.float16)
-            except:
-                cell_num = len(patchesBySize[size])
-                try:
-                    start = int(cell_num * random.uniform(0, 0.49))
-                    end = start + int(cell_num*0.5)
-                    pics = pack_pics(patchesBySize[size][start:end])
-                    pics = pics.astype(np.float16)
-                except:
-                    start = int(cell_num * random.uniform(0, 0.69))
-                    end = start + int(cell_num * 0.15)
-                    pics = pack_pics(patchesBySize[size][start:end])
-                    pics = pics.astype(np.float16)
-            order = np.random.permutation(pics.shape[0])
-            pics = pics[order, :, :]
-            fn = out_dir + str(size) + '.bin'
-            pics.tofile(fn)
-            print(os.path.getsize(fn))
+        controller = FeaturesController()
+        patches = []
 
-        del patchesBySize
+        for i in range(len(cells)):
+            properties = cells[i]
+            cell = Cell(id=None, prep_id=stack, section=properties['section'], x=properties['x'], y=properties['y'], \
+                        cell_width=properties['width'], cell_height=properties['height'], cell_area=properties['area'], \
+                        rotation=properties['rotation'], rotation_confidence=properties['rotation_confidence'], \
+                        img_width=properties['Normalized_patch'].shape[0], \
+                        cell_images=zlib.compress(properties['Normalized_patch'].copy(order='C')))
+            controller.add_row(cell)
+            patches.append(properties['Normalized_patch'])
+
+
+        fn = out_dir + '.pkl'
+        pickle.dump(patches,open(fn,'wb'))
+        print(os.path.getsize(fn))
+
+        del patches
         print(filename, 'finished in', time() - t0, 'seconds')

@@ -27,26 +27,21 @@ def create_annotation(mask):
     segmentation = np.array(poly.exterior.coords)#.ravel().tolist()
     return segmentation
 
-def COMs_to_contours(centers):
+def COMs_to_contours(center,structure):
     contours = {}
-    for structure in centers.keys():
-        contour = np.load('/net/birdstore/Active_Atlas_Data/data_root/atlas_data/atlasV7/structure/'+structure+'.npy')
-        idx = np.indices(contour.shape).reshape(contour.ndim, contour.size)
-        weights = contour.reshape(1,-1)
-        com = np.average(idx, axis = 1, weights=weights[0,:])
-        start = int(centers[structure][2]-com[2])
-        for i in range(contour.shape[2]):
-            try:
-                polygon = create_annotation(contour[:,:,i])
-            except:
-                continue
-            polygon[:,0] = centers[structure][0]+(polygon[:,0]-com[1])*32*1.4154
-            polygon[:,1] = centers[structure][1]+(polygon[:,1]-com[0])*32*1.4154
-            if start+i in contours.keys():
-                contours[start+i][structure] = polygon
-            else:
-                contours[start+i] = {}
-                contours[start+i][structure] = polygon
+    contour = np.load('/net/birdstore/Active_Atlas_Data/data_root/atlas_data/atlasV7/structure/'+structure+'.npy')
+    idx = np.indices(contour.shape).reshape(contour.ndim, contour.size)
+    weights = contour.reshape(1,-1)
+    com = np.average(idx, axis = 1, weights=weights[0,:])
+    start = int(center[2]-com[2])
+    for i in range(contour.shape[2]):
+        try:
+            polygon = create_annotation(contour[:,:,i])
+        except:
+            continue
+        polygon[:,0] = center[0]+(polygon[:,0]-com[1])*32*1.4154
+        polygon[:,1] = center[1]+(polygon[:,1]-com[0])*32*1.4154
+        contours[start+i] = polygon
     return contours
 
 def collect_inside_cell_features(loc):
@@ -77,8 +72,8 @@ def collect_inside_cell_features(loc):
 def features_to_vector(features, thresholds, object_area):
     extracted = []
     n1 = features.shape[0]
-    for k in list(range(10)) + [14]:
-    # for k in range(features.shape[1]): #iterate over features, one feature equal one cdf
+#     for k in list(range(10)) + [14]:
+    for k in range(features.shape[1]): #iterate over features, one feature equal one cdf
         data1 = np.sort(features[:, k]) # sort feature k
         cdf = np.searchsorted(data1, thresholds[k], side='right') / n1
         extracted.extend(cdf)
@@ -112,20 +107,18 @@ if __name__=='__main__':
 
 
     half = 15
-    fn = stack + '/' + stack + '_beth_COMs.pkl'
+    fn = stack + '/' + stack + '_beth_COMs_new.pkl'
     COMs = pickle.load(open(os.environ['ROOT_DIR'] + fn, 'rb'))
     centroid = COMs[structure]
-    contours = COMs_to_contours(COMs)
-    seq = sorted([section for section in contours.keys() if structure in contours[section].keys()])
+    contours = COMs_to_contours(centroid,structure)
+    seq = sorted(list(contours.keys()))
 
-    C = {i: contours[i][structure] for i in contours if structure in contours[i]}
-    section_numbers = sorted(C.keys())
-    Concat = np.concatenate([C[i] for i in C])
+    Concat = np.concatenate([contours[i] for i in contours])
     center = np.mean(Concat, axis=0)
 
     polygon_set = []
     for sec in seq:
-        polygon = contours[sec][structure].copy()
+        polygon = contours[sec].copy()
         polygon_set.append(polygon)
     polygon_set = np.concatenate(polygon_set)
     [left, right, up, down] = [int(max(min(polygon_set[:, 0]) - margin - half * step_size, 0)),
@@ -172,7 +165,7 @@ if __name__=='__main__':
                     sur_cdf = features_to_vector(outside_features, thresholds, total_sur_area[sec - seq[0]])
                     feature_vector = np.array(inside_cdf) - np.array(sur_cdf)
 
-                    polygon = contours[sec][structure].copy()
+                    polygon = contours[sec].copy()
                     outline = Path(polygon)
                     region = polygon.copy()
                     region[:, 0] += i * step_size
@@ -190,8 +183,8 @@ if __name__=='__main__':
     indices_choose = np.random.choice(range(len(positive_sample_features)), n_choose, replace=False)
     positive_sample_features = np.array(positive_sample_features)
     positive_sample_features = positive_sample_features[indices_choose]
-    # save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v5/' + stack + '/' + rname
-    save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_dm_only/' + stack + '/' + rname
+    save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_v5_extra/' + stack + '/' + rname
+    # save_dir = os.environ['ROOT_DIR'] + 'CSHL_patch_samples_features_dm_only/' + stack + '/' + rname
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     pkl_out_file = save_dir + '/' + stack + '_' + structure + '_positive.pkl'
